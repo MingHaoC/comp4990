@@ -11,6 +11,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import javax.persistence.*;
 import java.util.Date;
 
+// todo: might need to update the model to match the k2 database user schema
+
 @Entity
 @Getter
 @Setter
@@ -24,8 +26,8 @@ public class User {
     @Id
     public Integer id;
 
-    @Column(name = "email", unique = true)
-    private String email;
+    @Column(name = "username", unique = true)
+    private String username;
 
     @Column(name = "password")
     private String password;
@@ -35,6 +37,12 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "address")
+    private String address;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
