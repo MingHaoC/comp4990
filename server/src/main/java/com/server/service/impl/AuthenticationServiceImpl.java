@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 // todo: Might need to update the register endpoint when the user models gets updated
 
 @Service
@@ -44,8 +46,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+    //todo: depending on how the user model is setup in k2, we might not need a username, instead the user would login with
+    // email and password
     @Override
-    public ResponseEntity<String> login(String email, String password) {
-       return null;
+    public ResponseEntity<String> login(String username, String password) {
+        try {
+            Optional<User> query = userRepository.findByUsername(username);
+            if (query.isPresent()) {
+                User user = query.get();
+                // todo: If the check pass, we should be returning a JWT token instead of a string
+                if (user.checkPass(password))
+                    return new ResponseEntity<>("Login success", HttpStatus.OK);
+            }
+            // no user found or incorrect email + password match
+            return new ResponseEntity<>("The username and password you enter is invalid", HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            logger.error("Something went wrong in the AuthenticationServiceImpl class, login method. Exception: ", e);
+            return new ResponseEntity<>("Server error: Something went wrong while trying to login please try again later", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
