@@ -33,7 +33,7 @@ public class JwtTokenProvider implements Serializable {
                 .compact();
     }
 
-    private Claims getAllClaimsFromToken(String token) {
+    protected Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token).getBody();
     }
@@ -44,7 +44,7 @@ public class JwtTokenProvider implements Serializable {
     }
 
     // retrieve username from jwt token
-    public String getUsernameFromToken(String token) {
+    public String getEmailFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
