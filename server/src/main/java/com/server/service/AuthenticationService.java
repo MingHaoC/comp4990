@@ -7,5 +7,5 @@ public interface AuthenticationService {
     
     ResponseEntity<String> register(User user);
 
-    ResponseEntity<String> login(String username, String password);
+    ResponseEntity<String> login(String email, String password);
 }

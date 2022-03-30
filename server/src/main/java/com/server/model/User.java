@@ -26,9 +26,6 @@ public class User {
     @Id
     public Integer id;
 
-    @Column(name = "username", unique = true)
-    private String username;
-
     @Column(name = "password")
     private String password;
 

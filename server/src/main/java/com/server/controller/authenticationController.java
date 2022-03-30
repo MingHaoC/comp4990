@@ -25,6 +25,6 @@ public class authenticationController {
 
     @PostMapping(LOGIN)
     public ResponseEntity<String> login(@RequestBody User user) {
-        return authenticationService.login(user.getUsername(), user.getPassword());
+        return authenticationService.login(user.getEmail(), user.getPassword());
     }
 }
