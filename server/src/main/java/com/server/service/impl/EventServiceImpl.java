@@ -6,38 +6,34 @@ import com.server.service.EventService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Getter
-@Setter
+@Service
 public class EventServiceImpl implements EventService {
 
     @Autowired
     EventRepository eventRepository;
 
     @Override
-    public Event loadEventById(Integer id) throws Exception {
-
+    public ResponseEntity<Event> getEvent(Integer id) {
         Optional<Event> event = eventRepository.findById(id);
-        if(event.isPresent())
-            return loadEventById(id);
+        if (event.isPresent())
+            return new ResponseEntity<>(event.get(), HttpStatus.OK);
         else
-            throw new Exception("Event not found with the ID: " + id);
-
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
-    public List<Event> loadEvents() throws Exception {
-
+    public ResponseEntity<List<Event>> getAllEvents() {
         List<Event> events = eventRepository.findAll();
-        if(!events.isEmpty())
-            return events;
+        if (!events.isEmpty())
+            return new ResponseEntity<>(events, HttpStatus.OK);
         else
-            throw new Exception("There are no events.");
-
-
-
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
