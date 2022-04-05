@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     return new ResponseEntity<>(jwtTokenProvider.generateJwtToken(user), HttpStatus.OK);
             }
             // no user found or incorrect email or password match
-            return new ResponseEntity<>("The username and password you enter is invalid", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("The email and password you enter is invalid", HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             logger.error("Something went wrong in the " + AuthenticationServiceImpl.class + ", login method. Exception: ", e);
             return new ResponseEntity<>("Server error: Something went wrong while trying to login please try again later", HttpStatus.INTERNAL_SERVER_ERROR);

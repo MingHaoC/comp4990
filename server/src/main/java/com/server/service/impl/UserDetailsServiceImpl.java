@@ -1,7 +1,5 @@
 package com.server.service.impl;
 
-
-
 import com.server.model.User;
 import com.server.repository.UserRepository;
 import com.server.service.UserDetailsService;
@@ -21,11 +19,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByEmail(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findById(Integer.parseInt(username));
+    public UserDetails loadUserById(String id) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findById(Integer.parseInt(id));
         if (user.isPresent())
             return UserDetailsImpl.build(user.get());
         else
-            throw new UsernameNotFoundException("User not found with the email: " + username);
+            throw new UsernameNotFoundException("User not found with the email: " + id);
     }
 }
