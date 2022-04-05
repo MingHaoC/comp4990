@@ -23,8 +23,6 @@ public class UserDetailsImpl implements UserDetails {
 
     private String username;
 
-    private String email;
-
     @JsonIgnore
     private String password;
 
@@ -33,7 +31,7 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(int id, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.email = email;
+        this.username = email;
         this.password = password;
         this.authorities = authorities;
     }
