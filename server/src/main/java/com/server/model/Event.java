@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -43,6 +44,7 @@ public class Event {
     @Column(name = "contact")
     public String contact;
 
+    //optional
     // if we want to tag events to break them up into categories
     // language/entertainment/lessons etc.
     @Column(name = "tags")
