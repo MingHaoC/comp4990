@@ -13,8 +13,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-// todo: might need to update the model to match the k2 database user schema
-
 @Entity
 @Getter
 @Setter
