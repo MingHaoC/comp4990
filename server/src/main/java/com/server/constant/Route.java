@@ -9,9 +9,8 @@ public class Route {
 
     // Event endpoints
     public static final String EVENT = "/event";
-    public static final String EVENT_REGISTER = "/register";
     public static final String EVENT_LIST = "/list";
-    public static final String NEW_EVENT = "/new";
+    public static final String NEW_EVENT = "/register";
 
     // admin endpoint
     public static final String ADMIN = "/admin";

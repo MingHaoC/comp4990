@@ -21,10 +21,14 @@ import java.util.Date;
 @Table(name = "events")
 public class Event {
 
-    @Column(name = "id")
+    @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     public Integer eventId;
+
+    @Column(name = "user_id")
+    @Id
+    public Integer userID;
 
     @Column(name = "title")
     public String eventTitle;
@@ -39,10 +43,12 @@ public class Event {
     @Column(name = "location")
     public String location;
 
-    // may need to break this up into different methods of contact
-    // email/phone
-    @Column(name = "contact")
-    public String contact;
+    //multiple forms of contact, email and phone.
+    @Column(name = "phone_contact")
+    public String phoneContact;
+
+    @Column(name = "email_contact")
+    public String emailContact;
 
     //optional
     // if we want to tag events to break them up into categories

@@ -17,12 +17,6 @@ public class eventController {
     @Autowired
     private EventService eventService;
 
-    //todo set up users registering for events
-    @PostMapping(EVENT_REGISTER)
-    public ResponseEntity<String> register() {
-        return null;
-    }
-
     @GetMapping
     public ResponseEntity<Event> getEvent(@RequestBody Integer id) {
         return eventService.getEvent(id);

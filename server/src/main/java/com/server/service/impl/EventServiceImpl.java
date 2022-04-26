@@ -36,7 +36,10 @@ public class EventServiceImpl implements EventService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @Override
     public ResponseEntity<String> createNewEvent(@RequestBody Event event){
+        
+        //eventRepository.save(event);
 
         return new ResponseEntity<>("Server error: Service Currently Not Available.", HttpStatus.SERVICE_UNAVAILABLE);
 
