@@ -26,9 +26,9 @@ public class Event {
     @Id
     public Integer eventId;
 
-    @Column(name = "user_id")
-    @Id
-    public Integer userID;
+//    @Column(name = "user_id")
+//    @Id
+//    public Integer userID;
 
     @Column(name = "title")
     public String eventTitle;

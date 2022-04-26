@@ -13,4 +13,6 @@ public interface EventService {
 
     ResponseEntity<String> createNewEvent(@RequestBody Event event);
 
+    ResponseEntity<String> removeUserFromEvent(/*@RequestBody Integer userID, @RequestBody Integer eventID*/);
+
 }

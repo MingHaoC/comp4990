@@ -38,11 +38,17 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public ResponseEntity<String> createNewEvent(@RequestBody Event event){
-        
+
         //eventRepository.save(event);
 
         return new ResponseEntity<>("Server error: Service Currently Not Available.", HttpStatus.SERVICE_UNAVAILABLE);
 
+    }
+
+    @Override
+    public ResponseEntity<String> removeUserFromEvent(/*@RequestBody Integer userID, @RequestBody Integer eventID*/){
+
+        return new ResponseEntity<>("Server error: Service Currently Not Available.", HttpStatus.SERVICE_UNAVAILABLE);
     }
 
 
