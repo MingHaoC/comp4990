@@ -36,7 +36,13 @@ public class eventController {
     }
 
     @PostMapping(CANCEL_EVENT)
-    public ResponseEntity<String> cancelEvent(/*@RequestBody Integer userID, @RequestBody Integer eventID*/){
-        return eventService.removeUserFromEvent(/*userID, eventID*/);
+    public ResponseEntity<String> cancelEvent(Integer userID, Integer eventID){
+        return eventService.removeUserFromEvent(userID, eventID);
     }
+
+    @PostMapping(DELETE_EVENT)
+    public ResponseEntity<String> removeEvent(Integer eventID){
+        return eventService.deleteEvent(eventID);
+    }
+
 }

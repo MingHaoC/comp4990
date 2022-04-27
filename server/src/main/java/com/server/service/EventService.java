@@ -1,7 +1,6 @@
 package com.server.service;
 import com.server.model.Event;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -11,8 +10,10 @@ public interface EventService {
 
     ResponseEntity<List<Event>> getAllEvents();
 
-    ResponseEntity<String> createNewEvent(@RequestBody Event event);
+    ResponseEntity<String> createNewEvent(Event event);
 
-    ResponseEntity<String> removeUserFromEvent(/*@RequestBody Integer userID, @RequestBody Integer eventID*/);
+    ResponseEntity<String> removeUserFromEvent(Integer userID, Integer eventID);
+
+    ResponseEntity<String> deleteEvent(Integer eventID);
 
 }

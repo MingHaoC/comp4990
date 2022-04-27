@@ -12,5 +12,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     List<Event> findAll();
 
     @Override
+    void deleteById(Integer id);
+
+    @Override
     <S extends Event> S save(S event);
 }
