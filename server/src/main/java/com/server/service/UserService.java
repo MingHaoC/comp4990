@@ -9,4 +9,7 @@ public interface UserService {
 
     ResponseEntity<String> updateUserAddress(User user);
 
+    ResponseEntity<String> updateUserName(User user);
+
+    ResponseEntity<String> updateUserPhoneNumber(User user);
 }

@@ -50,6 +50,32 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public ResponseEntity<String> updateUserName(User user) {
+        if(!VerifyUser(user.id))
+            return new ResponseEntity<>("You cannot modified another user data with your JWT Token", HttpStatus.UNAUTHORIZED);
+
+        try {
+            userRepository.updateName(user.getFirstName(), user.getLastName(), user.getId());
+            return new ResponseEntity<>("User address was updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An server error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> updateUserPhoneNumber(User user) {
+        if(!VerifyUser(user.id))
+            return new ResponseEntity<>("You cannot modified another user data with your JWT Token", HttpStatus.UNAUTHORIZED);
+
+        try {
+            userRepository.updatePhoneNumber(user.getPhoneNumber(), user.getId());
+            return new ResponseEntity<>("User address was updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An server error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     private boolean VerifyUser(int formData) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (((UserDetailsImpl) authentication.getPrincipal()).getId()) == formData;

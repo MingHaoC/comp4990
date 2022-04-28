@@ -25,5 +25,15 @@ public class UserController {
         return userService.updateUserAddress(user);
     }
 
+    @PostMapping(NAME)
+    public ResponseEntity<String> EditUserName(@RequestBody User user) {
+        return userService.updateUserName(user);
+    }
+
+    @PostMapping(PHONE_NUMBER)
+    public ResponseEntity<String> EditPhoneNumber(@RequestBody User user) {
+        return userService.updateUserPhoneNumber(user);
+    }
+
 
 }
