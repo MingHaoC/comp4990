@@ -1,28 +1,21 @@
 package com.server.controller;
 
-import static com.server.constant.Route.*;
-
 import com.server.model.Event;
-import com.server.service.EventService;
+import com.server.service.impl.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.server.constant.Route.*;
 
 @RestController
 @RequestMapping(EVENT)
 public class eventController {
 
     @Autowired
-    private EventService eventService;
-
-    //todo set up users registering for events
-    @PostMapping(EVENT_REGISTER)
-    public ResponseEntity<String> register() {
-        return null;
-    }
+    private EventServiceImpl eventService;
 
     @GetMapping
     public ResponseEntity<Event> getEvent(@RequestBody Integer id) {
@@ -33,4 +26,23 @@ public class eventController {
     public ResponseEntity<List<Event>> getEventList() {
         return eventService.getAllEvents();
     }
+
+    //todo:
+    //if it the first time a user is registering for this event, add it to the event table, and register the user to the event
+    //if another user registers for this event, no need to add it to the event table again, just register the user to the event
+    @PostMapping(NEW_EVENT)
+    public ResponseEntity<String> newEvent(@RequestBody Event event) {
+        return eventService.createNewEvent(event);
+    }
+
+    @PostMapping(CANCEL_EVENT)
+    public ResponseEntity<String> cancelEvent(Integer userID, Integer eventID){
+        return eventService.removeUserFromEvent(userID, eventID);
+    }
+
+    @PostMapping(DELETE_EVENT)
+    public ResponseEntity<String> removeEvent(Integer eventID){
+        return eventService.deleteEvent(eventID);
+    }
+
 }
