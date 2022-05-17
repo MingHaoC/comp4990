@@ -22,10 +22,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity<Event> getEvent(Integer id) {
         Optional<Event> event = eventRepository.findById(id);
-        if (event.isPresent())
-            return new ResponseEntity<>(event.get(), HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return event.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @Override
