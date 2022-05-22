@@ -55,7 +55,7 @@ public class UserController {
      * Update the user phone number
      *
      * @param user JSON object containing the following field:
-     *             phoneNummer: String, id: Integer
+     *             phoneNumber: String, id: Integer
      * @return
      */
     @PostMapping(PHONE_NUMBER)
