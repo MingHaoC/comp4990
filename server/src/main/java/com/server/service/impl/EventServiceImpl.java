@@ -6,10 +6,12 @@ import com.server.repository.EventRepository;
 import com.server.repository.UserRepository;
 import com.server.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,13 +41,36 @@ public class EventServiceImpl implements EventService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    //todo:
+    //if it the first time a user is registering for this event, add it to the event table, and register the user to the event
+    //if another user registers for this event, no need to add it to the event table again, just register the user to the event
     @Override
-    public ResponseEntity<String> createNewEvent(@RequestBody Event event) {
+    public ResponseEntity<String> userRegisterForNewEvent(@RequestBody Event event, @RequestParam Integer userID) {
         System.out.println(event.toString());
-        eventRepository.save(event);
+        System.out.println("USERID: " + userID);
 
-        return new ResponseEntity<>("Server error: Service Currently Not Available. test", HttpStatus.SERVICE_UNAVAILABLE);
+        if (!eventAlreadyExistsInDatabase(event)) {
+            //add the event to the event table
+            eventRepository.save(event);
+        }
 
+        //do not add the event to the event table.
+        Integer eventID = eventRepository.findEventID(event.eventTitle, event.eventDescription,
+                event.times, event.location, event.phoneContact, event.emailContact, event.tags);
+
+        System.out.println("TESTING TESTING TESTING EVENTID: " + eventID);
+
+        //todo
+        //register the user to the event
+        //need to figure out how to get eventID.
+        //add entry with userID and eventID to relational table
+
+        return new ResponseEntity<>("Server error: Service Currently Not Available.", HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    public boolean eventAlreadyExistsInDatabase(Event event) {
+        Example<Event> example = Example.of(event);
+        return eventRepository.exists(example);
     }
 
     @Override
@@ -69,12 +94,5 @@ public class EventServiceImpl implements EventService {
 
     }
 
-    @Override
-    public ResponseEntity<String> deleteEvent(Integer eventID) {
-
-        eventRepository.deleteById(eventID);
-        return new ResponseEntity<>("Event: " + eventID + " has been deleted.", HttpStatus.OK);
-
-    }
 
 }
