@@ -53,8 +53,9 @@ public class EventServiceImpl implements EventService {
             //add the event to the event table
             eventRepository.save(event);
         }
+        //else: do not add the event to the event table.
 
-        //do not add the event to the event table.
+        //todo fix this. this returns null
         Integer eventID = eventRepository.findEventID(event.eventTitle, event.eventDescription,
                 event.times, event.location, event.phoneContact, event.emailContact, event.tags);
 

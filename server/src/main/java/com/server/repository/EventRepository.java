@@ -24,6 +24,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Override
     <S extends Event> boolean exists(Example<S> example);
 
+    //todo checkout this query, is something wrong with it?
     @Query(value = "SELECT event_id FROM events WHERE title = :eventTitle " +
             "AND description = :eventDescription " +
             "AND times = :times " +
