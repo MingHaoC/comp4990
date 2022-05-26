@@ -18,11 +18,25 @@ public class authenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    /**
+     * Endpoint to register a new user
+     *
+     * @param user JSON object containing the following field:
+     *             firstName: String, lastName: String, address: String, email: String, password: String
+     * @return
+     */
     @PostMapping(REGISTER)
     public ResponseEntity<String> register(@RequestBody User user) {
         return authenticationService.register(user);
     }
 
+    /**
+     * Endpoint used to log user in, returns a json token if successful
+     *
+     * @param user JSON object containing the following field:
+     *             email: String, password: String
+     * @return Json token if user credential is correct
+     */
     @PostMapping(LOGIN)
     public ResponseEntity<String> login(@RequestBody User user) {
         return authenticationService.login(user.getEmail(), user.getPassword());
