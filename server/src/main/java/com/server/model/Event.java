@@ -10,7 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.*;
 
 // todo: might need to update the model to match the k2 database user schema
 
@@ -27,10 +27,8 @@ public class Event {
     @Id
     public Integer eventId;
 
-    // todo: setup relational table for users and events
-//    @Column(name = "user_id")
-//    @Id
-//    public Integer userID;
+    @OneToMany(mappedBy = "user")
+    private List<UserEvent> users;
 
     @Column(name = "title")
     public String eventTitle;
@@ -71,5 +69,12 @@ public class Event {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    public Event(String eventTitle, @Nullable String eventDescription, @Nullable Date times, @Nullable String location) {
+        this.eventTitle = eventTitle;
+        this.eventDescription = eventDescription;
+        this.times = times;
+        this.location = location;
+    }
 
 }

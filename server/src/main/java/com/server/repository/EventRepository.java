@@ -40,4 +40,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                         @Param("emailContact")String emailContact,
                         @Param("tags")String tags);
 
+
+    @Query("SELECT eu.user.id FROM Event e LEFT JOIN UserEvent eu on e.eventId = eu.event.eventId WHERE e.eventId = :eventId")
+    List<Integer> getUserRegisterInEvent(@Param("eventId") Integer eventId);
+
 }
