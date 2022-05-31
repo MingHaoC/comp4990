@@ -28,17 +28,8 @@ public class UserEvent {
     @JoinColumn(name = "event_id")
     Event event;
 
-    public UserEvent(UserEventKey id) {
-        this.id = id;
-    }
-
     public UserEvent(UserEventKey id, User user, Event event) {
         this.id = id;
-        this.user = user;
-        this.event = event;
-    }
-
-    public UserEvent(User user, Event event) {
         this.user = user;
         this.event = event;
     }
