@@ -2,7 +2,10 @@ package com.server.service.impl;
 
 import com.server.model.Event;
 import com.server.model.User;
+import com.server.model.UserEvent;
+import com.server.model.UserEventKey;
 import com.server.repository.EventRepository;
+import com.server.repository.UserEventRepository;
 import com.server.repository.UserRepository;
 import com.server.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ public class EventServiceImpl implements EventService {
     @Autowired
     EventRepository eventRepository;
     UserRepository userRepository;
+    UserEventRepository userEventRepository;
 
     @Override
     public ResponseEntity<Event> getEvent(Integer id) {
@@ -45,30 +49,40 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<String> userRegisterForNewEvent(@RequestBody Event event, @RequestParam Integer userID) {
         System.out.println(event.toString());
         System.out.println("USERID: " + userID);
+        User newUser = new User();
+        newUser.setId(userID);
+        int eventID = -1;
 
-        if (!eventAlreadyExistsInDatabase(event)) {
-            //add the event to the event table
-            eventRepository.save(event);
+        //todo still need to solve the problem of getting the eventID when the event already exists in the table
+        if (eventAlreadyExists(event)) {
+            //does exist in table
+
+            //todo fix this. this query does not work, it results in NullPointerException.
+//            eventID = eventRepository.findEventID(event.eventTitle, event.eventDescription,
+//                  event.times, event.location, event.phoneContact, event.emailContact);
+        }else{
+            //does not exist in table
+
+            Event savedEvent = eventRepository.save(event);
+            eventID = savedEvent.eventId;
         }
-        //else: do not add the event to the event table.
 
-        //todo fix this. this returns null
-        Integer eventID = eventRepository.findEventID(event.eventTitle, event.eventDescription,
-                event.times, event.location, event.phoneContact, event.emailContact, event.tags);
+        Event newEvent = new Event();
+        newEvent.setEventId(eventID);
 
-        System.out.println("TESTING TESTING TESTING EVENTID: " + eventID);
+        System.out.println(eventID);
 
-        //todo
-        //register the user to the event
-        //need to figure out how to get eventID.
-        //add entry with userID and eventID to relational table
+        // after save it to the relational table. Note: there might a better of doing this
+        //breaks here
+        userEventRepository.save(new UserEvent(new UserEventKey(), newUser, newEvent));
 
         return new ResponseEntity<>("Server error: Service Currently Not Available.", HttpStatus.SERVICE_UNAVAILABLE);
     }
 
-    public boolean eventAlreadyExistsInDatabase(Event event) {
-        Example<Event> example = Example.of(event);
-        return eventRepository.exists(example);
+    public boolean eventAlreadyExists(Event event) {
+        boolean test = eventRepository.exists(Example.of(event));
+        System.out.println(test);
+        return test;
     }
 
     @Override
@@ -91,6 +105,29 @@ public class EventServiceImpl implements EventService {
         return new ResponseEntity<>("Removed User: " + userID + " from Event: " + eventID, HttpStatus.OK);
 
     }
+
+//    public int getEventID(Event event){
+//        ArrayList<Event> events = (ArrayList<Event>) eventRepository.findAll();
+//        ArrayList<Event> eventsWithSameName = new ArrayList<>();
+//
+//        System.out.println(events.toString());
+//
+//        for (Event e : events) {
+//            if (e.eventTitle.equals(event.eventTitle)) {
+//                eventsWithSameName.add(e);
+//            }
+//        }
+//
+//        System.out.println(eventsWithSameName);
+//
+//        for (Event eventCompare : eventsWithSameName) {
+//            if (event.compare(eventCompare)) {
+//                return eventCompare.eventId;
+//            }
+//        }
+//
+//        return 0;
+//    }
 
 
 }

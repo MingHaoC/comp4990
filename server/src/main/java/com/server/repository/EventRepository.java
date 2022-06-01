@@ -25,20 +25,18 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     <S extends Event> boolean exists(Example<S> example);
 
     //todo checkout this query, is something wrong with it?
-    @Query(value = "SELECT event_id FROM events WHERE title = :eventTitle " +
-            "AND description = :eventDescription " +
-            "AND times = :times " +
-            "AND location =  :location " +
-            "AND phone_contact = :phoneContact " +
-            "AND email_contact = :emailContact " +
-            "AND tags = :tags", nativeQuery = true)
+    @Query(value = "SELECT event_id FROM events WHERE (title = :eventTitle or :eventTitle is null) " +
+            "AND (description = :eventDescription or :eventDescription = null)" +
+            "AND (times = :times or times = null)" +
+            "AND (location = :location or :location = null)" +
+            "AND (phone_contact = :phoneContact or :phoneContact = null)" +
+            "AND (email_contact = :emailContact or :emailContact = null)", nativeQuery = true)
     Integer findEventID(@Param("eventTitle")String eventTitle,
                         @Param("eventDescription")String eventDescription,
                         @Param("times")Date times,
                         @Param("location")String location,
                         @Param("phoneContact")String phoneContact,
-                        @Param("emailContact")String emailContact,
-                        @Param("tags")String tags);
+                        @Param("emailContact")String emailContact);
 
 
     @Query("SELECT eu.user.id FROM Event e LEFT JOIN UserEvent eu on e.eventId = eu.event.eventId WHERE e.eventId = :eventId")
