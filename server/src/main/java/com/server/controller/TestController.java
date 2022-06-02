@@ -39,7 +39,7 @@ public class TestController {
     public ResponseEntity<String> HealthCheck() {
         // assume the following is given to you by the user
         User newUser = new User();
-        newUser.setId(8); // todo: change the id to an existing id in your database
+        newUser.setId(11); // todo: change the id to an existing id in your database
 
         Event event = new Event("abc",  "abc", new Date(), "abc"); // assume the inputted info is sent by the frontend
 

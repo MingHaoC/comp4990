@@ -10,21 +10,26 @@ import com.server.repository.UserRepository;
 import com.server.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
 
 @Service
 public class EventServiceImpl implements EventService {
 
     @Autowired
     EventRepository eventRepository;
+
+    @Autowired
     UserRepository userRepository;
+
+    @Autowired
     UserEventRepository userEventRepository;
 
     @Override
@@ -46,88 +51,71 @@ public class EventServiceImpl implements EventService {
     //if it the first time a user is registering for this event, add it to the event table, and register the user to the event
     //if another user registers for this event, no need to add it to the event table again, just register the user to the event
     @Override
-    public ResponseEntity<String> userRegisterForNewEvent(@RequestBody Event event, @RequestParam Integer userID) {
-        System.out.println(event.toString());
-        System.out.println("USERID: " + userID);
+    public ResponseEntity<String> userRegisterForNewEvent(Event event, Integer userID) {
         User newUser = new User();
         newUser.setId(userID);
-        int eventID = -1;
+
+        //example matcher to only match required fields
+        //we dont need to match id, createdAt, or updatedAt. Match everything else.
+        ExampleMatcher eventMatcher = ExampleMatcher.matching()
+                .withIgnorePaths("eventId", "createdAt", "updatedAt")
+                .withMatcher("eventTitle", ignoreCase())
+                .withMatcher("eventDescription", ignoreCase())
+                .withMatcher("emailContact", ignoreCase())
+                .withMatcher("phoneContact", ignoreCase())
+                .withMatcher("location", ignoreCase())
+                .withMatcher("times", ignoreCase());
+
+        Optional<Event> matchedEvent = eventRepository.findOne(Example.of(event, eventMatcher));
 
         //todo still need to solve the problem of getting the eventID when the event already exists in the table
-        if (eventAlreadyExists(event)) {
-            //does exist in table
-
-            //todo fix this. this query does not work, it results in NullPointerException.
-//            eventID = eventRepository.findEventID(event.eventTitle, event.eventDescription,
-//                  event.times, event.location, event.phoneContact, event.emailContact);
-        }else{
+        if (matchedEvent.isEmpty()) {
             //does not exist in table
-
-            Event savedEvent = eventRepository.save(event);
-            eventID = savedEvent.eventId;
+            //save a new event
+            event = eventRepository.save(event);
+        }else{
+            //does exist in table
+            //get the event that has been matched with
+            event = matchedEvent.get();
         }
 
-        Event newEvent = new Event();
-        newEvent.setEventId(eventID);
+        //add the registration to the table.
+        userEventRepository.save(new UserEvent(new UserEventKey(), newUser, event));
 
-        System.out.println(eventID);
-
-        // after save it to the relational table. Note: there might a better of doing this
-        //breaks here
-        userEventRepository.save(new UserEvent(new UserEventKey(), newUser, newEvent));
-
-        return new ResponseEntity<>("Server error: Service Currently Not Available.", HttpStatus.SERVICE_UNAVAILABLE);
+        //todo fix bugs
+        // there is still an error when users register for event
+        // 1. When the user registers for an event that they are already registered for - primary key constraint error
+        return new ResponseEntity<>("User Successfully registered for Event", HttpStatus.OK);
     }
 
-    public boolean eventAlreadyExists(Event event) {
-        boolean test = eventRepository.exists(Example.of(event));
-        System.out.println(test);
-        return test;
-    }
 
     @Override
     public ResponseEntity<String> removeUserFromEvent(Integer userID, Integer eventID) {
-
-        //todo handle the null userID/eventID somehow
 
         //get the event and the user
         Optional<Event> event = eventRepository.findById(eventID);
         Optional<User> user = userRepository.findById(userID);
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             return new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
-        } else if (!event.isPresent()) {
+        } else if (event.isEmpty()) {
             return new ResponseEntity<>("Event does not exist.", HttpStatus.NOT_FOUND);
         }
 
-        //todo: remove the user from the event in the database
+
+        UserEvent probe = new UserEvent(new UserEventKey(), user.get(), event.get());
+        ExampleMatcher registerMatcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withMatcher("userID", ignoreCase())
+                .withMatcher("eventId", ignoreCase());
+
+        Optional<UserEvent> registedEvent = userEventRepository.findOne(Example.of(probe, registerMatcher));
+
+        //delete the entry in the database
+        registedEvent.ifPresent(userEvent -> userEventRepository.deleteById(userEvent.getId()));
 
         return new ResponseEntity<>("Removed User: " + userID + " from Event: " + eventID, HttpStatus.OK);
 
     }
-
-//    public int getEventID(Event event){
-//        ArrayList<Event> events = (ArrayList<Event>) eventRepository.findAll();
-//        ArrayList<Event> eventsWithSameName = new ArrayList<>();
-//
-//        System.out.println(events.toString());
-//
-//        for (Event e : events) {
-//            if (e.eventTitle.equals(event.eventTitle)) {
-//                eventsWithSameName.add(e);
-//            }
-//        }
-//
-//        System.out.println(eventsWithSameName);
-//
-//        for (Event eventCompare : eventsWithSameName) {
-//            if (event.compare(eventCompare)) {
-//                return eventCompare.eventId;
-//            }
-//        }
-//
-//        return 0;
-//    }
-
 
 }
