@@ -17,32 +17,64 @@ public class eventController {
     @Autowired
     private EventServiceImpl eventService;
 
+    /**
+     * Gets the event information with the given ID
+     *
+     * @param id JSON object containing the following field:
+     *           id: Integer
+     *
+     * @return
+     */
     @GetMapping
     public ResponseEntity<Event> getEvent(@RequestBody Integer id) {
         return eventService.getEvent(id);
     }
 
+    /**
+     * gets a list of all the events currently stored within our database
+     *
+     * @return
+     */
     @GetMapping(EVENT_LIST)
     public ResponseEntity<List<Event>> getEventList() {
         return eventService.getAllEvents();
     }
 
-    //todo:
-    //if it the first time a user is registering for this event, add it to the event table, and register the user to the event
-    //if another user registers for this event, no need to add it to the event table again, just register the user to the event
+    /**
+     * Registers the user for an event
+     *
+     * @param event JSON object with the following fields:
+     *              eventTitle: String
+     *              eventDescription: String
+     *              location: String
+     *              times: Date
+     *              emailContact: String
+     *              phoneContact: String
+     *              tags: String
+     *
+     * @param userID in the endpoint as a parameter
+     *              ex: /event/register?userID=12
+     * @return
+     */
     @PostMapping(NEW_EVENT)
-    public ResponseEntity<String> newEvent(@RequestBody Event event) {
-        return eventService.createNewEvent(event);
+    public ResponseEntity<String> registerForNewEvent(@RequestBody Event event, @RequestParam Integer userID) {
+        return eventService.userRegisterForNewEvent(event, userID);
     }
 
+    /**
+     * removes a user from being registered to an event
+     *
+     * @param - JSON object containing the following fields
+     *                userID: Integer,
+     *                eventID: Integer
+     *
+     * @return
+     */
     @PostMapping(CANCEL_EVENT)
     public ResponseEntity<String> cancelEvent(Integer userID, Integer eventID){
         return eventService.removeUserFromEvent(userID, eventID);
     }
 
-    @PostMapping(DELETE_EVENT)
-    public ResponseEntity<String> removeEvent(Integer eventID){
-        return eventService.deleteEvent(eventID);
-    }
+
 
 }
