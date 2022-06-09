@@ -75,4 +75,6 @@ public class eventController {
         return eventService.removeUserFromEvent(userID, eventID);
     }
 
+
+
 }

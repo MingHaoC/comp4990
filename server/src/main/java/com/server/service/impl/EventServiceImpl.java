@@ -59,14 +59,15 @@ public class EventServiceImpl implements EventService {
         //we dont need to match id, createdAt, or updatedAt. Match everything else.
         ExampleMatcher eventMatcher = ExampleMatcher.matching()
                 .withIgnorePaths("eventId", "createdAt", "updatedAt")
-                .withMatcher("eventTitle", ignoreCase())
-                .withMatcher("eventDescription", ignoreCase())
-                .withMatcher("emailContact", ignoreCase())
-                .withMatcher("phoneContact", ignoreCase())
-                .withMatcher("location", ignoreCase())
-                .withMatcher("times", ignoreCase());
+                .withMatcher("eventTitle", ignoreCase().exact())
+                .withMatcher("eventDescription", ignoreCase().exact())
+                .withMatcher("emailContact", ignoreCase().exact())
+                .withMatcher("phoneContact", ignoreCase().exact())
+                .withMatcher("location", ignoreCase().exact())
+                .withMatcher("times", ignoreCase().exact());
 
         Optional<Event> matchedEvent = eventRepository.findOne(Example.of(event, eventMatcher));
+        System.out.println(matchedEvent);
 
         //todo still need to solve the problem of getting the eventID when the event already exists in the table
         if (matchedEvent.isEmpty()) {
@@ -77,14 +78,17 @@ public class EventServiceImpl implements EventService {
             //does exist in table
             //get the event that has been matched with
             event = matchedEvent.get();
+
+            //check to see if the user is already registered for this event
+            List<UserEvent> temp = userEventRepository.getRegistrationRecord(event.eventId, userID);
+            if(!temp.isEmpty()){
+                return new ResponseEntity<>("User is already registered for this event.", HttpStatus.OK);
+            }
         }
 
         //add the registration to the table.
         userEventRepository.save(new UserEvent(new UserEventKey(), newUser, event));
 
-        //todo fix bugs
-        // there is still an error when users register for event
-        // 1. When the user registers for an event that they are already registered for - primary key constraint error
         return new ResponseEntity<>("User Successfully registered for Event", HttpStatus.OK);
     }
 
@@ -92,16 +96,19 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity<String> removeUserFromEvent(Integer userID, Integer eventID) {
 
+//        List<Integer> temp2 = eventRepository.getRegistrationRecord(8, 11);
+//        temp2.forEach(System.out::println);
+
         //get the event and the user
         Optional<Event> event = eventRepository.findById(eventID);
         Optional<User> user = userRepository.findById(userID);
 
         if (user.isEmpty()) {
             return new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
-        } else if (event.isEmpty()) {
+        }
+        if (event.isEmpty()) {
             return new ResponseEntity<>("Event does not exist.", HttpStatus.NOT_FOUND);
         }
-
 
         UserEvent probe = new UserEvent(new UserEventKey(), user.get(), event.get());
         ExampleMatcher registerMatcher = ExampleMatcher.matching()

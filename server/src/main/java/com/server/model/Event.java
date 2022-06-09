@@ -22,6 +22,9 @@ import java.util.*;
 @Table(name = "events")
 public class Event {
 
+    //todo
+    // remember to remove @nullable annotation.
+
     @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
