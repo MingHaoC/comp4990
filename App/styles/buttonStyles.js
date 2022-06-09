@@ -1,13 +1,13 @@
-import { textColours, fontFamily } from "./globals";
+import { textColours, fontFamily, colours } from "./globals";
 
 //All new styles must be added using the same format:
-// [newBtnStyleName]Btn
-// [newBtnStyleName]BtnPress
+// [newBtnStyleName]Btn 
+// [newBtnStyleName]BtnPress 
 // [newBtnStyleName]BtnText
 // [newBtnStyleName]BtnPressText
 
 const buttonStyles = {
-
+ 
     // Global style
     btn:{
         width: '100%',
@@ -25,33 +25,60 @@ const buttonStyles = {
 
     //Default button style 
     defaultBtn:{
-        backgroundColor: 'rgba(224, 0, 52, 0.7)',
+        backgroundColor: colours.secondary.toString(),
     },
     defaultBtnPress:{
-        backgroundColor: '#8A1005',
+        backgroundColor: colours.primary.toString(),
     },
     defaultBtnText:{
-        color: '#FFFFFF',
+        color: textColours.background.toString(),
     },
     defaultBtnPressText:{
-        color: '#FFFFFF',
+        color: textColours.background.toString(),
     },
 
     //Info button style
     infoBtn:{
         borderWidth: 1,
         borderStyle:'solid',
-        borderColor: '#212121 ',
+        borderColor: colours.foreground.toString(),
+        backgroundColor: textColours.background.toString()
     },
     infoBtnPress:{
-        backgroundColor: '#212121'
+        backgroundColor: colours.foreground.toString()
     },
     infoBtnText:{
-        color: '#212121'
+        color: textColours.primary.toString()
     },
     infoBtnPressText:{
-        color: '#FFFFFF',
-    }
+        color: textColours.background.toString(),
+    },
+
+    /*
+    New ProjectButton style template:
+    Please copy&paste instead of overwrite so people who wish to add a new style in the future have easy access.
+
+    //Style of button
+    [newBtnStyleName]Btn:{
+
+    },
+
+    //Style button onPress
+    [newBtnStyleName]BtnPress:{
+
+    },
+
+    //Style of button text
+    [newBtnStyleName]BtnText:{
+
+    },
+
+    //Style of button text onPress
+    [newBtnStyleName]BtnPressText:{
+
+    },
+
+    */
 
 }
 

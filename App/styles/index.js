@@ -4,12 +4,14 @@ import linkStyle from "./linkStyle";
 import buttonStyles from "./buttonStyles";
 import paperStyles from "./paperStyles";
 import inputTextStyles from "./inputTextStyles";
+import underlineStyles from "./underlineStyles";
+import { colours } from "./globals";
 
 const styles = StyleSheet.create({
 
     container: {
       flex: 1,
-      backgroundColor: '#F8F8F8',
+      backgroundColor: colours.background.toString(),
       alignItems: 'center',
       justifyContent: 'flex-start',
       padding: 30    
@@ -18,14 +20,7 @@ const styles = StyleSheet.create({
       padding: 30,
       justifyContent:'center'
     },
-    underline:{
-      alignSelf: 'stretch',
-      textAlign: 'center',
-      borderWidth: 1,
-      borderStyle:'solid',
-      borderColor: 'rgba(0, 0, 0, 0.07)',
-    },
-    
+    ...underlineStyles,
     ...textStyles,
     ...linkStyle,
     ...buttonStyles,

@@ -1,7 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native'
+import {View} from 'react-native'
 import styles from '../styles';
 
+/**
+ * Creates a horizontal line across its container
+ */
 export default function Underline(props)
 {
     return(

@@ -1,9 +1,10 @@
-import { textColours, fontFamily } from "./globals";
+import { textColours, fontFamily, colours, rgba } from "./globals";
 
 const paperStyles = {
     paperContainer: {
-        backgroundColor: '#fff',
-        border: '1px solid rgba(0, 0, 0, 0.07)', 
+        backgroundColor: textColours.background.toString(),
+        border: `1px solid 
+        ${new rgba( textColours.primary.r(),  textColours.primary.g(),  textColours.primary.b(), 0.07).toString()}`, 
         width: '100%',   
     },
     paperHeader1:{
@@ -16,7 +17,8 @@ const paperStyles = {
     paperHeader1Image: {
         width: 110, 
         height: 70,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        resizeMode: 'center'
     },
     paperHeader:{
         width: '100%',

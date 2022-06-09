@@ -5,8 +5,17 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
 
 
+/**
+ * Acts like a Button component but it is stylized
+ */
 const ProjectButton = (props) => {
-    const {type, title} = props
+    const { type,   //string, indicates the style type
+            title,  //string, the text that will describe button action
+
+            //Built in props
+            onPressIn, onPressOut} = props
+
+    //Style changes if the button is being pressed so the state variable is used to track when the button is pressed
     const [isPressed, setIsPressed] = useState(false);
 
     //verifiy that given type styles exists. If it dosen't give a warning
@@ -35,14 +44,23 @@ const ProjectButton = (props) => {
     return(
         <Pressable  {...props}
                     style={[styles.btn, styles[`${type}Btn`], (isPressed ? styles[`${type}BtnPress`] : ''), props.style ]}
-                    onPressIn={()=>setIsPressed(true)}
-                    onPressOut={()=>setIsPressed(false)}
+                    onPressIn={()=>
+                        {
+                            setIsPressed(true);
+                            onPressIn();
+                        
+                        }}
+                    onPressOut={()=> {
+                        setIsPressed(false)
+                        onPressOut()
+                    }}
         >
             <Text style={[styles.btnText, styles[`${type}BtnText`], isPressed ? styles[`${type}BtnPressText`] : '']}>{title}</Text>
       </Pressable>    
       );
 }
 
+// #region defaultProps and PropTypes
 ProjectButton.propTypes = {
     type: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired
@@ -50,7 +68,10 @@ ProjectButton.propTypes = {
 
 ProjectButton.defaultProps = {
     type: 'default',
-    title: `Please add 'title' prop to set button text`
+    title: `Please add 'title' prop to set button text`,
+    onPressIn: () => {},
+    onPressOut: () => {}
 }
+// #endregion
 
 export default ProjectButton
