@@ -11,7 +11,7 @@ jobs:
      - uses: actions/checkout@v2
      - name: Create Env file
        run: |
-         cd ./src/main/resources
+         cd ./server/src/main/resources
          touch ./application.properties
          echo ${{ secrets.PROD_ENV }}
        shell: bash

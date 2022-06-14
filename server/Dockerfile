@@ -5,8 +5,8 @@ RUN mkdir -p /workspace
 WORKDIR /workspace
 
 # Copy the pom file and src folder to workspace
-COPY pom.xml /workspace
-COPY src /workspace/src
+COPY server/pom.xml /workspace
+COPY server/src /workspace/src
 RUN mvn -B package --file pom.xml -DskipTests
 
 FROM openjdk:14-slim
