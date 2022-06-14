@@ -50,3 +50,4 @@ build/
 ## Java ###
 server/src/main/resources/application-local.properties
 application-local.properties
+application-prod.properties
