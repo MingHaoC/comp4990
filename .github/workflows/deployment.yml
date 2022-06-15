@@ -12,7 +12,7 @@ jobs:
      - name: Create Env file
        run: |
          cd ./server/src/main/resources
-         touch ./application.properties
+         touch application.properties
          echo ${{ secrets.PROD_ENV }}
          cat .application.properties
        shell: bash
