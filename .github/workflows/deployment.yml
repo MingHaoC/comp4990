@@ -12,9 +12,9 @@ jobs:
      - name: Create Env file
        run: |
          cd ./server/src/main/resources
-         touch application.properties
+         touch ./application.properties
          echo ${{ secrets.PROD_ENV }}
-         cat .application.properties
+         cat ./application.properties
        shell: bash
      - name: Login to Docker Hub
        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
