@@ -12,9 +12,8 @@ jobs:
      - name: Create Env file
        run: |
          cd ./server/src/main/resources
-         touch ./application.properties
+         touch application.properties
          echo ${{ secrets.PROD_ENV }}
-         cat .application.properties
        shell: bash
      - name: Login to Docker Hub
        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -41,6 +40,6 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_REPO }}:latest
             sudo docker stop server
             sudo docker rm server
-            sudo docker run --detach --name server -p 8080:8080 ${{ secrets.DOCKER_REPO }}
+            sudo docker run --detach --network="host" --name server -p 8080:8080 ${{ secrets.DOCKER_REPO }}
             sudo systemctl restart nginx
           '
