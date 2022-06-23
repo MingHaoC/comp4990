@@ -5,6 +5,7 @@ import { Formik } from 'formik'
 import PropTypes from 'prop-types';
 
 
+
 export default function Profile(){
 
   //Indicate if user is editing or reading their profile
@@ -14,7 +15,7 @@ export default function Profile(){
   return(
     <View>
       <Formik
-        initialValues={{first_name: '', last_name: '', address: '', password: ''}}
+        initialValues={{first_name: _first_name, last_name: _last_name, address: _address, password: _password}}
         onSubmit={(values)=> {
           console.log(values);
           //TODO: Save profile
@@ -65,10 +66,12 @@ export default function Profile(){
                 {!isEditing && 
                 //show text components only when editing mode is off
                 (<>
+                
                 <Text>{props.values.first_name}</Text>
                 <Text>{props.values.last_name}</Text>
                 <Text>{props.values.address}</Text>
                 <Text>{props.values.password}</Text>
+                
 
                 </>)}
 
@@ -79,6 +82,7 @@ export default function Profile(){
                   
                   if(isEditing){
                     //only submit form when leaving edit mode
+                    
                     props.handleSubmit()
                   }else{
                     //If edit mode is off then turn it on with button press
