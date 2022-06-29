@@ -16,7 +16,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("SELECT ue.user.id FROM Event e LEFT JOIN UserEvent ue on e.eventId = ue.event.eventId WHERE e.eventId = :eventId")
     List<Integer> getUserRegisterInEvent(@Param("eventId") Integer eventId);
 
-    @Query("SELECT * FROM Event e LEFT JOIN UserEvent ue on e.event_id = ue.event_id WHERE ue.user_id = :userId")
+    @Query(value = "SELECT * FROM Events e LEFT JOIN Users_Events ue on e.event_id = ue.event_id WHERE ue.user_id = :userId", nativeQuery = true)
     List<Event> getUsersRegisteredEvents(@Param("userId") Integer userId);
 
 //    @Query("SELECT eu.event.eventId FROM Event e LEFT JOIN UserEvent eu on e.eventId = eu.event.eventId WHERE e.eventId = :eventId AND userId = :userId")
