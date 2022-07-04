@@ -55,6 +55,9 @@ public class User {
     @OneToMany(mappedBy = "event")
     private List<UserEvent> events;
 
+    @Column(name = "expo_token")
+    private String expoToken;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private Date createdAt;
