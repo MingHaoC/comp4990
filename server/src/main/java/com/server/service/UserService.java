@@ -12,4 +12,6 @@ public interface UserService {
     ResponseEntity<String> updateUserName(User user);
 
     ResponseEntity<String> updateUserPhoneNumber(User user);
+
+    ResponseEntity<String> registerExpoToken(User user);
 }
