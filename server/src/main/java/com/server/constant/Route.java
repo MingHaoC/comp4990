@@ -7,10 +7,10 @@ public class Route {
     public static final String REGISTER = "/register";
     public static final String LOGIN = "/login";
     public static final String EDIT = "/edit";
-    public static final String NAME = "/name";
-    public static final String EMAIL = "/email";
-    public static final String ADDRESS = "/address";
-    public static final String PHONE_NUMBER = "/phonenumber";
+    public static final String EDIT_NAME = "/name";
+    public static final String EDIT_ADDRESS = EDIT +"/address";
+    public static final String EDIT_PHONE_NUMBER = EDIT + "/phonenumber";
+    public static final String REGISTER_EXPO_TOKEN = REGISTER + "/expoToken";
 
     // Event endpoints
     public static final String EVENT = "/event";

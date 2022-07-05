@@ -76,6 +76,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public ResponseEntity<String> registerExpoToken(User user) {
+        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+            return new ResponseEntity<>("User doesn't exists", HttpStatus.NOT_FOUND);
+        }
+        if (userRepository.updateExpoToken(user.getEmail(), user.getExpoToken()) == 1)
+            return new ResponseEntity<>("Successfully added token", HttpStatus.OK);
+        return new ResponseEntity<>("Error, could not add the expo token", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private boolean VerifyUser(int formData) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (((UserDetailsImpl) authentication.getPrincipal()).getId()) == formData;

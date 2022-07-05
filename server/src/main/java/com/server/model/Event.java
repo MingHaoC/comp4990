@@ -58,11 +58,11 @@ public class Event {
     public String emailContact;
 
     //optional
-    // if we want to tag events to break them up into categories
-    // language/entertainment/lessons etc.
-    @Column(name = "tags")
+    //will have to use only one tag at a time
+    //otherwise we will need to make relational table for events that can have multiple categories.
+    @Column(name = "category")
     @Nullable
-    public String tags;
+    public String category;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
