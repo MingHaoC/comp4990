@@ -15,13 +15,14 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     Optional<Event> findById(Integer id);
     List<Event> findAll();
 
-    @Query("SELECT eu.user.id FROM Event e LEFT JOIN UserEvent eu on e.eventId = eu.event.eventId WHERE e.eventId = :eventId")
+    @Query("SELECT ue.user.id FROM Event e LEFT JOIN UserEvent ue on e.eventId = ue.event.eventId WHERE e.eventId = :eventId")
     List<Integer> getUserRegisterInEvent(@Param("eventId") Integer eventId);
+
+
+    @Query(value = "SELECT * FROM Events e LEFT JOIN Users_Events ue on e.event_id = ue.event_id WHERE ue.user_id = :userId", nativeQuery = true)
+    List<Event> getUsersRegisteredEvents(@Param("userId") Integer userId);
 
     @Query(value = "SELECT e.eventId as eventId, e.eventTitle as eventTitle, e.eventDescription as eventDescription, e.location as location, e.times as times FROM Event e WHERE e.times BETWEEN :fromDate AND :toDate")
     List<IEvent> findAllByTimeRange(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
-
-//    @Query("SELECT eu.event.eventId FROM Event e LEFT JOIN UserEvent eu on e.eventId = eu.event.eventId WHERE e.eventId = :eventId AND userId = :userId")
-//    List<Integer> getRegistrationRecord(@Param("eventID") Integer eventId, @Param("userId") Integer userId);
-
+    
 }

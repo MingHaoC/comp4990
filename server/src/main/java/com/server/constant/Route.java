@@ -17,6 +17,7 @@ public class Route {
     public static final String EVENT_LIST = "/list";
     public static final String NEW_EVENT = "/register";
     public static final String CANCEL_EVENT = "/cancel";
+    public static final String USER_EVENTS = "/user_events";
 
     // admin endpoint
     public static final String ADMIN = "/admin";

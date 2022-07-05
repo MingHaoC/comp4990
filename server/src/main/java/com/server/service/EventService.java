@@ -14,5 +14,7 @@ public interface EventService {
 
     ResponseEntity<String> removeUserFromEvent(Integer userID, Integer eventID);
 
+    ResponseEntity<List<Event>> getEventsThatUserRegisteredFor(Integer userID);
+
 
 }

@@ -7,7 +7,6 @@ import com.server.component.JwtTokenProvider;
 import com.server.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -45,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/user/login", "/user/register", "/event/register", "/event/cancel", "/event/delete", "/test")
+                    .antMatchers("/user/login", "/user/register", "/event/register", "/event/cancel", "/event/delete", "/event/user_events", "/test")
                     .permitAll()
                 .anyRequest()
                     .authenticated()

@@ -96,9 +96,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity<String> removeUserFromEvent(Integer userID, Integer eventID) {
 
-//        List<Integer> temp2 = eventRepository.getRegistrationRecord(8, 11);
-//        temp2.forEach(System.out::println);
-
         //get the event and the user
         Optional<Event> event = eventRepository.findById(eventID);
         Optional<User> user = userRepository.findById(userID);
@@ -123,6 +120,25 @@ public class EventServiceImpl implements EventService {
 
         return new ResponseEntity<>("Removed User: " + userID + " from Event: " + eventID, HttpStatus.OK);
 
+    }
+
+    @Override
+    public ResponseEntity<List<Event>> getEventsThatUserRegisteredFor(Integer userID) {
+
+        Optional<User> user = userRepository.findById(userID);
+
+        if(user.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<Event> events = eventRepository.getUsersRegisteredEvents(userID);
+
+        if(events.isEmpty()){
+            //if the user is not registered for any events
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
 }
