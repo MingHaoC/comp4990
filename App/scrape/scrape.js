@@ -4,30 +4,57 @@ const axios = require("axios");
 const baseURL = "https://www.eriestclairhealthline.ca/";
 const baseURLMain = baseURL + "listServices.aspx?id=10566&region=WindsorEssex";
 
+const secondaryURL = "https://windsorite.ca/events/categories/community/";
+
+const event_data = [];
+
+//gets main list of events with times (government services for necomers to the area)
 async function getEventsList() {
   try {
     const response = await axios.get(baseURLMain);
     const $ = cheerio.load(response.data);
-    const event_data = [];
 
     const eventsURL = $(".serviceListing");
+    const array = eventsURL.toArray();
 
-    eventsURL.each(async function () {
-      var anchor = $(this).find("a");
+    for (const item of array) {
+      var anchor = $(item).find("a");
       if (anchor.attr("id").includes("RegionalServices")) {
         var url = anchor.attr("href");
         eventInfoURL = baseURL + url;
 
-        let event = await getEventInformation(eventInfoURL);
-        console.log(event);
-        //console.logging the above line works as intended, the issue arises when trying to push the event to the array, and then printing out the array afterwards
-        //the array prints out empty.
-        //maybe an issue with async await?
-
-        event_data.push(event);
+        event_data.push(await getEventInformation(eventInfoURL));
       }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//daily community events from windsorite.ca (not related to newcomers)
+async function getExtraEvents() {
+  try {
+    const response = await axios.get(secondaryURL);
+    const $ = cheerio.load(response.data);
+
+    const events = $(".right.rightener");
+    events.each(function () {
+      var title = $(this).find("h2 a").text();
+      var schedule = $(this).find("div:first-of-type").text();
+      var location = $(this).find(".hidemobile").text();
+      var phoneContact = "";
+      var emailContact = "";
+      var description = "";
+
+      event_data.push({
+        title,
+        description,
+        phoneContact,
+        emailContact,
+        location,
+        schedule,
+      });
     });
-    console.log(event_data);
   } catch (error) {
     console.error(error);
   }
@@ -70,5 +97,17 @@ async function getEventInformation(eventInfoURL) {
   }
 }
 
-getEventsList();
-//getEvents();
+//gets main list as well as extra events
+async function fetchEventList() {
+  await getExtraEvents(); //daily community events from windsorite.ca
+  await getEventsList(); //gets main list of events with times (basically government services for necomers to the area)
+  //console.log(event_data);
+  return event_data;
+}
+
+//only gets main list
+async function fetchMainEventList() {
+  await getEventsList(); //gets main list of events with times (basically government services for necomers to the area)
+  //console.log(event_data);
+  return event_data;
+}
