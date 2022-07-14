@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 import { registerForPushNotificationsAsync } from "./ultis/Notification";
+import { registerExpoToken } from "./usecases/notification";
 import * as Notifications from "expo-notifications";
 
 export default function App() {
@@ -18,11 +19,11 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  const [token, setToken] = useState();
-
+  // todo: this needs to be called when the user is login
   useEffect(() => {
     (async () => {
-      setToken(await registerForPushNotificationsAsync(Notifications));
+      // todo: the hardcoded email should be updated to fetch the login user email
+      await registerExpoToken("example@example.com", await registerForPushNotificationsAsync(Notifications));
     })();
 
     notificationListener.current =
@@ -46,7 +47,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app! {token ? token : "no token"}</Text>
+      <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
   );

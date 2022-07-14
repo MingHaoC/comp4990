@@ -23,10 +23,11 @@ exports.registerExpoToken = async (
 
   try {
     const result = await axios.post(
-      `${config.host}/expoToken/register`,
+      `${config.host}/user/register/expoToken`,
       user,
       header
     );
+    console.log("testing: " + JSON.stringify(result, null, 4))
     if ((result.status = "200"))
       console.log("Expo token has successfully been stored");
     else

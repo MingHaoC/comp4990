@@ -1,3 +1,3 @@
 export default config = {
-    host: "http://172.17.32.1:8080"
+    host: "http://IPv4:8080" // put your person IPv4 Address, you can find it using ipconfig on the cmd
 }
