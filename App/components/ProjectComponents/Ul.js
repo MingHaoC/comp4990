@@ -4,6 +4,7 @@ import { Text} from 'react-native'
 
 /**
  * Creates a bulleted item
+ * @authors avdouloa@uwindsor.ca, 
  */
 export default function Ul(props)
 {

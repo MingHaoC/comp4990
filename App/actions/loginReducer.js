@@ -1,6 +1,6 @@
 const reducer = (state, action) => {
     switch (action.type) {
-        case "LOGIN":
+        case "VERIFIY_LOGIN_PRECONDITIONS":
         {    
             // #region ensure that required fields are filled
             const emptyFieldError = 'Please fill in required field.'
@@ -17,9 +17,22 @@ const reducer = (state, action) => {
 
             /*Check each field and ensure that there are no errors in order to login */
             if( !state.PasswordError.error && !state.EmailError.error){
-                    console.log('Post Data')
+                state.LoginPreconditionsMet = true
             }
             return {...state};
+        }
+        case "CONFIRM_LOGIN":
+        {
+            state.Response = {status: action.payload.status, text: action.payload.text}
+            return reducer({...state}, {type: 'SHOW_MODAL'})
+        }
+        case "SHOW_MODAL":
+        {
+            return {...state, showModal: true}
+        }
+        case "CLOSE_MODAL":
+        {
+            return {...state, showModal: false}
         }
         case "ENTER_INPUT":
             {
