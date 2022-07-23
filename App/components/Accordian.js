@@ -18,7 +18,7 @@ const Accordian = (props) => {
             titleStyle,             //style for the title text
 
             //built in props
-            onPressIn, onPressOut, onPress
+            onPressIn, onPressOut, onPress, style
         } = props;
 
     const [isCollapsed, setIsCollapsed] = useState(collapsed)
@@ -30,7 +30,7 @@ const Accordian = (props) => {
     },[collapsed])
 
     return (
-    <Paper>
+    <Paper style={style}>
          <Pressable  style={[styles.row_start, titleContainerStyle]} 
                     onPress={() => { 
                         //toggle is collapsed on press

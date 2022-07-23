@@ -3,11 +3,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Paper, ProjectButton, ProjectTextInput, Underline, ProjectHeader, Accordian } from '../../components'
 import styles from '../../styles'
 import { FindEventProvider, useFindEventContext } from '../../actions/Find Events/FindEventsContext'
-import EventDetails from '../modals/EventDetails'
-import EventFilter from '../modals/EventFilter'
-import AvailabilityFilter from '../modals/AvailabilityFilter'
-import RegisterForEvent from '../modals/RegisterForEvent'
-import ConfirmEventRegistration from '../modals/ConfirmEventRegistration'
+import EventDetails from './find-events-modals/EventDetails'
+import EventFilter from './find-events-modals/EventFilter'
+import AvailabilityFilter from './find-events-modals/AvailabilityFilter'
+import RegisterForEvent from './find-events-modals/RegisterForEvent'
+import ConfirmEventRegistration from '../find-events-modals/ConfirmEventRegistration'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 /** 

@@ -1,36 +1,12 @@
 import 'react-native-gesture-handler';
-
-import { StatusBar } from 'expo-status-bar';
 import { AppProvider } from './context';
-import Register from './screens/auth/Register';
-import Login from './screens/auth/Login';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './screens/home/Home';
-import Profile from './screens/home/Profile';
-import FindEvents from './screens/home/FindEvents';
-import MyEvents from './screens/home/MyEvents';
-import EventDetails from './screens/modals/EventDetails';
-import RegisterForEvent from './screens/modals/RegisterForEvent';
-import ConfirmEventRegistration from './screens/modals/ConfirmEventRegistration';
-import EventFilter from './screens/modals/EventFilter';
-import AvailabilityFilter from './screens/modals/AvailabilityFilter';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { HomeStackComponent, MainStackComponent, MyDrawer } from './screens';
+import { MyDrawer } from './screens';
 
 const Drawer = createDrawerNavigator();
 const AuthStack = createNativeStackNavigator();
-// const HomeStack = createNativeStackNavigator();
-
-// function MyDrawer() {
-//   return (
-//     <Drawer.Navigator>
-//       <Drawer.Screen name="Home" component={Home} />
-//       <Drawer.Screen name="Article" component={Article} />
-//     </Drawer.Navigator>
-//   );
-// }
 
 
 export default function App() {

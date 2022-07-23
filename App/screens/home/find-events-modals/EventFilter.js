@@ -1,12 +1,10 @@
-import { View, Text, Pressable, ScrollView, Modal } from 'react-native'
+import { View, Text, ScrollView, Modal } from 'react-native'
 import React, { useContext } from 'react'
 import styles from '../../styles'
 import { InlineSelect, Paper, ProjectButton, ProjectTextInput } from '../../components'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import CheckBox from 'expo-checkbox'
 import RNPickerSelect from "react-native-picker-select";
-// import {ScrollPicker} from 'react-native-value-picker';
-import {BsFillXCircleFill, BsXCircle} from 'react-icons/bs'
 import { useFindEventContext, FindEventContext } from '../../actions/Find Events/FindEventsContext'
 import { colours } from '../../styles/globals'
 import DateTimePicker from '@react-native-community/datetimepicker'; 

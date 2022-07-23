@@ -789,6 +789,15 @@
      h3: {
          ...colors.muted_2_colour,
          ...fontSizing.Medium
+     },
+     center_text: {
+      textAlign: 'center'
+     },
+     right_text: {
+      textAlign: 'right'
+     },
+     left_text:{
+      textAlign: 'left'
      }
  
  }

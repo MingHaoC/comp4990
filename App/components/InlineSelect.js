@@ -6,14 +6,14 @@ const InlineSelectContext = React.createContext()
 
 /**
  * Inline select renders pressable option boxes that span the width of a conatiner. 
- * @param {Object} - data -> Array of Objects {label,value}, indicates the option. The label will be displayed in the box. The value is the value that the label repsresnts
+ * @param {Object} - data -> Array of Objects {id, label,value}, indicates the option. The label will be displayed in the box. The value is the value that the label repsresnts
  *                 - selectedIndicies -> An array of numbers, each representing an index of an option selected in data
  *                 - multiselect -> bool, indicate if multiple selects are allowed
  *                 - onSelect -> function(selectedOptions, lastSelected), selectedOptions -> array of selected option object {label,value}
  *                                                                        lastSelected -> option object clicked to trigger onSelect function. {label, value}
  * @returns JSX Inline select
  */
-const InlineSelect = ({data, selectedIndicies, multiselect, onSelect}) => {
+const InlineSelect = ({data, selectedIndicies, multiselect, onSelect, disabled}) => {
 
     const [options, setOptions] = useState(data)
     const [width, setWidth] = useState(0)
@@ -88,6 +88,7 @@ const InlineSelect = ({data, selectedIndicies, multiselect, onSelect}) => {
 
     return (
         <InlineSelectContext.Provider value={{
+            disabled,
             width,
             options,
             updateSelected,
@@ -137,7 +138,8 @@ const Block = ({id, label, value}) => {
         isSelected,
         updateSelected,
         onSelect,
-        getSelectedObjects
+        getSelectedObjects,
+        disabled
     } = useContext(InlineSelectContext)
  
     const [itemSelected, setItemSelected] = useState(isSelected(id))
@@ -147,10 +149,13 @@ const Block = ({id, label, value}) => {
     return(
     <Pressable 
         onPress={() => { 
-            let selectedItems = updateSelected(id);
-            if(!itemSelected){ selectedItems.push(id)}
-            if(itemSelected){selectedItems.splice(selectedItems.indexOf(id),1)}
-            onSelect(getSelectedObjects(selectedItems),{id, label,value})
+            if(!disabled){
+                let selectedItems = updateSelected(id);
+                if(!itemSelected){ selectedItems.push(id)}
+                if(itemSelected){selectedItems.splice(selectedItems.indexOf(id),1)}
+                onSelect(getSelectedObjects(selectedItems),{id, label,value})
+            }
+
         }}
         style={[
             styles.border,
@@ -176,6 +181,7 @@ const Block = ({id, label, value}) => {
 InlineSelect.defaultProps = {
     selectedIndicies: [],
     multiselect: false,
+    disabled: false,
     onSelect: () => {}
 }
 

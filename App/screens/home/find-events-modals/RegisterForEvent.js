@@ -160,20 +160,70 @@ const Confirm = (props) => {
         <>
             <Text style={[styles.h3, styles.bold, styles.margin_bottom_small]}>Confirm</Text>
             <Paper style={[styles.padding_medium]}>
-                {
-                    Object.keys(confirmationInfo).map((propName, index) => {
-                        return(
-                            <View key={index}>
-                                <View  style={[styles.row]}>
-                                    <Text style={[styles.text_medium, styles.muted_text_2_colour]}>{propName}:</Text>
-                                    <Text style={[styles.text_medium, styles.muted_text_1_colour]}>{confirmationInfo[propName]}</Text>   
-                                </View>
-                                <Underline />                             
-                            </View>
 
-                        );
-                    })
-                }
+                {/*Name */}
+                <View>
+                    <View  style={[styles.row]}>
+                        <Text style={[styles.text_medium, styles.muted_text_2_colour]}>Name:</Text>
+                        <Text style={[styles.text_medium, styles.muted_text_1_colour,styles.medium_container,styles.right_text]}>{confirmationInfo["name"]}</Text>   
+                    </View>
+                    <Underline />                             
+                </View>
+
+                {/*Location */}
+                <View>
+                    <View  style={[styles.row]}>
+                        <Text style={[styles.text_medium, styles.muted_text_2_colour]}>Location:</Text>
+                        <Text style={[styles.text_medium, styles.muted_text_1_colour,styles.medium_container,styles.right_text]}>{confirmationInfo["location"]}</Text>   
+                    </View>
+                    <Underline />                             
+                </View>
+
+                {/*Days */}
+                <View>
+                    <View  style={[styles.row]}>
+                        <Text style={[styles.text_medium, styles.muted_text_2_colour, styles.small_container]}>Days:</Text>
+                        <Text style={[styles.text_medium, styles.muted_text_1_colour,styles.medium_container,styles.right_text]}>{confirmationInfo["days_of_the_week"]}</Text>   
+                    </View>
+                    <Underline />                             
+                </View>
+
+                {/*Start Date */}
+                <View>
+                    <View  style={[styles.row]}>
+                        <Text style={[styles.text_medium, styles.muted_text_2_colour]}>Start Date:</Text>
+                        <Text style={[styles.text_medium, styles.muted_text_1_colour,styles.medium_container,styles.right_text]}>{confirmationInfo["start_date"]}</Text>   
+                    </View>
+                    <Underline />                             
+                </View>
+
+                {/*End Date */}
+                <View>
+                    <View  style={[styles.row]}>
+                        <Text style={[styles.text_medium, styles.muted_text_2_colour]}>End Date:</Text>
+                        <Text style={[styles.text_medium, styles.muted_text_1_colour,styles.medium_container,styles.right_text]}>{confirmationInfo["end_date"]}</Text>   
+                    </View>
+                    <Underline />                             
+                </View>
+
+                {/*Start Time */}
+                <View>
+                    <View  style={[styles.row]}>
+                        <Text style={[styles.text_medium, styles.muted_text_2_colour]}>Start Time:</Text>
+                        <Text style={[styles.text_medium, styles.muted_text_1_colour,styles.medium_container,styles.right_text]}>{confirmationInfo["start_time"]}</Text>   
+                    </View>
+                    <Underline />                             
+                </View>
+
+                {/*Start Time */}
+                <View>
+                    <View  style={[styles.row]}>
+                        <Text style={[styles.text_medium, styles.muted_text_2_colour]}>End Time:</Text>
+                        <Text style={[styles.text_medium, styles.muted_text_1_colour,styles.medium_container,styles.right_text]}>{confirmationInfo["end_time"]}</Text>   
+                    </View>
+                    <Underline />                             
+                </View>
+
             </Paper>
         </>
     );
