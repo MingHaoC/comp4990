@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StatusBar, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Paper from './Paper'
-import styles from '../../styles'
+import styles from '../styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ProjectHeader = ({children, navigation}) => {

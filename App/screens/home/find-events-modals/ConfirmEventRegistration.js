@@ -1,9 +1,9 @@
 import { View, Text, Modal } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Paper, ProjectButton } from '../../components'
-import styles from '../../styles'
-import { useFindEventContext } from '../../actions/Find Events/FindEventsContext'
+import { Paper, ProjectButton } from '../../../components'
+import styles from '../../../styles'
+import { useFindEventContext } from '../../../actions/Find Events/FindEventsContext'
 
 const ConfirmEventRegistration = () => {
 
@@ -13,7 +13,7 @@ const ConfirmEventRegistration = () => {
   } = useFindEventContext()
   return (
 
-
+ 
     <Modal
       animationType="fade"
       transparent={true}

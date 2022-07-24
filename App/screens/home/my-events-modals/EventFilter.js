@@ -1,6 +1,3 @@
-
-
-
 import { View, Text, ScrollView, Modal } from 'react-native'
 import React, { useContext } from 'react'
 import styles from '../../../styles'

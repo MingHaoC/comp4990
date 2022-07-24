@@ -7,7 +7,7 @@ import EventDetails from './find-events-modals/EventDetails'
 import EventFilter from './find-events-modals/EventFilter'
 import AvailabilityFilter from './find-events-modals/AvailabilityFilter'
 import RegisterForEvent from './find-events-modals/RegisterForEvent'
-import ConfirmEventRegistration from '../find-events-modals/ConfirmEventRegistration'
+import ConfirmEventRegistration from './find-events-modals/ConfirmEventRegistration'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 /** 

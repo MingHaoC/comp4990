@@ -1,10 +1,10 @@
 import { View, Text, Pressable, Modal, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import dummyEvents from '../../dummyEvents'
-import styles from '../../styles'
+import dummyEvents from '../../../dummyEvents'
+import styles from '../../../styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Paper, ProjectButton, Underline } from '../../components'
-import { useFindEventContext } from '../../actions/Find Events/FindEventsContext'
+import { Paper, ProjectButton, Underline } from '../../../components'
+import { useFindEventContext } from '../../../actions/Find Events/FindEventsContext'
 
 const RegisterForEvent = () => {
     const {

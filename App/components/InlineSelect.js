@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import styles from '../../styles'
+import styles from '../styles'
 
 const InlineSelectContext = React.createContext()
 

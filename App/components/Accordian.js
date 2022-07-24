@@ -2,7 +2,7 @@ import { Text, Pressable } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import styles from '../../styles'
+import styles from '../styles'
 import Underline from './Underline'
 import Paper from './Paper'
 import PropTypes from 'prop-types';

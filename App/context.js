@@ -10,6 +10,12 @@ const AppContext = React.createContext()
 
 const AppProvider = ({ children }) => {
 
+  const [user,setUser] = useState(null)
+
+
+  const logout = () => {
+    setUser(null)
+  }
   // #region POST
   const POST_Response = {
     status: 501,
@@ -123,6 +129,9 @@ const AppProvider = ({ children }) => {
     return (
         <AppContext.Provider
           value={{
+            user,
+            setUser,
+            logout,
             registerPOST, 
             loginPOST
           }}

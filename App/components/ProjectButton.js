@@ -1,4 +1,4 @@
-import styles from '../../styles'
+import styles from '../styles'
 import React from 'react';
 import { Text, Pressable} from 'react-native';
 import { useState, useEffect } from 'react'

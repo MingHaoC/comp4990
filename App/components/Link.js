@@ -2,7 +2,7 @@ import React from 'react';
 import {Text,Pressable, Linking } from 'react-native'
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
-import styles from '../../styles'
+import styles from '../styles'
 import Underline from './Underline';
 /**
  * Used to direct a user to a new screen

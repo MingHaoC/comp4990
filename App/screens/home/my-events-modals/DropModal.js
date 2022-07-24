@@ -1,8 +1,8 @@
 import { Modal, View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useMyEventContext } from "../../actions/My Events/MyEventsContext";
-import { Paper, ProjectButton, Underline } from "../../components";
-import styles from "../../styles";
+import { useMyEventContext } from "../../../actions/My Events/MyEventsContext";
+import { Paper, ProjectButton, Underline } from "../../../components";
+import styles from "../../../styles";
 
 /**
  * Modal for dropping an event from 'MyEvents'

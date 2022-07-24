@@ -1,10 +1,10 @@
 import { View, Text, Pressable, Modal, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Paper, Accordian, ProjectButton } from '../../components'
-import dummyEvents from '../../dummyEvents'
-import styles from '../../styles'
+import dummyEvents from '../../../dummyEvents'
+import styles from '../../../styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useFindEventContext } from '../../actions/Find Events/FindEventsContext'
+import { useFindEventContext } from '../../../actions/Find Events/FindEventsContext'
+import { Paper, Accordian, ProjectButton  } from '../../../components'
 
 /**
  * Expands upon event information. Modal is opened up when user presses 'More Info' on FindEvents screen

@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TextInput, View} from 'react-native';
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
-import styles from '../../styles'
+import styles from '../styles'
 
 /**
  * Acts like a TextInput component but it is stylized

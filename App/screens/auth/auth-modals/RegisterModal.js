@@ -1,18 +1,17 @@
 import React from 'react';
-import { View, Modal, Text } from 'react-native';
-import styles from '../../styles'
-import { Paper, ProjectButton} from '../../components'
-import { colours } from '../../styles/globals'
+import { Text, View, Modal } from 'react-native';
+import styles from '../../../styles'
+import { Paper, ProjectButton} from '../../../components'
+import { colours } from '../../../styles/globals';
 
-//Shows outcome of login attempt
-const LoginModal = (props) => {
+//Shows outcome of registration attempt
+const RegisterModal = (props) => {
     const {
       showModal,
       Response,
       closeModal,
     } = props
-    
-    return(
+    return (
           <Modal
           animationType="fade"
           transparent={true}
@@ -29,6 +28,7 @@ const LoginModal = (props) => {
                           justifyContent: 'center'
                         },
                         styles.muted_2_coloured_bg
+
                       ]}>
           <Paper style={{
                         marginTop: 33,
@@ -49,7 +49,6 @@ const LoginModal = (props) => {
   
        
         </Modal>
-    );
-}
-
-export default LoginModal
+      );
+  }
+  export default RegisterModal

@@ -3,54 +3,40 @@ import { View } from 'react-native';
 import styles from '../../styles'
 import { useReducer } from 'react';
 import {Link, Paper, ProjectTextInput, ProjectButton} from '../../components'
-import reducer from '../../actions/loginReducer'
+import reducer from '../../actions/Auth/Login/loginReducer'
 import {useAppContext} from '../../context'
-import {LoginModal} from '../../components/LoginComponents'
+import LoginModal from './auth-modals/LoginModal';
+import { LoginProvider, useLoginContext } from '../../actions/Auth/Login/LoginContext';
 
-// #region Initial State
-const initialState = {
-  Email: '',      //Value of Email Input
 
-  /*Indicates if there is an error concering the Email input and what the error is*/
-  EmailError: {
-    error: false,
-    errorText: ' '
-  },
-  Password: '',     //Value of Password Input
-
-  /*Indicates if there is an error concering the Password input and what the error is*/
-  PasswordError: {
-    error: false,
-    errorText: ' '
-  }, 
-  LoginPreconditionsMet: false, //Indicates if all the requirements have been met to send a POST request to login
-
-  showModal: false,             //Indicates if the LoginModal should be visible
-                                //Modal is used to show POST request response
-
-  /*Response from sending a POST request to Login URL*/
-  Response: {
-    status: 500, 
-    text: 'System Error'
-  },
+export default function Login(props) {
+return (  
+  <LoginProvider>
+    <LoginContent {...props} />
+  </LoginProvider>)
 }
+
 // #endregion
-export default function Login({navigation}) {
+const LoginContent = ({navigation}) => {
 
   // #region variables
-  const {loginPOST} = useAppContext();
-  const [state, dispatch] = useReducer(reducer, initialState)
+
 
   //For a desciption of state variables see initialState
   const {
+    state,
     Email,
     EmailError,
     Password,
     PasswordError,
     LoginPreconditionsMet,
     showModal,              
-    Response                
-  } = state
+    Response,
+    login,
+    enterEmail,
+    enterPassword,
+    openForgotPasswordModal                
+  } = useLoginContext()
 
   //#endregion
 
@@ -60,25 +46,25 @@ export default function Login({navigation}) {
    * OnPress login Button
    * Sends POST Request to Login URL if login conditions are met and displays request results. 
    */
-  const login = async() => {
-    dispatch({type: "VERIFIY_LOGIN_PRECONDITIONS"})
+  // const login = async() => {
+  //   dispatch({type: "VERIFIY_LOGIN_PRECONDITIONS"})
 
-    if(LoginPreconditionsMet){
+  //   if(LoginPreconditionsMet){
 
-      console.log('loading...')
-      //TODO: Create Loading Screen
-      const response = await loginPOST(Email, Password) 
-      dispatch({type: 'CONFIRM_LOGIN', payload: {...response}})
+  //     console.log('loading...')
+  //     //TODO: Create Loading Screen
+  //     const response = await loginPOST(Email, Password) 
+  //     dispatch({type: 'CONFIRM_LOGIN', payload: {...response}})
 
-    }
-  }
+  //   }
+  // }
 
   /**
    * OnPress Dismiss Button in Modal
    * Closes the login Modal
    */
   const closeModal = () => {
-    dispatch({type: "CLOSE_MODAL"})
+    // dispatch({type: "CLOSE_MODAL"})
   }
 
   /**
@@ -87,7 +73,7 @@ export default function Login({navigation}) {
    * @param {string} value Value of the input
    */
   const enterInput = (label, value) => {
-    dispatch({type: "ENTER_INPUT", payload: {label, value} })
+    // dispatch({type: "ENTER_INPUT", payload: {label, value} })
   }
   //#endregion
 
@@ -109,16 +95,16 @@ export default function Login({navigation}) {
                                   label="Email"
                                   error={EmailError.error}
                                   errorText={EmailError.errorText}
-                                  onChange={(e) => {enterInput('Email',e.target.value )}}/>
+                                  onChangeText={(text) => {enterEmail(text)}}/>
 
                 <ProjectTextInput placeholder='Password' 
                                   error={PasswordError.error} 
                                   errorText={PasswordError.errorText}
                                   label="Password"
-                                  onChange={(e) => {enterInput('Password',e.target.value )}} />
+                                  onChangeText={(text) => {enterPassword(text)}} />
 
                 <ProjectButton title='Login' type='default' style={{marginBottom: 18}} onPress={() => {login()}} />
-                <ProjectButton title='Forgot Password' type='info'  />
+                <ProjectButton title='Forgot Password' type='info' onPress={() => {openForgotPasswordModal()}}  />
                 
             </View>
         </Paper>
