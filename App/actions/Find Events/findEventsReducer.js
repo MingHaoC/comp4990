@@ -10,7 +10,7 @@ const reducer = (state, action) => {
         const newFilter = {...state.event_filter, category: newFilterCategories} 
 
         return {...state, event_filter: newFilter}
-    }
+    } 
     if(action.type == 'DISPLAY_LOCATIONS'){
         const newFilterLocations = {...state.event_filter.location, items: action.payload }
         const newFilter = {...state.event_filter, location: newFilterLocations} 

@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Profile from './home/Profile';
-import Home from './home/Home';
+import Home from './home/Home'
 import FindEvents from './home/FindEvents';
 import MyEvents from './home/MyEvents';
 import { Text, View } from 'react-native';

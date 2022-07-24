@@ -5,7 +5,7 @@ import RegisterModal from './auth-modals/RegisterModal';
 import { ScrollView } from 'react-native-gesture-handler';
 import {RegisterProvider, useRegisterContext } from '../../actions/Auth/Register/RegisterContext';
 
-
+          
 export default function Register(props) {
 return(
   <RegisterProvider>

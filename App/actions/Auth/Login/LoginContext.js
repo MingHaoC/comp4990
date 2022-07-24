@@ -23,7 +23,7 @@ const LoginProvider = ({children}) => {
 
     const login = async() => {
         dispatch({type: "VERIFIY_LOGIN_PRECONDITIONS"})
-
+ 
         if(state.LoginPreconditionsMet){
     
           console.log('loading...')

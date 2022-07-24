@@ -8,7 +8,7 @@ export default class initial_state {
         this.undefined_event = {                
             id: -1,
             name: "undefined",
-            description: "undefined",
+            description: "undefined", 
             min_age: 0,
             max_age: 100,
             category: "undefined",

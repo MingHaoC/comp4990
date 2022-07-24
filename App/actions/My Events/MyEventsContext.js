@@ -5,24 +5,21 @@ import reducer from './MyEventsReducer'
 
 const MyEventContext = React.createContext()
 const init_state = {...new initial_state}
-
+ 
 const MyEventProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, init_state)
 
     const getEvents = () => {
         const events = dummyEvents
         dispatch({type: "DISPLAY_EVENTS", payload:events})
-
-        // getEventCategories(events)
-        // getEventLocations(events)
     }
 
-    const getEventCategories = (events) => {
+    const getEventCategories = () => {
         const categories = []
         dispatch({type: "DISPLAY_CATEGORIES", payload:categories})
     }
 
-    const getEventLocations = (events) => {
+    const getEventLocations = () => {
         const locations = []
         dispatch({type: "DISPLAY_LOCATIONS", payload:locations})
     }

@@ -39,7 +39,7 @@ const reducer = (state,action) => {
                 state.VerificationError.errorText = emptyFieldError
             }
             // #endregion
-            
+             
             /*Check each field and ensure that there are no errors in order to register */
             if( !state.VerificationError.error    &&
                 !state.PasswordError.error        &&

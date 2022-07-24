@@ -160,7 +160,7 @@ const Confirm = (props) => {
         <>
             <Text style={[styles.h3, styles.bold, styles.margin_bottom_small]}>Confirm</Text>
             <Paper style={[styles.padding_medium]}>
-
+ 
                 {/*Name */}
                 <View>
                     <View  style={[styles.row]}>

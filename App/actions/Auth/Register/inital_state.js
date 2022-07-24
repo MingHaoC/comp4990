@@ -40,7 +40,7 @@
       this.PasswordError = {
         error: false,
         errorText: ''
-      }
+      } 
     
       this.Verification = '',    //Value of Verification Input
       /*Indicates error in Verification input*/

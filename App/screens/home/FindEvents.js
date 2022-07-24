@@ -9,6 +9,7 @@ import AvailabilityFilter from './find-events-modals/AvailabilityFilter'
 import RegisterForEvent from './find-events-modals/RegisterForEvent'
 import ConfirmEventRegistration from './find-events-modals/ConfirmEventRegistration'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import fromExternalToProjectFormat from '../../services/eventAdapter'
 
 /** 
  * This screen is used to allow users to view, search, and register for events
@@ -146,8 +147,10 @@ const Events = () => {
         {/*Event List*/}
         <ScrollView>
         {
-            events.map((event) =>{
-                return <Event {...event} key={event.id}/>
+            events.map((event,index) =>{
+                const projectEvent = fromExternalToProjectFormat(event)
+                
+                return <Event {...projectEvent} key={index}/>
             })
         }
         </ScrollView>
@@ -160,6 +163,7 @@ const Events = () => {
  * @returns JSX Event Item
  */ 
 const Event = ({id, name, description}) => {
+
 
     //Get props and actions from context
     const {
@@ -174,7 +178,7 @@ const Event = ({id, name, description}) => {
         <Paper   title={name} 
             header={2} 
             headerTitleStyle={[
-                styles.h1, 
+                styles.h2, 
                 styles.theme_tinted_colour,
                 ]}>
 

@@ -8,7 +8,7 @@ import IconF from 'react-native-vector-icons//Feather';
 import { MyEventProvider, useMyEventContext } from '../../actions/My Events/MyEventsContext'
 import DropModal from './my-events-modals/DropModal'
 import EventFilter from './my-events-modals/EventFilter'
-
+                   
 const MyEvents = (props) => {
   return (
     <MyEventProvider>

@@ -13,7 +13,7 @@ const reducer = (state, action) => {
                 state.PasswordError.error = true
                 state.PasswordError.errorText = emptyFieldError
             }
-            // #endregion
+            // #endregion 
 
             /*Check each field and ensure that there are no errors in order to login */
             if( !state.PasswordError.error && !state.EmailError.error){

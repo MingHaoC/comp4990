@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import styles from '../../styles'
 import { useReducer } from 'react';
@@ -8,10 +8,9 @@ import {useAppContext} from '../../context'
 import LoginModal from './auth-modals/LoginModal';
 import { LoginProvider, useLoginContext } from '../../actions/Auth/Login/LoginContext';
 
-
 export default function Login(props) {
 return (  
-  <LoginProvider>
+  <LoginProvider> 
     <LoginContent {...props} />
   </LoginProvider>)
 }
@@ -39,6 +38,7 @@ const LoginContent = ({navigation}) => {
   } = useLoginContext()
 
   //#endregion
+                   
 
   //#region methods
 

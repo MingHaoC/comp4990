@@ -11,7 +11,7 @@ const RegisterModal = (props) => {
       Response,
       closeModal,
     } = props
-    return (
+    return ( 
           <Modal
           animationType="fade"
           transparent={true}

@@ -5,9 +5,9 @@ import styles from '../../styles'
 
 const initialState = {
     user_firstname: 'Firstname'
-}
+}           
 
-const Home = ({navigation}) => {
+const Home = ({navigation}) => { 
     const toggleDrawer =() => {
         navigation.toggleDrawer()
     }

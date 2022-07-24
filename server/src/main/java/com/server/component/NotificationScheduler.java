@@ -1,6 +1,5 @@
 package com.server.component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.repository.EventRepository;
 import com.server.repository.UserEventRepository;
 import com.server.service.impl.AuthenticationServiceImpl;
@@ -38,14 +37,17 @@ public class NotificationScheduler {
 
         eventRepository.findAllByTimeRange(now, toDate).forEach(event -> {
             userEventRepository.getUserRegisterInEventWithExpoToken(event.getEventId()).forEach(user -> {
-                HashMap<String, String> body = new HashMap<>() {{
-                    put("to", user.getExpoToken());
-                    put("title", event.getEventTitle());
-                    put("body", event.getEventDescription());
-                }};
+                HashMap<String, String> body = new HashMap<>() {
+                    {
+                        put("to", user.getExpoToken());
+                        put("title", event.getEventTitle());
+                        put("body", event.getEventDescription());
+                    }
+                };
                 HttpResponse<String> response = sendNotification(body, EXPO_SEND_NOTIFICATION_URL);
                 if (response != null && response.statusCode() != 200) {
-                    logger.error("An error has occurred trying to send notification to expo, Response body:\n" + response.body());
+                    logger.error("An error has occurred trying to send notification to expo, Response body:\n"
+                            + response.body());
                 }
             });
         });

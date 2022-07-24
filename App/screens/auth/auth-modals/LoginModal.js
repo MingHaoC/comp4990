@@ -5,7 +5,7 @@ import { Paper, ProjectButton} from '../../../components'
 import { colours } from '../../../styles/globals'
 
 //Shows outcome of login attempt
-const LoginModal = (props) => {
+const LoginModal = (props) => {                
     const {
       showModal,
       Response,

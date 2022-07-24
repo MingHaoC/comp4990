@@ -13,7 +13,7 @@ const DropModal = () => {
     /*Get Context Props and Actions */
     const {
         drop_event_modal,
-        dropEvent,
+        dropEvent, 
         closeDropEventModal
     } = useMyEventContext()
 

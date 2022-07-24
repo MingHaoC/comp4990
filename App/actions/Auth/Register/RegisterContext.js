@@ -82,7 +82,7 @@ const RegisterProvider = ({children}) => {
             {children}
         </RegisterContext.Provider>
     )
-}
+} 
 
 
 // make sure use

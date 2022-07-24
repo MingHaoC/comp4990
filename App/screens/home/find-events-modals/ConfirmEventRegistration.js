@@ -13,7 +13,7 @@ const ConfirmEventRegistration = () => {
   } = useFindEventContext()
   return (
 
- 
+  
     <Modal
       animationType="fade"
       transparent={true}

@@ -1,4 +1,5 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
+import fetchEventList from './scrape/scrape'
 const root = 'http://localhost:8080'
 const registerURL = `${root}/user/register`
 const loginURL = `${root}/user/login`
@@ -133,7 +134,8 @@ const AppProvider = ({ children }) => {
             setUser,
             logout,
             registerPOST, 
-            loginPOST
+            loginPOST,
+            fetchEventList,
           }}
         >
           {children}

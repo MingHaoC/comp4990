@@ -1,5 +1,7 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
+import { useAppContext } from '../../context'
 import dummyEvents from '../../dummyEvents'
+import fromExternalToProjectFormat from '../../services/eventAdapter'
 import reducer from './findEventsReducer'
 import initial_state from './inital_state'
 const FindEventContext = React.createContext()
@@ -9,6 +11,10 @@ const init_state = {...new initial_state()}
 
 
 const FindEventProvider = ({children}) => {
+    const {
+        fetchEventList
+    } = useAppContext()
+    
     const [state, dispatch] = useReducer(reducer, init_state)
 
     const get24HourTime = (hour, minute, ante_meridian) => {
@@ -34,8 +40,14 @@ const FindEventProvider = ({children}) => {
     }
 
     //#region initialize data
-    const getEvents =() => {
-        const events = dummyEvents;
+    const getEvents = async() => {
+        let events = []
+        try {
+             events = await fetchEventList();
+
+        } catch (error) {
+            
+        }
         dispatch({type: 'DISPLAY_EVENTS', payload: events})
     }
 
@@ -100,25 +112,25 @@ const FindEventProvider = ({children}) => {
     }
     const openEventDetailsModal = (id) => {
         //Get selected event
-        const selected_event = state.events.filter((event) => event.id == id)[0]
-
+        const selected_event = state.events.filter((event) => fromExternalToProjectFormat(event).id == id)[0]
         //set the avilability filter to match the evnt filter
-        selectAvailabilityAnytime(state.event_filter.time.any_time)
-        selectAvailabilityLocation(state.event_filter.location.selected)
-        selectAvailableDays(state.event_filter.days.days_selected)
-        const before_time = {
-            hour: state.event_filter.time.before_time.hour,
-            minute: state.event_filter.time.before_time.minute,
-            ante_meridian: state.event_filter.time.before_time.ante_meridian,
-        }
-        const after_time = {
-            hour: state.event_filter.time.after_time.hour,
-            minute: state.event_filter.time.after_time.minute,
-            ante_meridian: state.event_filter.time.after_time.ante_meridian,
-        }
-        selectEventTimeRange(after_time.hour,after_time.minute,after_time.ante_meridian,before_time.hour,before_time.minute,before_time.ante_meridian)
-        dispatch({type: "FILTER_AVAILABILITIES", payload: selected_event.availabilities})
-        dispatch({type: 'OPEN_EVENT_DETAILS', payload: selected_event})
+        // selectAvailabilityAnytime(state.event_filter.time.any_time)
+        // selectAvailabilityLocation(state.event_filter.location.selected)
+        // selectAvailableDays(state.event_filter.days.days_selected)
+        // const before_time = {
+        //     hour: state.event_filter.time.before_time.hour,
+        //     minute: state.event_filter.time.before_time.minute,
+        //     ante_meridian: state.event_filter.time.before_time.ante_meridian,
+        // }
+        // const after_time = {
+        //     hour: state.event_filter.time.after_time.hour,
+        //     minute: state.event_filter.time.after_time.minute,
+        //     ante_meridian: state.event_filter.time.after_time.ante_meridian,
+        // }
+        // selectEventTimeRange(after_time.hour,after_time.minute,after_time.ante_meridian,before_time.hour,before_time.minute,before_time.ante_meridian)
+        const ptojectEvent = fromExternalToProjectFormat(selected_event)
+        dispatch({type: "FILTER_AVAILABILITIES", payload: ptojectEvent.availabilities})
+        dispatch({type: 'OPEN_EVENT_DETAILS', payload: ptojectEvent})
     }
 
     //#region Actions used in Event Detail Modals
@@ -487,7 +499,7 @@ const FindEventProvider = ({children}) => {
         </FindEventContext.Provider>
     );
 }
-
+                  
 
 // make sure use
  const useFindEventContext = () => {

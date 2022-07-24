@@ -127,7 +127,7 @@
             }
 
         }
-
+ 
         /**
          * Modal used to confirm if a user would like to drop an event
          */

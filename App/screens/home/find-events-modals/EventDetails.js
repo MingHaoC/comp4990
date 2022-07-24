@@ -1,6 +1,5 @@
 import { View, Text, Pressable, Modal, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import dummyEvents from '../../../dummyEvents'
 import styles from '../../../styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFindEventContext } from '../../../actions/Find Events/FindEventsContext'
@@ -12,7 +11,7 @@ import { Paper, Accordian, ProjectButton  } from '../../../components'
  */
 const EventDetails = () => {
 
-  //#region props
+  //#region props 
   /*Get values/actions from context */
   const {
     event_details,
@@ -47,14 +46,14 @@ const EventDetails = () => {
       <ScrollView>
         {/*Container */}
         <Paper  title={name} 
-          description={`${min_age} years - ${max_age} years`}
+          description={ (min_age > 0 && max_age > 90) ? `${min_age} years - ${max_age} years` : ''}
           header={1}
           headerTitleStyle={[styles.theme_tinted_colour]}
           underlineStyle={[styles.hidden]}
           descriptionStyle={[styles.padding_bottom_medium, styles.bold]}>
 
           {/*Show description if there is one*/}
-          { (description.trim().length > 0) && 
+          { (description != undefined && description.trim().length > 0) && 
             <Accordian
               
               title="Description" 
@@ -68,7 +67,7 @@ const EventDetails = () => {
           }
 
           {/*Show Prerequsistes if any exitss */}
-          { (prerequisite_programs.length > 0) &&
+          { (prerequisite_programs != undefined && prerequisite_programs.length > 0) &&
             <Accordian title="Prerequisites"
               content={
               <Prerequisites prerequisite_events={dummyEvents} />
@@ -76,6 +75,7 @@ const EventDetails = () => {
             />     
           }
 
+          {price != undefined && <>
           <View style={[
             styles.row
           ]}>
@@ -92,7 +92,7 @@ const EventDetails = () => {
               {/*Instead of showing $0 show Free*/}
               { (price <= 0) && 'Free'} {(price > 0 ) && `$${price}`}</Text>
           </View>  
-          
+          </>}
           {/*Always show availabilities tab even when none exist*/}
           <Accordian title="Availabilities" 
             collapsed={true}
@@ -127,6 +127,9 @@ const Prerequisites = ({prerequisite_events}) => {
       }
     </View>
   );
+}
+Prerequisites.defaultProps = {
+  prerequisite_events:[]
 }
 
 /**
@@ -221,6 +224,9 @@ const Availabilities = ({availabilities_item}) => {
   );
 }
 
+Availabilities.defaultProps ={
+  availabilities_item: []
+}
 /**
  * Creates a display for an availabilty 
  * @param {Object} availability_item Describes availability for an event. Required props: barcode, location, start_date, end_date, start_time, end_time, days_of_the_week

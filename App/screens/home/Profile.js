@@ -6,7 +6,7 @@ const Profile = ({navigation}) => {
   return (
     <View>
       <ProjectHeader navigation={navigation} />
-      <Text>TODO: Link to Rebecca's Profilr</Text>
+      <Text>TODO: Link to Rebecca's Profile</Text>
     </View>
   )
 }
