@@ -10,10 +10,11 @@ public interface EventService {
 
     ResponseEntity<List<Event>> getAllEvents();
 
-    ResponseEntity<String> createNewEvent(Event event);
+    ResponseEntity<String> userRegisterForNewEvent(Event event, Integer userID);
 
     ResponseEntity<String> removeUserFromEvent(Integer userID, Integer eventID);
 
-    ResponseEntity<String> deleteEvent(Integer eventID);
+    ResponseEntity<List<Event>> getEventsThatUserRegisteredFor(Integer userID);
+
 
 }

@@ -11,6 +11,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,6 +51,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "event")
+    private List<UserEvent> events;
+
+    @Column(name = "expo_token")
+    private String expoToken;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
