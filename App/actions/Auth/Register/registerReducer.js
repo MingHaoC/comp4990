@@ -1,7 +1,11 @@
+
+ 
  // reducer function
 const reducer = (state,action) => {
+
+
     switch (action.type) {
-        case 'REGISTER':
+        case 'CHECK_REGISTRATION_PRECONDITIONS':
         {
             //#region Check each field and ensure that they are empty
             const emptyFieldError = 'Please fill in required field.'
@@ -13,6 +17,11 @@ const reducer = (state,action) => {
             if(!state.Lastname){
                 state.LastnameError.error = true
                 state.LastnameError.errorText = emptyFieldError
+            }
+
+            if(!state.Address){
+                state.AddressError.error = true
+                state.AddressError.errorText = emptyFieldError
             }
 
             if(!state.Email){
@@ -36,11 +45,25 @@ const reducer = (state,action) => {
                 !state.PasswordError.error        &&
                 !state.EmailError.error           &&
                 !state.LastnameError.error        &&
+                !state.AddressError.error         &&
                 !state.FirstnameError.error){
-                    console.log('Post Data')
+                    state.registerPreconditionsMet = true;
                 }
 
             return {...state};
+        }
+        case "CONFIRM_REGISTRATION":
+        {
+            state.Response = {status: action.payload.status, text: action.payload.text}
+            return reducer({...state}, {type: 'SHOW_MODAL'})
+        }
+        case "SHOW_MODAL":
+        {
+            return {...state, showModal: true}
+        }
+        case "CLOSE_MODAL":
+        {
+            return {...state, showModal: false}
         }
         case "ENTER_INPUT":
         {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {ScrollView} from 'react-native'
-import { Link} from './';
 import {RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 import PropTypes from 'prop-types';
+import Link from './Link';
 
 const PADDING_LEFT_INCREMENT = 18;  //The amount of left padding to add to children options so they appear more right than their parents
 const INIT_PADDING_LEFT = 0;        //Default left padding
@@ -99,7 +99,7 @@ const TitleOption = (props) => {
 
     return(<>
             <Link   text='' 
-                    type='topLevelDropdownMenuLink'
+                    type='top_level_dropdown'
                     disabled={true}
                     target=''
                     onPress={_handleOnPress}
@@ -141,7 +141,7 @@ const ChildOption = (props) => {
     const isDisabled = !target 
 
     return <Link    text={name} 
-                    type='dropdownMenuLink'
+                    type='sub_dropdown'
                     disabled={isDisabled}
                     target={target}
                     isExternal={isExternal}

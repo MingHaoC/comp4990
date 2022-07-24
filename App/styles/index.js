@@ -1,33 +1,14 @@
-import { StyleSheet } from "react-native";
-import textStyles from "./textStyles";
-import linkStyle from "./linkStyle";
-import buttonStyles from "./buttonStyles";
-import paperStyles from "./paperStyles";
-import inputTextStyles from "./inputTextStyles";
-import underlineStyles from "./underlineStyles";
-import { colours } from "./globals";
+import { StyleSheet } from 'react-native'
+import base from './base'
+import buttons from './buttons'
+import form from './form'
+import links from './links'
+import paper from './paper'
 
-const styles = StyleSheet.create({
-
-    container: {
-      flex: 1,
-      backgroundColor: colours.background.toString(),
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: 30    
-    },
-    form:{
-      padding: 30,
-      justifyContent:'center'
-    },
-    ...underlineStyles,
-    ...textStyles,
-    ...linkStyle,
-    ...buttonStyles,
-    ...paperStyles, 
-    ...inputTextStyles,
-
-  });
-
-  
-  export default styles
+export default StyleSheet.create({
+  ...base,
+  ...buttons,
+  ...links,
+  ...paper,
+  ...form,
+})
