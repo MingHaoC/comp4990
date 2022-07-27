@@ -433,10 +433,13 @@ const getDirections = (destination) => {
       longitude: currentDestinationDetails.lng,
     };
 
+    //TODO remove console.log
     console.log("Current Destination: ", currentDestination);
     console.log("Current Location: ", currentLocation);
 
+    //TODO
     //need to send the user to the map screen with the two variables, currentDestination and currentLocation as props.
+    //userLocation={currentLocation} eventDestination={currentDestination}
   })();
 };
 
