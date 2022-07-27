@@ -2,6 +2,7 @@ import React, { useState, useContext, useReducer, useEffect } from 'react'
 import dummyEvents from "../../dummyEventsRegistered"
 import initial_state from "./inital_state"
 import reducer from './MyEventsReducer'
+import openMap from 'react-native-open-maps';
 
 const MyEventContext = React.createContext()
 const init_state = {...new initial_state}
@@ -25,6 +26,7 @@ const MyEventProvider = ({children}) => {
     }
 
     const navigateToEvent = (id) => {
+        openMap({ latitude: 37.865101, longitude: -119.538330 });
         console.log('TODO: Naviagtion')
     }
 
@@ -107,7 +109,6 @@ const MyEventProvider = ({children}) => {
     return (
         <MyEventContext.Provider value={{
             ...state,
-            openEventInSchedule,
             closeDropEventModal,
             dropEvent,
             openDropEventModal,
@@ -115,6 +116,7 @@ const MyEventProvider = ({children}) => {
             selectEventName,
             selectFilterAges,
             selectFilterCategory,
+            openEventInSchedule,
             selectFilterDays,
             selectFilterLocation,
             selectFilterOrderBy,

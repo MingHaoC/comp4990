@@ -216,8 +216,9 @@ const Availabilities = ({availabilities_item}) => {
 
       {/*List Availabilities */}
       {
-        availabilities_item.map((availability) => {
-          return <Availability key={availability.barcode} availability_item={availability} />
+        availabilities_item.map((availability, index) => {
+          console.log({...availability})
+          return <Availability key={index} {...availability} />
         })
       }
     </View>
@@ -232,7 +233,7 @@ Availabilities.defaultProps ={
  * @param {Object} availability_item Describes availability for an event. Required props: barcode, location, start_date, end_date, start_time, end_time, days_of_the_week
  * @returns JSX Object describing a single open avilable time to register for an event
  */
-const Availability = ({availability_item}) => {
+const Availability = ({days_of_the_week,location}) => {
 
   //Get props and actions from context
   const {
@@ -245,25 +246,13 @@ const Availability = ({availability_item}) => {
     id
   } = event_details.event_selected
 
-  //All prop names in an availability item
-  //We will enumerate through the props instead of manually creating a row for each prop as all the styling is the same for all
-  //If you add any new props, be sure to add it to this array with its display name
-  const props = [
-    {name:'location',display:'Location'},
-    {name:'days_of_the_week', display: 'Days'}, 
-    {name:'start_time',display:'Start Time'},
-    {name:'end_time',display:'End Time'},
-    {name:'start_date',display:'Start Date'},
-    {name:'end_date',display:'End Date'}
-  ]
+
   return (
     <Paper style={[styles.margin_bottom_medium]}>
       {/*Display Row with Event Prop */}
-      {
-        //Because each row has exactly the same style, we will cycle through prop names instead of copy and pasting each row and changing value
-        props.map((prop,index) =>{
-          return(
-          <View key={index}
+      
+          {/*Days*/}
+          <View 
             style={[
               styles.row, 
               styles.padding_horizontal_medium, 
@@ -274,24 +263,46 @@ const Availability = ({availability_item}) => {
             <Text style={[
               styles.text_small, 
               styles.muted_text_2_colour
-            ]}>{prop.display}:
+            ]}>Days:
             </Text>
 
             {/*Value */}
             <Text style={[
               styles.text_small, 
-              styles.muted_text_1_colour
+              styles.muted_text_1_colour,
+              styles.medium_container
             ]}>
-              {/*Fix Times */}
-              {(prop.name == 'start_time' || prop.name == 'end_time') && `${availability_item[prop.name].hour}:${availability_item[prop.name].minute} ${availability_item[prop.name].ante_meridian}`}
-              {/*Days is an array so we must turn it into a string before printing */}
-              {(prop.name == 'days_of_the_week') && availability_item[prop.name].join(', ')}
-              {(prop.name != 'days_of_the_week' && prop.name != 'start_time' && prop.name != 'end_time') && availability_item[prop.name]}
+              {days_of_the_week.join(', ')}
             </Text>
 
-        </View>)
-        })
-      }
+        </View>
+
+            {/*Location*/}
+            <View 
+            style={[
+              styles.row, 
+              styles.padding_horizontal_medium, 
+              styles.padding_vertical_xsmall
+            ]}>
+            
+            {/*Label */}
+            <Text style={[
+              styles.text_small, 
+              styles.muted_text_2_colour
+            ]}>Location:
+            </Text>
+
+            {/*Value */}
+            <Text style={[
+              styles.text_small, 
+              styles.muted_text_1_colour,
+              styles.medium_container
+            ]}>
+              {location}
+            </Text>
+
+        </View>
+
 
       {/*Container for Option Buttons */}
       <View style={[
@@ -313,6 +324,10 @@ const Availability = ({availability_item}) => {
       </View>
     </Paper>
   );
+}
+Availability.defaultProps = {
+  days_of_the_week: [],
+  location:  ""
 }
 
 export default EventDetails

@@ -274,7 +274,7 @@ const MeetingTimes = ({id,days,start_time,end_time}) => {
   /*Get Props and actions from context */
   const {
     event_filter,
-    openEventInSchedule
+    // openEventInSchedule
   } = useMyEventContext()
 
   const daysData = event_filter.days.data
@@ -363,7 +363,7 @@ const MeetingTimes = ({id,days,start_time,end_time}) => {
           </Text>
         } 
         type='info' 
-        onPress={() => {openEventInSchedule(id)}} 
+        onPress={() => {}} 
       />
       </View>
 
