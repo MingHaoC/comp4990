@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Register from './auth/Register'
 import Login from './auth/Login'
 import { useAppContext } from '../context';
+import MapDirections from './home/MapDirections';
 
 const DrawerContent = (props) => {
   const {
@@ -24,6 +25,7 @@ const DrawerContent = (props) => {
                 <DrawerItem label="Profile" onPress={() => props.navigation.navigate("Profile")}/>
                 <DrawerItem label="My Events" onPress={() => props.navigation.navigate("MyEvents")}/>
                 <DrawerItem label="Find Events" onPress={() => props.navigation.navigate("FindEvents")}/>
+                <DrawerItem label="Map" onPress={() => props.navigation.navigate("Map")} />
                 <DrawerItem label="Logout" onPress={() => logout()}/>
             </DrawerContentScrollView>
         </View>
@@ -33,11 +35,14 @@ const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
   return (
-    <Drawer.Navigator initialRouteName='Profile' screenOptions={{ headerShown: false }} drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }} drawerContent={(props) => <DrawerContent {...props} />}>
             <Drawer.Screen name='Home' component={Home} options={{drawerIcons: <Icon name='home' />}}/>
             <Drawer.Screen name='Profile' component={Profile} />
             <Drawer.Screen name='FindEvents' component={FindEvents} />
             <Drawer.Screen name='MyEvents' component={MyEvents} />
+            <Drawer.Screen name="MapDirections">
+            {props => <MapDirections {...props} />}
+            </Drawer.Screen>
     </Drawer.Navigator>
   );
 }

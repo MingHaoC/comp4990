@@ -1,19 +1,27 @@
-import { View, Text, Pressable, StatusBar } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Accordian, InlineSelect, Paper, ProjectButton, ProjectHeader, ProjectTextInput, Underline } from '../../components'
-import { ScrollView } from 'react-native-gesture-handler'
-import styles from '../../styles'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import IconF from 'react-native-vector-icons//Feather';
-import { MyEventProvider, useMyEventContext } from '../../actions/My Events/MyEventsContext'
-import DropModal from './my-events-modals/DropModal'
-import EventFilter from './my-events-modals/EventFilter'
-                   
-const MyEvents = (props) => {
-  const [location, setLocation] = useState(null);
-  const [destination, setDestination] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+import { View, Text, Pressable, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Accordian,
+  InlineSelect,
+  Paper,
+  ProjectButton,
+  ProjectHeader,
+  ProjectTextInput,
+  Underline,
+} from "../../components";
+import { ScrollView } from "react-native-gesture-handler";
+import styles from "../../styles";
+import Icon from "react-native-vector-icons/FontAwesome";
+import IconF from "react-native-vector-icons//Feather";
+import {
+  MyEventProvider,
+  useMyEventContext,
+} from "../../actions/My Events/MyEventsContext";
+import DropModal from "./my-events-modals/DropModal";
+import EventFilter from "./my-events-modals/EventFilter";
+import * as Directions from "expo-location";
 
+const MyEvents = (props) => {
   return (
     <MyEventProvider>
       <StatusBar />
@@ -80,7 +88,7 @@ const MyEventsContents = ({ navigation }) => {
         {/*Events */}
         <Paper>
           <ScrollView>
-            <Events events={events} />
+            <Events events={events} navigation={navigation} />
           </ScrollView>
         </Paper>
       </View>
@@ -93,7 +101,7 @@ const MyEventsContents = ({ navigation }) => {
  * @param {Object} events Array[event]
  * @returns JSX Object
  */
-const Events = ({ events }) => {
+const Events = ({ events, navigation }) => {
   return (
     <View
       style={[styles.padding_horizontal_medium, styles.margin_bottom_xlarge]}
@@ -120,7 +128,7 @@ const Events = ({ events }) => {
       {/*Event List*/}
       <ScrollView style={[styles.margin_bottom_xlarge]}>
         {events.map((event) => {
-          return <Event {...event} key={event.id} />;
+          return <Event {...event} key={event.id} navigation={navigation} />;
         })}
         <Text style={[styles.margin_bottom_xlarge]}></Text>
         <Text style={[styles.margin_bottom_xlarge]}></Text>
@@ -147,6 +155,7 @@ const Event = ({
   end_date,
   location,
   other_information,
+  navigation,
 }) => {
   /*Get Props and actions from context */
   const { openDropEventModal } = useMyEventContext();
@@ -165,7 +174,7 @@ const Event = ({
           start_time={start_time}
           end_time={end_time}
         />
-        <Address location={location} id={id} />
+        <Location location={location} id={id} navigation={navigation} />
         <Duration start_date={start_date} end_date={end_date} id={id} />
         {description && (
           <Description
@@ -300,8 +309,7 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
   const {
     event_filter,
     // openEventInSchedule
-  } = useMyEventContext()
-
+  } = useMyEventContext();
 
   const daysData = event_filter.days.data;
 
@@ -356,43 +364,8 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
   };
 
   useEffect(() => {
-    addAllSelected()
-  },[])
-
-  return(
-  <Accordian title="Meeting Times"
-    titleStyle={[styles.bold]}
-    collapsed={false}
-    content={
-    <View style={[styles.padding_horizontal_medium]}>
-      {/*Meeting Days */}
-      <InlineSelect disabled={true} 
-        multiselect={true} 
-        data={daysData}
-        selectedIndicies={selected}
-      />
-
-      <View style={[
-        styles.row,
-      ]}>
-
-        {/*Meeting Times */}
-        <Text style={[
-          styles.text_medium
-        ]}
-        >{start_time.hour}:{start_time.minute} {start_time.ante_meridian} - {end_time.hour}:{end_time.minute} {end_time.ante_meridian}</Text>
-        
-        {/*Button Opens Event in Schedule */}
-        <ProjectButton title={
-          <Text>
-          <Icon name='calendar' style={[styles.text_medium, styles.padding_right_medium]} />  Schedule
-          </Text>
-        } 
-        type='info' 
-        onPress={() => {}} 
-      />
-      </View>
-
+    addAllSelected();
+  }, []);
 
   return (
     <Accordian
@@ -428,9 +401,7 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
                 </Text>
               }
               type="info"
-              onPress={() => {
-                openEventInSchedule(id);
-              }}
+              onPress={() => {}}
             />
           </View>
         </View>
@@ -439,15 +410,15 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
   );
 };
 
-const getDirections = (destination) => {
+const getDirections = (destination, navigation) => {
   (async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+    let { status } = await Directions.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       //need something to let user know we cant give directions without their permission
       return;
     }
 
-    let currentLocationDetails = await Location.getCurrentPositionAsync({});
+    let currentLocationDetails = await Directions.getCurrentPositionAsync({});
     let currentLocation = {
       latitude: currentLocationDetails.coords.latitude,
       longitude: currentLocationDetails.coords.longitude,
@@ -467,6 +438,11 @@ const getDirections = (destination) => {
     //TODO
     //need to send the user to the map screen with the two variables, currentDestination and currentLocation as props.
     //userLocation={currentLocation} eventDestination={currentDestination}
+    /* am i doing this right??? */
+    navigation.navigate("MapDirections", {
+      userLocation: currentLocation,
+      eventDestination: currentDestination,
+    });
   })();
 };
 
@@ -517,7 +493,7 @@ const getDestinationDetails = async (eventDestination) => {
  * @param {Object} {id,location} location is a string
  * @returns JSX Object displaying location
  */
-const Address = ({ id, location }) => {
+const Location = ({ id, location, navigation }) => {
   const { navigateToEvent } = useMyEventContext();
 
   return (
@@ -556,7 +532,7 @@ const Address = ({ id, location }) => {
             </Text>
           }
           onPress={() => {
-            getDirections(location);
+            getDirections(location, navigation);
           }}
         />
       </View>
