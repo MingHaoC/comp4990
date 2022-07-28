@@ -3,15 +3,27 @@ import dummyEvents from "../../dummyEventsRegistered"
 import initial_state from "./inital_state"
 import reducer from './MyEventsReducer'
 import openMap from 'react-native-open-maps';
+import { useAppContext } from '../../context';
 
 const MyEventContext = React.createContext()
 const init_state = {...new initial_state}
  
 const MyEventProvider = ({children}) => {
+    const {
+        getUserEventsGET,
+        cancelEvent
+    } = useAppContext()
     const [state, dispatch] = useReducer(reducer, init_state)
 
-    const getEvents = () => {
-        const events = dummyEvents
+    const getEvents = async() => {
+        let events = []
+        try {
+            const response = await getUserEventsGET()
+            events= response.content
+        } catch (error) {
+            console.log(error)
+        }
+
         dispatch({type: "DISPLAY_EVENTS", payload:events})
     }
 
@@ -85,12 +97,13 @@ const MyEventProvider = ({children}) => {
     }
     const openDropEventModal = (id) => {
         const event = state.events.filter((event) => event.id == id)[0]
-        // console.log(event)
+        console.log(event)
         dispatch({type: "OPEN_DROP_MODAL",payload:event})
     }
 
-    const dropEvent = (id) => {
-        console.log("TODO: Drop Event")
+    const dropEvent = async(id) => {
+        let res = await cancelEvent(id)
+        console.log(res)
         closeDropEventModal()
     }
 

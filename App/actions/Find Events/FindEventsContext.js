@@ -234,7 +234,13 @@ const FindEventProvider = ({children}) => {
             tags: state.event_details.event_selected.category,
             eventTitle: state.event_details.event_selected.name,
             eventDescription: state.event_details.event_selected.description,
-            location: state.event_details.register.selected_availability.location
+            location: state.event_details.register.selected_availability.location,
+            emailContact: JSON.stringify({
+                days_of_the_week: state.event_details.register.selected_availability.days_of_the_week,
+                start_time: state.event_details.register.selected_availability.start_time,
+                end_time: state.event_details.register.selected_availability.end_time,
+                start_date: state.event_details.register.selected_availability.start_date,
+            })
         })
         dispatch({type: "SET_REGISTER_LOADING", payload: false})
 

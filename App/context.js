@@ -18,7 +18,7 @@ const AppProvider = ({ children }) => {
     "exp": 1658991010
   })
 
-  const root = 'https://809f-216-8-184-8.ngrok.io'
+  const root = 'https://3dce-216-8-186-247.ngrok.io'
   const registerURL = `${root}/user/register`
   const loginURL = `${root}/user/login`
   const registerEventURL = `${root}/event/register?userID=${user.sub}`
@@ -149,11 +149,13 @@ const AppProvider = ({ children }) => {
     }
   }
 
-  const cancelEvent = (eventId) => {
+  const cancelEvent = async(eventId) => {
     try {
-      let cancelResposne = POST({},cancelEventURL+eventId)
+      let cancelResposne = await POST({},cancelEventURL+eventId)
+      POST_Response.status = cancelResposne.status
+      POST_Response.content = await cancelResposne.text()
     } catch (error) {
-      
+     console.log(error) 
     }
   }
   const updateProfilePOST = async(id, firstName, lastName, address, phoneNumber) => {
@@ -177,8 +179,14 @@ const AppProvider = ({ children }) => {
     try {
       let response = await fetch(getUserEventsURL)
       let data = await response.json()
+<<<<<<< Updated upstream
+=======
+      POST_Response.status = response.status
+      POST_Response.content = data
+      return POST_Response
+>>>>>>> Stashed changes
     } catch (error) {
-      
+      console.log(error)
     }
     
   }
