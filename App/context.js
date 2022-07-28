@@ -80,8 +80,8 @@ const AppProvider = ({ children }) => {
     let userData = {
         address: _address,
         email: _email,
-        first_name: _first_name,
-        last_name: _last_name,
+        firstName: _first_name,
+        lastName: _last_name,
         password: _password
     };
 

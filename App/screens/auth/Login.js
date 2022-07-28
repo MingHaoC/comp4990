@@ -65,6 +65,7 @@ const LoginContent = ({navigation}) => {
                                   keyboardType="email-address"
                                   label="Email"
                                   autoComplete="email"
+                                  autoCapitalize="none"
                                   error={EmailError.error}
                                   errorText={EmailError.errorText}
                                   onChangeText={(text) => {enterEmail(text)}}/>
@@ -73,11 +74,12 @@ const LoginContent = ({navigation}) => {
                 <View style={[styles.row]}>
                   <ProjectTextInput placeholder='Password' 
                                     // keyboardType="visible-password"
-                                    // autoComplete="password"
+                                    autoComplete="password"
+                                    autoCapitalize="none"
                                     error={PasswordError.error} 
                                     errorText={PasswordError.errorText}
                                     label="Password"
-                                    // secureTextEntry={HidePassword}
+                                    secureTextEntry={HidePassword}
                                     style={[styles.large_container]}
                                     onChangeText={(text) => {enterPassword(text)}} />
                   

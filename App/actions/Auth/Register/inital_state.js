@@ -1,9 +1,13 @@
 /**
- * Initial state for register page
+ * Initial state for Register screen
  */ 
  export default class initial_state {
 
    constructor() {
+      this.Loading = false
+      this.showResponseModal = false
+      this.RegisterResponse = ""
+
       this.Firstname = '',    //Value of Firstname Input
 
       /*Indicates error in Firstname input*/
@@ -36,28 +40,19 @@
       }
     
       this.Password = '',     //Value of Password Input
+      this.HidePassword = true
       /*Indicates error in Password input*/
       this.PasswordError = {
         error: false,
         errorText: ''
       } 
     
-      this.Verification = '',    //Value of Verification Input
+      this.Verification = '',    //Value of Verification 
+      this.HideVerificationPassword = true
       /*Indicates error in Verification input*/
       this.VerificationError = {
         error: false,
         errorText: ''
       }
-    
-      /*Response from sending a POST request to Register URL*/
-      this.Response = {
-        status: 500, 
-        text: 'System Error'
-      }
-    
-      this.showModal = false,  //Indicates if the LoginModal should be visible
-                               //Modal is used to show POST request response
-    
-      this.registerPreconditionsMet = false //Indicates if all the requirements have been met to send a POST request to Register
    }
  }
