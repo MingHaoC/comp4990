@@ -22,8 +22,9 @@ const AppProvider = ({ children }) => {
   const registerURL = `${root}/user/register`
   const loginURL = `${root}/user/login`
   const registerEventURL = `${root}/event/register?userID=${user.sub}`
-
-
+  const getUserEventsURL = `${root}/event/user_events?userID=${user.sub}`
+  const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`
+  const editProfileURL = `${root}/user/edit`
 
 
   const logout = () => {
@@ -141,15 +142,48 @@ const AppProvider = ({ children }) => {
   const registerEventPOST = async(event) => {
     //format user data
     try {
-      let registerRespone = await POST(event,registerEventURL)
+      let registerRespone = POST(event,registerEventURL)
 
     } catch (error) {
       console.log(error)
     }
   }
+
+  const cancelEvent = (eventId) => {
+    try {
+      let cancelResposne = POST({},cancelEventURL+eventId)
+    } catch (error) {
+      
+    }
+  }
+  const updateProfilePOST = async(id, firstName, lastName, address, phoneNumber) => {
+    const userData = {id,firstName,lastName,address,phoneNumber}
+
+    let updateResponse = POST_Response
+    try {
+      updateResponse = await POST(userData, editProfileURL)
+    } catch (error) {
+      console.log(error)
+    }
+
+    return updateResponse
+
+  }
   // #endregion
 
   
+  //#region Get
+  const getUserEventsGET = async() => {
+    try {
+      let response = await fetch(getUserEventsURL)
+      let data = await response.json()
+    } catch (error) {
+      
+    }
+    
+  }
+  //#endregion
+
     return (
         <AppContext.Provider
           value={{
@@ -159,7 +193,10 @@ const AppProvider = ({ children }) => {
             registerPOST, 
             loginPOST,
             fetchEventList,
-            registerEventPOST
+            registerEventPOST,
+            getUserEventsGET,
+            cancelEvent,
+            updateProfilePOST,
           }}
         >
           {children}

@@ -111,9 +111,9 @@ const FindEventsContent = ({navigation}) => {
  * A List of Events with Name, Description, and an option to read more only.
  * @returns JSX List of Events
  */
-const Events = () => {
+const Events = React.memo(() => {
     const {
-        events,
+        renderedEvents,
         Loading
     } = useFindEventContext()
 
@@ -142,7 +142,7 @@ const Events = () => {
                 styles.theme_tinted_colour,
                 styles.bold
             ]} 
-            >{events.length} Results</Text>
+            >{renderedEvents.length} Results</Text>
 
         </View>
 
@@ -157,7 +157,7 @@ const Events = () => {
             {/*Event List*/}
             <ScrollView>
             {
-                events.map((event,index) =>{
+                renderedEvents.map((event,index) =>{
                     const projectEvent = fromExternalToProjectFormat(event)
                     
                     return <Event {...projectEvent} key={index}/>
@@ -168,7 +168,7 @@ const Events = () => {
         }
 
     </View>);
-}
+})
 
 /**
  * Condensed Event Items. Shows Name, Description, and option to read more

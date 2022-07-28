@@ -112,22 +112,22 @@ const FindEventProvider = ({children}) => {
             }
         })
 
-        const filteredEvents = dummyEvents.filter((event) => { 
-
+        const filteredEvents = state.events.filter((event) => { 
+            let formattedEvent = fromExternalToProjectFormat(event)
             /*Check if name has been passed. If it has -> filter by passed value, otherwise filter by stored value */
 
-            let validMinAge = (event.min_age >= min_age) || min_age == undefined
+            let validMinAge = (formattedEvent.min_age >= min_age) || min_age == undefined
 
-            let validMaxAge = (event.max_age <= max_age) || max_age == undefined || max_age.length <= 0
+            let validMaxAge = (formattedEvent.max_age <= max_age) || max_age == undefined || max_age.length <= 0
 
-            let validLocation = (event.availabilities && ((event.availabilities.filter((a) => a.location == location).length > 0) || location.trim().length == 0))
+            let validLocation = (formattedEvent.availabilities && ((formattedEvent.availabilities.filter((a) => a.location == location).length > 0) || location.trim().length == 0))
             
-            let validCategory =  (event.category && ((event.category == category) || category.trim().length <= 0))
+            let validCategory =  (formattedEvent.category && ((formattedEvent.category == category) || category.trim().length <= 0))
 
             //Check that there is at least 1 availability in an event where 'days of the week' is a subset of 'days selected'
             let isSubset = false;
-            if(event.availabilities){
-                event.availabilities.forEach((a) => {
+            if(formattedEvent.availabilities){
+                formattedEvent.availabilities.forEach((a) => {
                     let result = a.days_of_the_week.every(val => days_values.includes(val));
                     if(result){isSubset = true}
                 })

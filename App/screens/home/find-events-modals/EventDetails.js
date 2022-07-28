@@ -18,6 +18,7 @@ const EventDetails = () => {
     closeEventDetailsModal
   } = useFindEventContext()
   const availabilities = event_details.rendered_availabilities
+  
   const {
     name, 
     min_age,
