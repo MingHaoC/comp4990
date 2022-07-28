@@ -78,7 +78,7 @@ public class eventController {
     /**
      * get all the events that a user has registered for
      *
-     * @param - JSON object containing the following fields
+     * @param - JSON object containing the following fields-
      *                  userID: Integer,
      *
      * @return
