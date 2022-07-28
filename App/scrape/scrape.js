@@ -99,7 +99,7 @@ async function getEventInformation(eventInfoURL) {
 
 //gets main list as well as extra events
 async function fetchEventList() {
-  await getExtraEvents(); //daily community events from windsorite.ca
+  // await getExtraEvents(); //daily community events from windsorite.ca
   await getEventsList(); //gets main list of events with times (basically government services for necomers to the area)
   // console.log(event_data);
   return event_data;

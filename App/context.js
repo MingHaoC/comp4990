@@ -177,6 +177,7 @@ const AppProvider = ({ children }) => {
     try {
       let response = await fetch(getUserEventsURL)
       let data = await response.json()
+      console.log(data)
     } catch (error) {
       
     }
