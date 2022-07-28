@@ -179,12 +179,10 @@ const AppProvider = ({ children }) => {
     try {
       let response = await fetch(getUserEventsURL)
       let data = await response.json()
-<<<<<<< Updated upstream
-=======
+
       POST_Response.status = response.status
       POST_Response.content = data
       return POST_Response
->>>>>>> Stashed changes
     } catch (error) {
       console.log(error)
     }

@@ -120,9 +120,7 @@ const Events = ({ events }) => {
       {/*Event List*/}
       <ScrollView style={[styles.margin_bottom_xlarge]}>
         {events.map((event) => {
-<<<<<<< Updated upstream
-          return <Event {...event} key={event.id} />;
-=======
+
 
           if(event.emailContact != null){
             const obj = JSON.parse(event.emailContact)
@@ -142,7 +140,6 @@ const Events = ({ events }) => {
 
           }
 
->>>>>>> Stashed changes
         })}
         <Text style={[styles.margin_bottom_xlarge]}></Text>
         <Text style={[styles.margin_bottom_xlarge]}></Text>
@@ -383,40 +380,6 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
   useEffect(() => {
     addAllSelected()
   },[])
-
-  return(
-  <Accordian title="Meeting Times"
-    titleStyle={[styles.bold]}
-    collapsed={false}
-    content={
-    <View style={[styles.padding_horizontal_medium]}>
-      {/*Meeting Days */}
-      <InlineSelect disabled={true} 
-        multiselect={true} 
-        data={daysData}
-        selectedIndicies={selected}
-      />
-
-      <View style={[
-        styles.row,
-      ]}>
-
-        {/*Meeting Times */}
-        <Text style={[
-          styles.text_medium
-        ]}
-        >{start_time.hour}:{start_time.minute} {start_time.ante_meridian} - {end_time.hour}:{end_time.minute} {end_time.ante_meridian}</Text>
-        
-        {/*Button Opens Event in Schedule */}
-        <ProjectButton title={
-          <Text>
-          <Icon name='calendar' style={[styles.text_medium, styles.padding_right_medium]} />  Schedule
-          </Text>
-        } 
-        type='info' 
-        onPress={() => {}} 
-      />
-      </View>
 
 
   return (
