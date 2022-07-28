@@ -1,13 +1,12 @@
 import * as React from "react";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { useEffect, useState } from "react";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Marker } from "react-native-svg";
 import MapViewDirections from "react-native-maps-directions";
-
 const GOOGLE_API_KEY = "AIzaSyDJSMw5bJWGcs17vqjnB4kZSkusq0FGWEU";
 
-export default function MapDirections({ userLocation, eventDestination }) {
+const MapDirections = (props) => {
+  const {userLocation, eventDestination} = props.route.params;
+  console.log(JSON.stringify(userLocation, null, 4) + " " + JSON.stringify(eventDestination, null, 4))
   return (
     <View style={styles.container}>
       <MapView
@@ -20,13 +19,13 @@ export default function MapDirections({ userLocation, eventDestination }) {
           longitudeDelta: 0,
         }}
       >
-        <MapView.Marker
+        <Marker
           coordinate={{
             latitude: userLocation.latitude,
             longitude: userLocation.longitude,
           }}
         />
-        <MapView.Marker
+        <Marker
           coordinate={{
             latitude: eventDestination.latitude,
             longitude: eventDestination.longitude,
@@ -44,6 +43,8 @@ export default function MapDirections({ userLocation, eventDestination }) {
     </View>
   );
 }
+
+export default MapDirections
 
 const styles = StyleSheet.create({
   container: {

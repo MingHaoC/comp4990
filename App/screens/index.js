@@ -41,7 +41,7 @@ const MyDrawer = () => {
             <Drawer.Screen name='FindEvents' component={FindEvents} />
             <Drawer.Screen name='MyEvents' component={MyEvents} />
             <Drawer.Screen name="MapDirections">
-            {props => <MapDirections {...props} />}
+              {props => <MapDirections {...props} />}
             </Drawer.Screen>
     </Drawer.Navigator>
   );

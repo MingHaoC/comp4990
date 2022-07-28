@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
+    ResponseEntity<User> getUser(User user);
+
     ResponseEntity<String> updateUserInformation(User user);
 
     ResponseEntity<String> updateUserAddress(User user);

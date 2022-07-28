@@ -174,7 +174,7 @@ const Event = ({
           start_time={start_time}
           end_time={end_time}
         />
-        <Location location={location} id={id} navigation={navigation} />
+        <Address location={location} id={id} navigation={navigation} />
         <Duration start_date={start_date} end_date={end_date} id={id} />
         {description && (
           <Description
@@ -411,38 +411,39 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
 };
 
 const getDirections = (destination, navigation) => {
-  (async () => {
+  (async function () {
     let { status } = await Directions.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       //need something to let user know we cant give directions without their permission
       return;
     }
 
-    let currentLocationDetails = await Directions.getCurrentPositionAsync({});
-    let currentLocation = {
-      latitude: currentLocationDetails.coords.latitude,
-      longitude: currentLocationDetails.coords.longitude,
-    };
-
-    let currentDestinationDetails = await getDestinationDetails(destination);
-
-    let currentDestination = {
-      latitude: currentDestinationDetails.lat,
-      longitude: currentDestinationDetails.lng,
-    };
-
-    //TODO remove console.log
-    console.log("Current Destination: ", currentDestination);
-    console.log("Current Location: ", currentLocation);
-
-    //TODO
-    //need to send the user to the map screen with the two variables, currentDestination and currentLocation as props.
-    //userLocation={currentLocation} eventDestination={currentDestination}
-    /* am i doing this right??? */
-    navigation.navigate("MapDirections", {
-      userLocation: currentLocation,
-      eventDestination: currentDestination,
-    });
+    let currentLocationDetails;
+    try {
+      currentLocationDetails = await Directions.getCurrentPositionAsync({ accuracy: Directions.Accuracy.Balanced });
+      let currentLocation = {
+        latitude: currentLocationDetails.coords.latitude,
+        longitude: currentLocationDetails.coords.longitude,
+      };
+  
+      let currentDestinationDetails = await getDestinationDetails(destination);
+  
+      let currentDestination = {
+        latitude: currentDestinationDetails.lat,
+        longitude: currentDestinationDetails.lng,
+      };
+  
+      //TODO
+      //need to send the user to the map screen with the two variables, currentDestination and currentLocation as props.
+      //userLocation={currentLocation} eventDestination={currentDestination}
+      /* am i doing this right??? */
+      navigation.navigate("MapDirections", {
+        userLocation: currentLocation,
+        eventDestination: currentDestination,
+      });
+    } catch( error ) {
+      console.log(error);
+    }
   })();
 };
 
@@ -493,7 +494,7 @@ const getDestinationDetails = async (eventDestination) => {
  * @param {Object} {id,location} location is a string
  * @returns JSX Object displaying location
  */
-const Location = ({ id, location, navigation }) => {
+const Address = ({ id, location, navigation }) => {
   const { navigateToEvent } = useMyEventContext();
 
   return (
