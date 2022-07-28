@@ -420,19 +420,21 @@ const getDirections = (destination, navigation) => {
 
     let currentLocationDetails;
     try {
-      currentLocationDetails = await Directions.getCurrentPositionAsync({ accuracy: Directions.Accuracy.Balanced });
+      currentLocationDetails = await Directions.getCurrentPositionAsync({
+        accuracy: Directions.Accuracy.Balanced,
+      });
       let currentLocation = {
         latitude: currentLocationDetails.coords.latitude,
         longitude: currentLocationDetails.coords.longitude,
       };
-  
+
       let currentDestinationDetails = await getDestinationDetails(destination);
-  
+
       let currentDestination = {
         latitude: currentDestinationDetails.lat,
         longitude: currentDestinationDetails.lng,
       };
-  
+
       //TODO
       //need to send the user to the map screen with the two variables, currentDestination and currentLocation as props.
       //userLocation={currentLocation} eventDestination={currentDestination}
@@ -441,7 +443,7 @@ const getDirections = (destination, navigation) => {
         userLocation: currentLocation,
         eventDestination: currentDestination,
       });
-    } catch( error ) {
+    } catch (error) {
       console.log(error);
     }
   })();
