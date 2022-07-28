@@ -1,5 +1,5 @@
-import { View, Text, Pressable, ScrollView, StatusBar } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, Pressable, ScrollView, StatusBar, ActivityIndicator } from 'react-native'
+import React from 'react'
 import { Paper, ProjectButton, ProjectTextInput, Underline, ProjectHeader, Accordian } from '../../components'
 import styles from '../../styles'
 import { FindEventProvider, useFindEventContext } from '../../actions/Find Events/FindEventsContext'
@@ -27,7 +27,8 @@ const FindEvents = (props) => {
         <EventFilter />
         <AvailabilityFilter />
         <RegisterForEvent />
-        <ConfirmEventRegistration />
+        <ConfirmEventRegistration {...props} />
+
     </FindEventProvider>
   )
 }
@@ -111,7 +112,10 @@ const FindEventsContent = ({navigation}) => {
  * @returns JSX List of Events
  */
 const Events = () => {
-    const {events} = useFindEventContext()
+    const {
+        events,
+        Loading
+    } = useFindEventContext()
 
     return(
     <View style={[
@@ -144,16 +148,24 @@ const Events = () => {
 
         <Underline />
 
-        {/*Event List*/}
-        <ScrollView>
-        {
-            events.map((event,index) =>{
-                const projectEvent = fromExternalToProjectFormat(event)
-                
-                return <Event {...projectEvent} key={index}/>
-            })
+        {/*Display loading spinner*/}
+        {Loading && <ActivityIndicator size="large" />}
+
+        {/*Hide inputs while loading */}
+        {!Loading && 
+        <>
+            {/*Event List*/}
+            <ScrollView>
+            {
+                events.map((event,index) =>{
+                    const projectEvent = fromExternalToProjectFormat(event)
+                    
+                    return <Event {...projectEvent} key={index}/>
+                })
+            }
+            </ScrollView>
+        </>
         }
-        </ScrollView>
 
     </View>);
 }

@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Modal, ScrollView } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styles from '../../../styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFindEventContext } from '../../../actions/Find Events/FindEventsContext'
@@ -95,7 +95,7 @@ const EventDetails = () => {
           </>}
           {/*Always show availabilities tab even when none exist*/}
           <Accordian title="Availabilities" 
-            collapsed={true}
+            collapsed={false}
             content={
                 <Availabilities availabilities_item={availabilities} />
             } 
@@ -217,7 +217,6 @@ const Availabilities = ({availabilities_item}) => {
       {/*List Availabilities */}
       {
         availabilities_item.map((availability, index) => {
-          console.log({...availability})
           return <Availability key={index} {...availability} />
         })
       }
@@ -233,7 +232,7 @@ Availabilities.defaultProps ={
  * @param {Object} availability_item Describes availability for an event. Required props: barcode, location, start_date, end_date, start_time, end_time, days_of_the_week
  * @returns JSX Object describing a single open avilable time to register for an event
  */
-const Availability = ({days_of_the_week,location}) => {
+const Availability = ({days_of_the_week,location, start_time, end_time, start_date,end_date, barcode}) => {
 
   //Get props and actions from context
   const {
@@ -247,6 +246,8 @@ const Availability = ({days_of_the_week,location}) => {
   } = event_details.event_selected
 
 
+
+  
   return (
     <Paper style={[styles.margin_bottom_medium]}>
       {/*Display Row with Event Prop */}
@@ -303,6 +304,62 @@ const Availability = ({days_of_the_week,location}) => {
 
         </View>
 
+        
+
+        {/*Time*/}
+        <View 
+          style={[
+            styles.row, 
+            styles.padding_horizontal_medium, 
+            styles.padding_vertical_xsmall
+          ]}>
+          
+          {/*Label */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_2_colour
+          ]}>Time:
+          </Text>
+
+          {/*Value */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_1_colour,
+            styles.medium_container
+          ]}>
+            {(start_time.hour == 0 && end_time.hour == 0) &&` All Day`}
+            {!(start_time.hour == 0 && end_time.hour == 0) && `${start_time.hour}:${ (parseInt(start_time.minute) < 10) ? `0${start_time.minute}` : `${start_time.minute}` } ${start_time.ante_meridian} - ${end_time.hour}:${ (parseInt(start_time.minute) < 10) ? `0${start_time.minute}` : `${start_time.minute}` } ${end_time.ante_meridian}`}
+          </Text>
+
+        </View>
+
+        {/*Start Date*/}
+        <View 
+          style={[
+            styles.row, 
+            styles.padding_horizontal_medium, 
+            styles.padding_vertical_xsmall
+          ]}>
+          
+          {/*Label */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_2_colour
+          ]}>{ (new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `Date:`}
+          { !(new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `Start Date:`}
+          </Text>
+
+          {/*Value */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_1_colour,
+            styles.medium_container
+          ]}>
+            { (new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `Continuous`}
+          { !(new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `${start_date}`}
+          </Text>
+
+        </View>
 
       {/*Container for Option Buttons */}
       <View style={[
@@ -310,7 +367,7 @@ const Availability = ({days_of_the_week,location}) => {
         styles.padding_horizontal_medium
       ]}>
 
-        <ProjectButton title='Register' onPress={() => {openRegisterModal(availability_item.barcode)}} />
+        <ProjectButton title='Register' onPress={() => {openRegisterModal(barcode)}} />
 
         <ProjectButton title={
             <Text>
@@ -318,7 +375,7 @@ const Availability = ({days_of_the_week,location}) => {
             </Text>
           } 
           type='info' 
-          onPress={() => {viewInSchedule(availability_item.barcode)}} 
+          onPress={() => {viewInSchedule(barcode)}} 
         />
 
       </View>
@@ -327,7 +384,12 @@ const Availability = ({days_of_the_week,location}) => {
 }
 Availability.defaultProps = {
   days_of_the_week: [],
-  location:  ""
+  location:  "",
+  start_time: {hour: 0, minute: 0, ante_meridain: 'AM'},
+  end_time: {hour: 0, minute: 0, ante_meridain: 'AM'},
+  start_date: new Date(1995, 11, 17).toLocaleDateString(),
+  end_date: new Date(1995, 11, 17).toLocaleDateString()
+
 }
 
 export default EventDetails

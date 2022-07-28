@@ -85,7 +85,7 @@ const MyEventProvider = ({children}) => {
     }
     const openDropEventModal = (id) => {
         const event = state.events.filter((event) => event.id == id)[0]
-        console.log(event)
+        // console.log(event)
         dispatch({type: "OPEN_DROP_MODAL",payload:event})
     }
 

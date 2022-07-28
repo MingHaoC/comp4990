@@ -1,8 +1,15 @@
 import dummyEvents from "../../dummyEvents"
 
 const reducer = (state, action) => {
+    if(action.type == "SET_REGISTER_LOADING"){
+        state.event_details.register.Loading = action.payload
+        return {...state}
+    }
+    if(action.type == "SET_LOADING"){
+        state.Loading = action.payload
+        return {...state}
+    }
     if(action.type == 'DISPLAY_EVENTS'){
-        console.log(action.payload.length)
         return {...state, events: action.payload}
     }
     if(action.type == 'DISPLAY_CATEGORIES'){

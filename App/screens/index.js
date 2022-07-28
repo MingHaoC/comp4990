@@ -33,7 +33,7 @@ const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator initialRouteName='FindEvents' screenOptions={{ headerShown: false }} drawerContent={(props) => <DrawerContent {...props} />}>
             <Drawer.Screen name='Home' component={Home} options={{drawerIcons: <Icon name='home' />}}/>
             <Drawer.Screen name='Profile' component={Profile} />
             <Drawer.Screen name='FindEvents' component={FindEvents} />
@@ -46,7 +46,7 @@ const AuthStack = createNativeStackNavigator();
 
 const Auth = () => {
   return(
-    <AuthStack.Navigator initialRouteName='Register' screenOptions={{ headerShown: false }} >
+    <AuthStack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }} >
             <AuthStack.Screen name="Register" component={Register} />
             <AuthStack.Screen name="Login" component={Login} />
     </AuthStack.Navigator> 

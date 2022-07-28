@@ -1,9 +1,6 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
 import jwt_decode from "jwt-decode";
 import fetchEventList from './scrape/scrape'
-const root = 'https://809f-216-8-184-8.ngrok.io'
-const registerURL = `${root}/user/register`
-const loginURL = `${root}/user/login`
 
 const AppContext = React.createContext()
 
@@ -12,7 +9,21 @@ const AppContext = React.createContext()
 
 const AppProvider = ({ children }) => {
 
-  const [user,setUser] = useState(null)
+  const [user,setUser] = useState({
+    "sub": "8",
+    "email": "a@uwindsor.ca",
+    "name": "Ariana Avdoulos",
+    "expiresIn": 100000,
+    "iat": 1658987410,
+    "exp": 1658991010
+  })
+
+  const root = 'https://809f-216-8-184-8.ngrok.io'
+  const registerURL = `${root}/user/register`
+  const loginURL = `${root}/user/login`
+  const registerEventURL = `${root}/event/register?userID=${user.sub}`
+
+
 
 
   const logout = () => {
@@ -127,6 +138,15 @@ const AppProvider = ({ children }) => {
     }
   }
 
+  const registerEventPOST = async(event) => {
+    //format user data
+    try {
+      let registerRespone = await POST(event,registerEventURL)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
   // #endregion
 
   
@@ -139,6 +159,7 @@ const AppProvider = ({ children }) => {
             registerPOST, 
             loginPOST,
             fetchEventList,
+            registerEventPOST
           }}
         >
           {children}
