@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text,Pressable, Linking } from 'react-native'
-import styles from '../styles';
-import { useState, useEffect, useRef } from 'react'
-import Underline from './Underline';
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
-
+import styles from '../styles'
+import Underline from './Underline';
 /**
  * Used to direct a user to a new screen
+ * @authors avdouloa@uwindsor.ca, 
  */
 export default function Link(props){
     const { text,       //string, link text
@@ -16,27 +16,36 @@ export default function Link(props){
             isExternal, //bool, indicate if we are sent to another website or stay on this one
 
             //built in props
-            onPressIn, onPressOut, onPress,style, children } = props;
+            onPressIn, onPressOut, onPress,style, children, navigation } = props;
 
+    const [isDisabled, setIsDisabled] = useState(isDisabled)
+    const [linkText, setLinkText] = useState(text)
+    const [linkTarget, setLinkTarget] = useState(target)
+    const [isExternalLink, setIsExternalLink] = useState(isExternal)
+
+    //update component if props change
+    useEffect(() => {
+        setIsDisabled(disabled)
+        setLinkText(text)
+        setIsExternalLink(isExternal)
+        setLinkTarget(target)
+    }, [text,disabled,target,isExternal])
 
     //verifiy that given type styles exists. If it dosen't give a warning
     //to verifiy only when app loads and when type is changed
     useEffect(() => {
         let stylesNotFound = [] 
-        if(!styles[`${type}LinkContainer`]){
-            stylesNotFound.push(`${type}LinkContainer`)
+        if(!styles[`${type}_link_text`]){
+            stylesNotFound.push(`${type}_link_text`)
         }
-        if(!styles[`${type}LinkText`]){
-            stylesNotFound.push(`${type}LinkText`)
+        if(!styles[`${type}_link_text_on_press`]){
+            stylesNotFound.push(`${type}_link_text_on_press`)
         }
-        if(!styles[`${type}LinkOnPress`]){
-            stylesNotFound.push(`${type}LinkOnPress`)
+        if(! styles[`${type}_link_underline`] ){
+            stylesNotFound.push(`${type}_link_underline`)
         }
-        if(! styles[`${type}LinkBottomBorder`] ){
-            stylesNotFound.push(`${type}LinkBottomBorder`)
-        }
-        if(! styles[`${type}LinkContainerOnPress`]){
-            stylesNotFound.push(`${type}LinkContainerOnPress`)
+        if(! styles[`${type}_link_underline_on_press`]){
+            stylesNotFound.push(`${type}_link_underline_on_press`)
         }
         if(stylesNotFound.length > 0){
             console.warn(`type given is not found. Please create class(es): ${stylesNotFound} in styles/linkStyle`)
@@ -49,22 +58,25 @@ export default function Link(props){
 
     //NOTE: styles change when link is pressed in/out
     return(
-        <Pressable  style={[styles.linkContainer, styles[   `${type}LinkContainer`], 
-                                                            (isPressed  ? styles[`${type}LinkContainerOnPress`] 
-                                                                        : ''),
-                                                            style
-                                                        ]}
+        <Pressable  style={[
+                            styles[''], 
+                            (isPressed  ? ''
+                                        : ''),
+                            style
+                        ]}
 
                     onPress={() => {
 
                         //External links
-                        if(isExternal && !disabled){
-                            Linking.openURL(target)
+                        if(isExternalLink && !isDisabled){
+                            Linking.openURL(linkTarget)
                         }
                         
                         //Internal Links
-                        if(!isExternal && !disabled){
-                            //TODO: Handle internal linking
+                        if(!isExternalLink && !isDisabled){
+                            if(navigation){
+                                navigation.navigate(target)
+                            }
                         }
 
                         onPress()
@@ -79,12 +91,26 @@ export default function Link(props){
                         onPressOut()
                     }}
         >
-            <Text   style={isPressed    ? [styles.linkOnPress, styles[`${type}LinkOnPress`]] 
-                                        : [styles.linkText, styles[`${type}LinkText`]]}
-            > {text}{children}</Text>
+            <Text   style={[
+                            styles.text_medium,
+                            (isPressed    ? 
+                                        [
+                                            styles[`${type}_link_text_on_press`]
+                                        ] 
+                                        : 
+                                        [
+                                            styles[`${type}_link_text`]
+                                        ]
+                            )
+                        ]}
+            > {linkText}{children}</Text>
             {/* Underline appears only onPress */}
-            {isPressed ? <Underline style={[styles.linkBottomBorder, styles[`${type}LinkBottomBorder`]]} /> 
-            : <Underline style={[styles.linkBottomBorder,styles.linkBottomHidden]} />} 
+            <Underline style={[
+                                styles[`${type}_link_underline`], 
+                                (isPressed  ? styles[`${type}_link_underline_on_press`]
+                                            : ''
+                                ) 
+                            ]} /> 
             
         </Pressable>
     );
@@ -108,7 +134,8 @@ Link.defaultProps = {
     onPressIn: () => {},
     onPressOut: () => {},
     onPress: () => {},
-    children: <></>
+    children: <></>,
+    navigation: null
 }
 
 // #endregion

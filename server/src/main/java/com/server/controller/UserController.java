@@ -15,6 +15,18 @@ public class UserController {
     @Autowired
     UserService userService;
 
+   /**
+     * Get user by Id
+     *
+     * @param user JSON object containing the following field
+     *             id: Integer
+     * @return
+     */
+    @GetMapping()
+    public ResponseEntity<User> getUser(@RequestBody User user) {
+        return userService.getUser(user);
+    }
+
     /**
      * Update the following user information: firstname, lastname, address, phone number
      *
