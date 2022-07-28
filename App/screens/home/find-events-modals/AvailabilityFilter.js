@@ -11,7 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AvailabilityFilter = () => {
 
-    const{
+    const{ 
         event_details,
         closeAvilabilitiesFilter,
         applyAvailabilitiesFilter,

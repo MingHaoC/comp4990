@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { ProjectHeader, Paper, ProjectButton } from '../../components'
+import { useAppContext } from '../../context'
 import styles from '../../styles'
+   
 
-const initialState = {
-    user_firstname: 'Firstname'
-}
 
-const Home = ({navigation}) => {
-    const toggleDrawer =() => {
-        navigation.toggleDrawer()
-    }
-    const [firstname, setFirstname] = useState(initialState.user_firstname)
+const Home = ({navigation}) => { 
+    const {
+        user
+    } = useAppContext()
+
+    useEffect(() => {
+        setFirstname(user.name)
+    },[])
+
+    const [firstname, setFirstname] = useState("")
 
     return(
         <>

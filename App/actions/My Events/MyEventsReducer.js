@@ -42,7 +42,7 @@ const reducer = (state, action) => {
         let newFilter = {...state.event_filter}
         newFilter.location.selected = action.payload
         return {...state, event_filter: newFilter}
-    }
+    } 
     if(action.type == "SELECT_EVENT_CATEGORY"){
         let newFilter = {...state.event_filter}
         newFilter.category.selected = action.payload

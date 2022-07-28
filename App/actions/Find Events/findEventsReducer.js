@@ -1,16 +1,24 @@
 import dummyEvents from "../../dummyEvents"
+import fromExternalToProjectFormat from "../../services/eventAdapter"
 
 const reducer = (state, action) => {
+    if(action.type == "SET_REGISTER_LOADING"){
+        state.event_details.register.Loading = action.payload
+        return {...state}
+    }
+    if(action.type == "SET_LOADING"){
+        state.Loading = action.payload
+        return {...state}
+    }
     if(action.type == 'DISPLAY_EVENTS'){
-        console.log(action.payload.length)
-        return {...state, events: action.payload}
+        return {...state, events: action.payload, renderedEvents: action.payload}
     }
     if(action.type == 'DISPLAY_CATEGORIES'){
         const newFilterCategories = {...state.event_filter.category, items: action.payload }
         const newFilter = {...state.event_filter, category: newFilterCategories} 
 
         return {...state, event_filter: newFilter}
-    }
+    } 
     if(action.type == 'DISPLAY_LOCATIONS'){
         const newFilterLocations = {...state.event_filter.location, items: action.payload }
         const newFilter = {...state.event_filter, location: newFilterLocations} 
@@ -66,9 +74,18 @@ const reducer = (state, action) => {
     }
     if(action.type == "SELECT_EVENT_NAME"){
         let newFilter = {...state.event_filter, name: action.payload}
-        const filteredEvents = dummyEvents.filter(event => (event.name.toLowerCase().includes(action.payload.toLowerCase()) ) || (action.payload.trim().length <= 0))
 
-        return {...state, event_filter: newFilter, events: filteredEvents}
+        let filteredEvents = state.events.filter(event => {
+            let internalEvent = fromExternalToProjectFormat(event)
+            return action.payload.includes(internalEvent.name) 
+        })
+
+        if(action.payload.length == 0){
+            filteredEvents = state.events
+        }
+
+
+        return {...state, event_filter: newFilter, renderedEvents: state.events}
     }
     if(action.type == 'FILTER_EVENTS'){
         return {...state, events: action.payload}

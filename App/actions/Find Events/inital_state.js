@@ -8,7 +8,7 @@ export default class initial_state {
         this.undefined_event = {                
             id: -1,
             name: "undefined",
-            description: "undefined",
+            description: "undefined", 
             min_age: 0,
             max_age: 100,
             category: "undefined",
@@ -17,7 +17,7 @@ export default class initial_state {
             prerequisite_programs: [],
             availabilities: []
         }
-
+        this.Loading = false
         this.events = []            //fetched events 
         this.renderedEvents = []    //events that match the applied filter
 
@@ -187,6 +187,7 @@ export default class initial_state {
              * Properties used to render the 'register for event modal'
              */
             register: {
+                Loading: false,
                 selected_availability: {other_information: ''},
                 is_open: false, //indicates if the modal is open or closed
                 displays: ['additional info', 'confirm'],   //the registermodal is kinda like a caroseul, in that when you click next just the content styas the same but the container remains the same

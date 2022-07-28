@@ -1,5 +1,7 @@
-import React, { useState, useContext, useReducer, useEffect } from 'react'
+import React, { useContext, useReducer, useEffect } from 'react'
+import { useAppContext } from '../../context'
 import dummyEvents from '../../dummyEvents'
+import fromExternalToProjectFormat from '../../services/eventAdapter'
 import reducer from './findEventsReducer'
 import initial_state from './inital_state'
 const FindEventContext = React.createContext()
@@ -9,6 +11,11 @@ const init_state = {...new initial_state()}
 
 
 const FindEventProvider = ({children}) => {
+    const {
+        fetchEventList,
+        registerEventPOST
+    } = useAppContext()
+    
     const [state, dispatch] = useReducer(reducer, init_state)
 
     const get24HourTime = (hour, minute, ante_meridian) => {
@@ -33,100 +40,38 @@ const FindEventProvider = ({children}) => {
         return new Date(2020,1,2,hour24,minute)
     }
 
-    //#region initialize data
-    const getEvents =() => {
-        const events = dummyEvents;
-        dispatch({type: 'DISPLAY_EVENTS', payload: events})
-    }
-
-    const getEventCategories = () => {
-        //Get all catgeories
-        let categories = dummyEvents.map((event) => {
-            if(event.category){
-                return event.category
-            }else{
-                return " "
-            } 
-        })
-        //Remove duplicates
-        categories = [...new Set(categories)]
-
-        let filteredCatgories = categories.filter(c => c.trim().length > 0)
-        //Get in correct format for select
-        filteredCatgories = filteredCatgories.map((category) => {
-            return {label: category, value: category}
-        }) 
-        dispatch({type: 'DISPLAY_CATEGORIES', payload: filteredCatgories})
-
-    }
-
-    const getEventLocations = () => {
-        let locations = []
-
-        //Get all locations
-        dummyEvents.forEach(event => {
-            let avil = event.availabilities 
-            if(avil != undefined){
-                let locationsFound = avil.map((a) => {
-                    if(a.location){
-                        return a.location
-                    }else{
-                        return " "
-                    }
-
-                })
-                Array.prototype.push.apply(locations,locationsFound); 
-            }
-        }); 
-        //Remove duplicates
-        locations = [...new Set(locations)]
-
-        //Remove empty strings
-        let filteredLocations = locations.filter(l => l.trim().length > 0)
-
-        //Get in correct format for filter select
-        const locationsObjects = filteredLocations.map((location) => {
-            if(location){
-                return {label: location, value: location}
-            }
-        })
-        dispatch({type: 'DISPLAY_LOCATIONS', payload: locationsObjects})
-    }
-    //#endregion
-    
+    /**
+     * Opens event filter
+     * Sets state of event_filter.is_open
+     */
     const openEventFilterModal = () => {
         dispatch({type: 'OPEN_EVENT_FILTER'}) 
 
     }
+
+    /**
+     * Updates state of event_details.is_open to true as to show the Event Details modal
+     */
     const openEventDetailsModal = (id) => {
         //Get selected event
-        const selected_event = state.events.filter((event) => event.id == id)[0]
-
-        //set the avilability filter to match the evnt filter
-        selectAvailabilityAnytime(state.event_filter.time.any_time)
-        selectAvailabilityLocation(state.event_filter.location.selected)
-        selectAvailableDays(state.event_filter.days.days_selected)
-        const before_time = {
-            hour: state.event_filter.time.before_time.hour,
-            minute: state.event_filter.time.before_time.minute,
-            ante_meridian: state.event_filter.time.before_time.ante_meridian,
-        }
-        const after_time = {
-            hour: state.event_filter.time.after_time.hour,
-            minute: state.event_filter.time.after_time.minute,
-            ante_meridian: state.event_filter.time.after_time.ante_meridian,
-        }
-        selectEventTimeRange(after_time.hour,after_time.minute,after_time.ante_meridian,before_time.hour,before_time.minute,before_time.ante_meridian)
-        dispatch({type: "FILTER_AVAILABILITIES", payload: selected_event.availabilities})
-        dispatch({type: 'OPEN_EVENT_DETAILS', payload: selected_event})
+        const selected_event = state.events.filter((event) => fromExternalToProjectFormat(event).id == id)[0]
+        const internalEvent = fromExternalToProjectFormat(selected_event)
+        dispatch({type: "FILTER_AVAILABILITIES", payload: internalEvent.availabilities})
+        dispatch({type: 'OPEN_EVENT_DETAILS', payload: internalEvent})
     }
 
-    //#region Actions used in Event Detail Modals
-
+    /**
+     * Opens the registration modal for an event after selecting an availability
+     * @param {Number} availabilityBarcode Unqiue code applied to an availability
+     */
     const openRegisterModal = (availabilityBarcode) => {
         const avail = state.event_details.event_selected.availabilities.filter((a) => a.barcode == availabilityBarcode)[0]
         dispatch({type: "OPEN_REGISTRATION_MODAL", payload: avail})
     }
+
+    /**
+     * Closes the registration modal for an event
+     */
     const closeEventDetailsModal = () => {
         dispatch({type: 'CLOSE_EVENT_DETAILS', payload: state.undefined_event})
 
@@ -135,17 +80,22 @@ const FindEventProvider = ({children}) => {
     const viewInSchedule = (eventId, availabilityBarcode) => {
         console.log("WIP")
     }
+
+    /**
+     * Opens availabilty filter modal
+     */
     const openAvilabilitiesFilter = () => {
         dispatch({type: "OPEN_AVAILABILITIES_FILTER"})
     }
 
-    //#endregion
-
-    //#region Event Filter
+    /**
+     * Updates the value of event_filter.is_open to true as to show the event filter modal
+     */
     const closeEventFilterModal = () => {
         dispatch({type: 'CLOSE_EVENT_FILTER'})
 
     }
+
     const filterEvents = () => {
         const any_time = state.event_filter.time.any_time
         const min_age = state.event_filter.age.min_age
@@ -162,22 +112,22 @@ const FindEventProvider = ({children}) => {
             }
         })
 
-        const filteredEvents = dummyEvents.filter((event) => { 
-
+        const filteredEvents = state.events.filter((event) => { 
+            let formattedEvent = fromExternalToProjectFormat(event)
             /*Check if name has been passed. If it has -> filter by passed value, otherwise filter by stored value */
 
-            let validMinAge = (event.min_age >= min_age) || min_age == undefined
+            let validMinAge = (formattedEvent.min_age >= min_age) || min_age == undefined
 
-            let validMaxAge = (event.max_age <= max_age) || max_age == undefined || max_age.length <= 0
+            let validMaxAge = (formattedEvent.max_age <= max_age) || max_age == undefined || max_age.length <= 0
 
-            let validLocation = (event.availabilities && ((event.availabilities.filter((a) => a.location == location).length > 0) || location.trim().length == 0))
+            let validLocation = (formattedEvent.availabilities && ((formattedEvent.availabilities.filter((a) => a.location == location).length > 0) || location.trim().length == 0))
             
-            let validCategory =  (event.category && ((event.category == category) || category.trim().length <= 0))
+            let validCategory =  (formattedEvent.category && ((formattedEvent.category == category) || category.trim().length <= 0))
 
             //Check that there is at least 1 availability in an event where 'days of the week' is a subset of 'days selected'
             let isSubset = false;
-            if(event.availabilities){
-                event.availabilities.forEach((a) => {
+            if(formattedEvent.availabilities){
+                formattedEvent.availabilities.forEach((a) => {
                     let result = a.days_of_the_week.every(val => days_values.includes(val));
                     if(result){isSubset = true}
                 })
@@ -274,18 +224,32 @@ const FindEventProvider = ({children}) => {
         }
         dispatch({type: "SELECT_EVENT_TIME_RANGE", payload: {before_time,after_time}})
     }
-    //#endregion
-    
-    //#region Register Modal
-    const registerForEvent = () => {
-        console.log("coming soon")
+
+    /**
+     * Sends a request to register an event to the server
+     */
+    const registerForEvent = async() => {
+        dispatch({type: "SET_REGISTER_LOADING", payload: true})
+        await registerEventPOST({
+            tags: state.event_details.event_selected.category,
+            eventTitle: state.event_details.event_selected.name,
+            eventDescription: state.event_details.event_selected.description,
+            location: state.event_details.register.selected_availability.location
+        })
+        dispatch({type: "SET_REGISTER_LOADING", payload: false})
+
+        //Close any modals that potentially are open
         closeAvilabilitiesFilter()
         closeEventDetailsModal()
         closeEventFilterModal()
         closeRegisterModal()
+
         dispatch({type:"OPEN_REGISTRATION_STATUS_MODAL", payload:true})
     }
 
+    /**
+     * Closes the 
+     */
     const closeRegisterModal = () => {
         dispatch({type: "CLOSE_REGISTRATION_MODAL"})
     }
@@ -437,11 +401,115 @@ const FindEventProvider = ({children}) => {
     }
     //#endregion
 
+    //#region Private Methods
+
+    /**
+     * Gets all the events
+     */
+    const _getEvents = async() => {
+        let events = []
+        try {
+            dispatch({type: "SET_LOADING", payload: true})
+                events = await fetchEventList();
+
+        } catch (error) {
+            
+        }
+        dispatch({type: "SET_LOADING", payload: false})
+        dispatch({type: 'DISPLAY_EVENTS', payload: events})
+    }
+
+    /**
+     * Gets all event categories
+     * Can be selected in event filter
+     */
+    const _getEventCategories = () => {
+        //Get all catgeories
+        let categories = state.events.map((event) => {
+            if(event.category){
+                return event.category
+            }else{
+                return " "
+            } 
+        })
+        //Remove duplicates
+        categories = [...new Set(categories)]
+
+        let filteredCatgories = categories.filter(c => c.trim().length > 0)
+
+        //Get in correct format for select
+        filteredCatgories = filteredCatgories.map((category) => {
+            return {label: category, value: category}
+        }) 
+        dispatch({type: 'DISPLAY_CATEGORIES', payload: filteredCatgories})
+
+    }
+
+    /**
+     * Gets all the locations from listed events 
+     * Used in event filter
+     */
+    const _getEventLocations = () => {
+        let locations = []
+
+        //Get all locations
+        state.events.forEach(event => {
+            let avil = event.availabilities 
+            if(avil != undefined){
+                let locationsFound = avil.map((a) => {
+                    if(a.location){
+                        return a.location
+                    }else{
+                        return " "
+                    }
+
+                })
+                Array.prototype.push.apply(locations,locationsFound); 
+            }
+        }); 
+        //Remove duplicates
+        locations = [...new Set(locations)]
+
+        //Remove empty strings
+        let filteredLocations = locations.filter(l => l.trim().length > 0)
+
+        //Get in correct format for filter select
+        const locationsObjects = filteredLocations.map((location) => {
+            if(location){
+                return {label: location, value: location}
+            }
+        })
+        dispatch({type: 'DISPLAY_LOCATIONS', payload: locationsObjects})
+    }
+
+    /**
+     * Ensures that the filter values of the availabilites filter is the same as event filter
+     */
+    const _setAvailabilitiesFilter = () => {
+        //TODO
+          //set the avilability filter to match the evnt filter
+        // selectAvailabilityAnytime(state.event_filter.time.any_time)
+        // selectAvailabilityLocation(state.event_filter.location.selected)
+        // selectAvailableDays(state.event_filter.days.days_selected)
+        // const before_time = {
+        //     hour: state.event_filter.time.before_time.hour,
+        //     minute: state.event_filter.time.before_time.minute,
+        //     ante_meridian: state.event_filter.time.before_time.ante_meridian,
+        // }
+        // const after_time = {
+        //     hour: state.event_filter.time.after_time.hour,
+        //     minute: state.event_filter.time.after_time.minute,
+        //     ante_meridian: state.event_filter.time.after_time.ante_meridian,
+        // }
+        // selectEventTimeRange(after_time.hour,after_time.minute,after_time.ante_meridian,before_time.hour,before_time.minute,before_time.ante_meridian)
+    }
+    //#endregion
+
     useEffect(() => {
-        getEvents()
-        getEventCategories()
-        getEventLocations()
-    }, [dummyEvents])
+        _getEvents()
+        _getEventCategories()
+        _getEventLocations()
+    }, [])
 
     useEffect(() => {
         filterEvents()
@@ -487,7 +555,7 @@ const FindEventProvider = ({children}) => {
         </FindEventContext.Provider>
     );
 }
-
+                  
 
 // make sure use
  const useFindEventContext = () => {

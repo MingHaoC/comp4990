@@ -1,6 +1,5 @@
 import { View, Text, Pressable, Modal, ScrollView } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import dummyEvents from '../../../dummyEvents'
+import React, { useState } from 'react'
 import styles from '../../../styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFindEventContext } from '../../../actions/Find Events/FindEventsContext'
@@ -12,13 +11,14 @@ import { Paper, Accordian, ProjectButton  } from '../../../components'
  */
 const EventDetails = () => {
 
-  //#region props
+  //#region props 
   /*Get values/actions from context */
   const {
     event_details,
     closeEventDetailsModal
   } = useFindEventContext()
   const availabilities = event_details.rendered_availabilities
+  
   const {
     name, 
     min_age,
@@ -47,14 +47,14 @@ const EventDetails = () => {
       <ScrollView>
         {/*Container */}
         <Paper  title={name} 
-          description={`${min_age} years - ${max_age} years`}
+          description={ (min_age > 0 && max_age > 90) ? `${min_age} years - ${max_age} years` : ''}
           header={1}
           headerTitleStyle={[styles.theme_tinted_colour]}
           underlineStyle={[styles.hidden]}
           descriptionStyle={[styles.padding_bottom_medium, styles.bold]}>
 
           {/*Show description if there is one*/}
-          { (description.trim().length > 0) && 
+          { (description != undefined && description.trim().length > 0) && 
             <Accordian
               
               title="Description" 
@@ -68,7 +68,7 @@ const EventDetails = () => {
           }
 
           {/*Show Prerequsistes if any exitss */}
-          { (prerequisite_programs.length > 0) &&
+          { (prerequisite_programs != undefined && prerequisite_programs.length > 0) &&
             <Accordian title="Prerequisites"
               content={
               <Prerequisites prerequisite_events={dummyEvents} />
@@ -76,6 +76,7 @@ const EventDetails = () => {
             />     
           }
 
+          {price != undefined && <>
           <View style={[
             styles.row
           ]}>
@@ -92,10 +93,10 @@ const EventDetails = () => {
               {/*Instead of showing $0 show Free*/}
               { (price <= 0) && 'Free'} {(price > 0 ) && `$${price}`}</Text>
           </View>  
-          
+          </>}
           {/*Always show availabilities tab even when none exist*/}
           <Accordian title="Availabilities" 
-            collapsed={true}
+            collapsed={false}
             content={
                 <Availabilities availabilities_item={availabilities} />
             } 
@@ -127,6 +128,9 @@ const Prerequisites = ({prerequisite_events}) => {
       }
     </View>
   );
+}
+Prerequisites.defaultProps = {
+  prerequisite_events:[]
 }
 
 /**
@@ -213,20 +217,23 @@ const Availabilities = ({availabilities_item}) => {
 
       {/*List Availabilities */}
       {
-        availabilities_item.map((availability) => {
-          return <Availability key={availability.barcode} availability_item={availability} />
+        availabilities_item.map((availability, index) => {
+          return <Availability key={index} {...availability} />
         })
       }
     </View>
   );
 }
 
+Availabilities.defaultProps ={
+  availabilities_item: []
+}
 /**
  * Creates a display for an availabilty 
  * @param {Object} availability_item Describes availability for an event. Required props: barcode, location, start_date, end_date, start_time, end_time, days_of_the_week
  * @returns JSX Object describing a single open avilable time to register for an event
  */
-const Availability = ({availability_item}) => {
+const Availability = ({days_of_the_week,location, start_time, end_time, start_date,end_date, barcode}) => {
 
   //Get props and actions from context
   const {
@@ -239,25 +246,15 @@ const Availability = ({availability_item}) => {
     id
   } = event_details.event_selected
 
-  //All prop names in an availability item
-  //We will enumerate through the props instead of manually creating a row for each prop as all the styling is the same for all
-  //If you add any new props, be sure to add it to this array with its display name
-  const props = [
-    {name:'location',display:'Location'},
-    {name:'days_of_the_week', display: 'Days'}, 
-    {name:'start_time',display:'Start Time'},
-    {name:'end_time',display:'End Time'},
-    {name:'start_date',display:'Start Date'},
-    {name:'end_date',display:'End Date'}
-  ]
+
+
+  
   return (
     <Paper style={[styles.margin_bottom_medium]}>
       {/*Display Row with Event Prop */}
-      {
-        //Because each row has exactly the same style, we will cycle through prop names instead of copy and pasting each row and changing value
-        props.map((prop,index) =>{
-          return(
-          <View key={index}
+      
+          {/*Days*/}
+          <View 
             style={[
               styles.row, 
               styles.padding_horizontal_medium, 
@@ -268,24 +265,102 @@ const Availability = ({availability_item}) => {
             <Text style={[
               styles.text_small, 
               styles.muted_text_2_colour
-            ]}>{prop.display}:
+            ]}>Days:
             </Text>
 
             {/*Value */}
             <Text style={[
               styles.text_small, 
-              styles.muted_text_1_colour
+              styles.muted_text_1_colour,
+              styles.medium_container
             ]}>
-              {/*Fix Times */}
-              {(prop.name == 'start_time' || prop.name == 'end_time') && `${availability_item[prop.name].hour}:${availability_item[prop.name].minute} ${availability_item[prop.name].ante_meridian}`}
-              {/*Days is an array so we must turn it into a string before printing */}
-              {(prop.name == 'days_of_the_week') && availability_item[prop.name].join(', ')}
-              {(prop.name != 'days_of_the_week' && prop.name != 'start_time' && prop.name != 'end_time') && availability_item[prop.name]}
+              {days_of_the_week.join(', ')}
             </Text>
 
-        </View>)
-        })
-      }
+        </View>
+
+            {/*Location*/}
+            <View 
+            style={[
+              styles.row, 
+              styles.padding_horizontal_medium, 
+              styles.padding_vertical_xsmall
+            ]}>
+            
+            {/*Label */}
+            <Text style={[
+              styles.text_small, 
+              styles.muted_text_2_colour
+            ]}>Location:
+            </Text>
+
+            {/*Value */}
+            <Text style={[
+              styles.text_small, 
+              styles.muted_text_1_colour,
+              styles.medium_container
+            ]}>
+              {location}
+            </Text>
+
+        </View>
+
+        
+
+        {/*Time*/}
+        <View 
+          style={[
+            styles.row, 
+            styles.padding_horizontal_medium, 
+            styles.padding_vertical_xsmall
+          ]}>
+          
+          {/*Label */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_2_colour
+          ]}>Time:
+          </Text>
+
+          {/*Value */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_1_colour,
+            styles.medium_container
+          ]}>
+            {(start_time.hour == 0 && end_time.hour == 0) &&` All Day`}
+            {!(start_time.hour == 0 && end_time.hour == 0) && `${start_time.hour}:${ (parseInt(start_time.minute) < 10) ? `0${start_time.minute}` : `${start_time.minute}` } ${start_time.ante_meridian} - ${end_time.hour}:${ (parseInt(start_time.minute) < 10) ? `0${start_time.minute}` : `${start_time.minute}` } ${end_time.ante_meridian}`}
+          </Text>
+
+        </View>
+
+        {/*Start Date*/}
+        <View 
+          style={[
+            styles.row, 
+            styles.padding_horizontal_medium, 
+            styles.padding_vertical_xsmall
+          ]}>
+          
+          {/*Label */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_2_colour
+          ]}>{ (new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `Date:`}
+          { !(new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `Start Date:`}
+          </Text>
+
+          {/*Value */}
+          <Text style={[
+            styles.text_small, 
+            styles.muted_text_1_colour,
+            styles.medium_container
+          ]}>
+            { (new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `Continuous`}
+          { !(new Date(start_date).getFullYear() == 1995 || new Date(end_date) == 1995) && `${start_date}`}
+          </Text>
+
+        </View>
 
       {/*Container for Option Buttons */}
       <View style={[
@@ -293,7 +368,7 @@ const Availability = ({availability_item}) => {
         styles.padding_horizontal_medium
       ]}>
 
-        <ProjectButton title='Register' onPress={() => {openRegisterModal(availability_item.barcode)}} />
+        <ProjectButton title='Register' onPress={() => {openRegisterModal(barcode)}} />
 
         <ProjectButton title={
             <Text>
@@ -301,12 +376,21 @@ const Availability = ({availability_item}) => {
             </Text>
           } 
           type='info' 
-          onPress={() => {viewInSchedule(availability_item.barcode)}} 
+          onPress={() => {viewInSchedule(barcode)}} 
         />
 
       </View>
     </Paper>
   );
+}
+Availability.defaultProps = {
+  days_of_the_week: [],
+  location:  "",
+  start_time: {hour: 0, minute: 0, ante_meridain: 'AM'},
+  end_time: {hour: 0, minute: 0, ante_meridain: 'AM'},
+  start_date: new Date(1995, 11, 17).toLocaleDateString(),
+  end_date: new Date(1995, 11, 17).toLocaleDateString()
+
 }
 
 export default EventDetails

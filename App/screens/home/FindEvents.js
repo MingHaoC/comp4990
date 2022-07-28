@@ -1,24 +1,16 @@
-import { View, Text, Pressable, ScrollView, StatusBar } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Paper,
-  ProjectButton,
-  ProjectTextInput,
-  Underline,
-  ProjectHeader,
-  Accordian,
-} from "../../components";
-import styles from "../../styles";
-import {
-  FindEventProvider,
-  useFindEventContext,
-} from "../../actions/Find Events/FindEventsContext";
-import EventDetails from "./find-events-modals/EventDetails";
-import EventFilter from "./find-events-modals/EventFilter";
-import AvailabilityFilter from "./find-events-modals/AvailabilityFilter";
-import RegisterForEvent from "./find-events-modals/RegisterForEvent";
-import ConfirmEventRegistration from "./find-events-modals/ConfirmEventRegistration";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { View, Text, Pressable, ScrollView, StatusBar, ActivityIndicator } from 'react-native'
+import React from 'react'
+import { Paper, ProjectButton, ProjectTextInput, Underline, ProjectHeader, Accordian } from '../../components'
+import styles from '../../styles'
+import { FindEventProvider, useFindEventContext } from '../../actions/Find Events/FindEventsContext'
+import EventDetails from './find-events-modals/EventDetails'
+import EventFilter from './find-events-modals/EventFilter'
+import AvailabilityFilter from './find-events-modals/AvailabilityFilter'
+import RegisterForEvent from './find-events-modals/RegisterForEvent'
+import ConfirmEventRegistration from './find-events-modals/ConfirmEventRegistration'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import fromExternalToProjectFormat from '../../services/eventAdapter'
+
 
 /**
  * This screen is used to allow users to view, search, and register for events
@@ -27,15 +19,16 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const FindEvents = (props) => {
   return (
     <FindEventProvider>
-      <StatusBar />
-      <FindEventsContent {...props} />
+        <StatusBar />
+        <FindEventsContent {...props} />
 
-      {/*MODALS */}
-      <EventDetails />
-      <EventFilter />
-      <AvailabilityFilter />
-      <RegisterForEvent />
-      <ConfirmEventRegistration />
+        {/*MODALS */}
+        <EventDetails />
+        <EventFilter />
+        <AvailabilityFilter />
+        <RegisterForEvent />
+        <ConfirmEventRegistration {...props} />
+
     </FindEventProvider>
   );
 };
@@ -103,85 +96,111 @@ const FindEventsContent = ({ navigation }) => {
  * A List of Events with Name, Description, and an option to read more only.
  * @returns JSX List of Events
  */
-const Events = () => {
-  const { events } = useFindEventContext();
+const Events = React.memo(() => {
+    const {
+        renderedEvents,
+        Loading
+    } = useFindEventContext()
 
-  return (
-    <View
-      style={[styles.padding_horizontal_medium, styles.margin_bottom_xlarge]}
-    >
-      {/*Display Number of Results */}
-      <View style={[styles.row, styles.padding_horizontal_medium]}>
-        {/*Label */}
-        <Text
-          style={[styles.text_medium, styles.theme_tinted_colour, styles.bold]}
-        >
-          Event Results
-        </Text>
+    return(
+    <View style={[
+        styles.padding_horizontal_medium,
+        styles.margin_bottom_xlarge
+    ]}>
+        {/*Display Number of Results */}
+        <View style={[
+            styles.row, 
+            styles.padding_horizontal_medium
+        ]}>
 
-        {/*Value */}
-        <Text
-          style={[styles.text_medium, styles.theme_tinted_colour, styles.bold]}
-        >
-          {events.length} Results
-        </Text>
-      </View>
+            {/*Label */}
+            <Text style={[
+                styles.text_medium, 
+                styles.theme_tinted_colour,
+                styles.bold,
+            ]} 
+            >Event Results</Text>
 
-      <Underline />
+            {/*Value */}
+            <Text style={[
+                styles.text_medium, 
+                styles.theme_tinted_colour,
+                styles.bold
+            ]} 
+            >{renderedEvents.length} Results</Text>
 
-      {/*Event List*/}
-      <ScrollView>
-        {events.map((event) => {
-          return <Event {...event} key={event.id} />;
-        })}
-      </ScrollView>
-    </View>
-  );
-};
+        </View>
+
+        <Underline />
+
+        {/*Display loading spinner*/}
+        {Loading && <ActivityIndicator size="large" />}
+
+        {/*Hide inputs while loading */}
+        {!Loading && 
+        <>
+            {/*Event List*/}
+            <ScrollView>
+            {
+                renderedEvents.map((event,index) =>{
+                    const projectEvent = fromExternalToProjectFormat(event)
+                    
+                    return <Event {...projectEvent} key={index}/>
+                })
+            }
+            </ScrollView>
+        </>
+        }
+
+    </View>);
+})
+
 
 /**
  * Condensed Event Items. Shows Name, Description, and option to read more
  * @returns JSX Event Item
- */
-const Event = ({ id, name, description }) => {
-  //Get props and actions from context
-  const { openEventDetailsModal } = useFindEventContext();
+ */ 
+const Event = ({id, name, description}) => {
 
-  return (
-    <View style={styles.margin_vertical_medium}>
-      {/*Event Container */}
-      <Paper
-        title={name}
-        header={2}
-        headerTitleStyle={[styles.h1, styles.theme_tinted_colour]}
-      >
-        {/*Content Container (Not including title) */}
-        <View
-          style={[
-            styles.column,
-            styles.padding_medium,
-            styles.padding_top_small,
-          ]}
-        >
-          {/*Description */}
-          <Text
-            style={[
-              styles.text_medium,
-              styles.muted_text_1_colour,
-              styles.padding_bottom_large,
-            ]}
-          >
-            {description}
-          </Text>
 
-          <ProjectButton
-            title="More Information"
-            onPress={() => {
-              openEventDetailsModal(id);
-            }}
-          />
-        </View>
-      </Paper>
+    //Get props and actions from context
+    const {
+        openEventDetailsModal
+    } = useFindEventContext()
+
+
+    return(
+    <View style={styles.margin_vertical_medium}> 
+
+        {/*Event Container */}
+        <Paper   title={name} 
+            header={2} 
+            headerTitleStyle={[
+                styles.h2, 
+                styles.theme_tinted_colour,
+                ]}>
+
+                {/*Content Container (Not including title) */}
+                <View style={[
+                    styles.column,
+                    styles.padding_medium,
+                    styles.padding_top_small,
+                ]}>
+                    {/*Description */}
+                    <Text style={[
+                                    styles.text_medium,
+                                    styles.muted_text_1_colour, 
+                                    styles.padding_bottom_large
+                                ]}
+                    >{description}</Text>
+
+                    <ProjectButton title='More Information' 
+                        onPress={() => {openEventDetailsModal(id)}}
+                    />
+
+                </View>
+        </Paper>
+
     </View>
   );
 };

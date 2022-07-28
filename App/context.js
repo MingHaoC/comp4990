@@ -1,7 +1,6 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
-const root = 'http://localhost:8080'
-const registerURL = `${root}/user/register`
-const loginURL = `${root}/user/login`
+import jwt_decode from "jwt-decode";
+import fetchEventList from './scrape/scrape'
 
 const AppContext = React.createContext()
 
@@ -10,7 +9,22 @@ const AppContext = React.createContext()
 
 const AppProvider = ({ children }) => {
 
-  const [user,setUser] = useState(null)
+  const [user,setUser] = useState({
+    "sub": "8",
+    "email": "a@uwindsor.ca",
+    "name": "Ariana Avdoulos",
+    "expiresIn": 100000,
+    "iat": 1658987410,
+    "exp": 1658991010
+  })
+
+  const root = 'https://809f-216-8-184-8.ngrok.io'
+  const registerURL = `${root}/user/register`
+  const loginURL = `${root}/user/login`
+  const registerEventURL = `${root}/event/register?userID=${user.sub}`
+  const getUserEventsURL = `${root}/event/user_events?userID=${user.sub}`
+  const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`
+  const editProfileURL = `${root}/user/edit`
 
 
   const logout = () => {
@@ -19,7 +33,7 @@ const AppProvider = ({ children }) => {
   // #region POST
   const POST_Response = {
     status: 501,
-    text: 'Error: Not Implemented.'
+    content: 'Error: Not Implemented.'
   }
 
   /**
@@ -45,18 +59,20 @@ const AppProvider = ({ children }) => {
        * Try to make POST request
        */
       try {
+
         //fetch data and get data contents
-        const response = await fetch(url, options );
-        const data = await response.text();
-        console.log(data)
+        const response = await fetch(url, options);
+        let data = ""
+        data = await response.text()
+
         /*Change POST_Response to match the actual response*/
-        let POST_Response_Modified = Object.create(POST_Response)
-        POST_Response_Modified.status =  response.status;
-        POST_Response_Modified.text = data
+        POST_Response.status = response.status;
+        POST_Response.content = data
         
-        return POST_Response_Modified
+        return POST_Response
       } 
       catch (error) {
+        console.log(error)
         return POST_Response;
       }
 
@@ -76,8 +92,8 @@ const AppProvider = ({ children }) => {
     let userData = {
         address: _address,
         email: _email,
-        first_name: _first_name,
-        last_name: _last_name,
+        firstName: _first_name,
+        lastName: _last_name,
         password: _password
     };
 
@@ -110,12 +126,12 @@ const AppProvider = ({ children }) => {
     };
 
     //send response
-    let loginResponse =  POST(userData,loginURL) 
+    let loginResponse =  await POST(userData,loginURL) 
 
     //Modifiy POST response data depending on statuus
     switch (loginResponse.status) {
       case 200:
-        loginResponse.text = 'Login Success... Routing Coming Soon'
+        // setUser(jwt_decode(loginResponse.content))
         return loginResponse;
 
       default:
@@ -123,9 +139,51 @@ const AppProvider = ({ children }) => {
     }
   }
 
+  const registerEventPOST = async(event) => {
+    //format user data
+    try {
+      let registerRespone = POST(event,registerEventURL)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const cancelEvent = (eventId) => {
+    try {
+      let cancelResposne = POST({},cancelEventURL+eventId)
+    } catch (error) {
+      
+    }
+  }
+  const updateProfilePOST = async(id, firstName, lastName, address, phoneNumber) => {
+    const userData = {id,firstName,lastName,address,phoneNumber}
+
+    let updateResponse = POST_Response
+    try {
+      updateResponse = await POST(userData, editProfileURL)
+    } catch (error) {
+      console.log(error)
+    }
+
+    return updateResponse
+
+  }
   // #endregion
 
   
+  //#region Get
+  const getUserEventsGET = async() => {
+    try {
+      let response = await fetch(getUserEventsURL)
+      let data = await response.json()
+    } catch (error) {
+      
+    }
+    
+  }
+  //#endregion
+
     return (
         <AppContext.Provider
           value={{
@@ -133,7 +191,12 @@ const AppProvider = ({ children }) => {
             setUser,
             logout,
             registerPOST, 
-            loginPOST
+            loginPOST,
+            fetchEventList,
+            registerEventPOST,
+            getUserEventsGET,
+            cancelEvent,
+            updateProfilePOST,
           }}
         >
           {children}

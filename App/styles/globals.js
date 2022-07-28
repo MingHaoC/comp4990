@@ -16,9 +16,11 @@ const sizing = {
     Small: 4,
     XSmall: 2,
     FullContainer: '100%',
+    LargeContainer: '90%',
     MediumContainer: '70%',
     HalfConatiner: '50%',
     SmallContainer: '20%',
+
 }
 
 /**

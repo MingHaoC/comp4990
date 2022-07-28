@@ -1,26 +1,14 @@
-import { View, Text, Pressable, StatusBar } from "react-native";
-import React, { useEffect, useState } from "react";
-import {
-  Accordian,
-  InlineSelect,
-  Paper,
-  ProjectButton,
-  ProjectHeader,
-  ProjectTextInput,
-  Underline,
-} from "../../components";
-import { ScrollView } from "react-native-gesture-handler";
-import styles from "../../styles";
-import Icon from "react-native-vector-icons/FontAwesome";
-import IconF from "react-native-vector-icons//Feather";
-import {
-  MyEventProvider,
-  useMyEventContext,
-} from "../../actions/My Events/MyEventsContext";
-import DropModal from "./my-events-modals/DropModal";
-import EventFilter from "./my-events-modals/EventFilter";
-import * as Location from "expo-location";
-
+import { View, Text, Pressable, StatusBar } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Accordian, InlineSelect, Paper, ProjectButton, ProjectHeader, ProjectTextInput, Underline } from '../../components'
+import { ScrollView } from 'react-native-gesture-handler'
+import styles from '../../styles'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import IconF from 'react-native-vector-icons//Feather';
+import { MyEventProvider, useMyEventContext } from '../../actions/My Events/MyEventsContext'
+import DropModal from './my-events-modals/DropModal'
+import EventFilter from './my-events-modals/EventFilter'
+                   
 const MyEvents = (props) => {
   const [location, setLocation] = useState(null);
   const [destination, setDestination] = useState(null);
@@ -309,7 +297,11 @@ const Duration = ({ start_date, end_date }) => {
  */
 const MeetingTimes = ({ id, days, start_time, end_time }) => {
   /*Get Props and actions from context */
-  const { event_filter, openEventInSchedule } = useMyEventContext();
+  const {
+    event_filter,
+    // openEventInSchedule
+  } = useMyEventContext()
+
 
   const daysData = event_filter.days.data;
 
@@ -364,8 +356,43 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
   };
 
   useEffect(() => {
-    addAllSelected();
-  }, []);
+    addAllSelected()
+  },[])
+
+  return(
+  <Accordian title="Meeting Times"
+    titleStyle={[styles.bold]}
+    collapsed={false}
+    content={
+    <View style={[styles.padding_horizontal_medium]}>
+      {/*Meeting Days */}
+      <InlineSelect disabled={true} 
+        multiselect={true} 
+        data={daysData}
+        selectedIndicies={selected}
+      />
+
+      <View style={[
+        styles.row,
+      ]}>
+
+        {/*Meeting Times */}
+        <Text style={[
+          styles.text_medium
+        ]}
+        >{start_time.hour}:{start_time.minute} {start_time.ante_meridian} - {end_time.hour}:{end_time.minute} {end_time.ante_meridian}</Text>
+        
+        {/*Button Opens Event in Schedule */}
+        <ProjectButton title={
+          <Text>
+          <Icon name='calendar' style={[styles.text_medium, styles.padding_right_medium]} />  Schedule
+          </Text>
+        } 
+        type='info' 
+        onPress={() => {}} 
+      />
+      </View>
+
 
   return (
     <Accordian

@@ -2,32 +2,31 @@ import React, { useState, useContext, useReducer, useEffect } from 'react'
 import dummyEvents from "../../dummyEventsRegistered"
 import initial_state from "./inital_state"
 import reducer from './MyEventsReducer'
+import openMap from 'react-native-open-maps';
 
 const MyEventContext = React.createContext()
 const init_state = {...new initial_state}
-
+ 
 const MyEventProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, init_state)
 
     const getEvents = () => {
         const events = dummyEvents
         dispatch({type: "DISPLAY_EVENTS", payload:events})
-
-        // getEventCategories(events)
-        // getEventLocations(events)
     }
 
-    const getEventCategories = (events) => {
+    const getEventCategories = () => {
         const categories = []
         dispatch({type: "DISPLAY_CATEGORIES", payload:categories})
     }
 
-    const getEventLocations = (events) => {
+    const getEventLocations = () => {
         const locations = []
         dispatch({type: "DISPLAY_LOCATIONS", payload:locations})
     }
 
     const navigateToEvent = (id) => {
+        openMap({ latitude: 37.865101, longitude: -119.538330 });
         console.log('TODO: Naviagtion')
     }
 
@@ -86,7 +85,7 @@ const MyEventProvider = ({children}) => {
     }
     const openDropEventModal = (id) => {
         const event = state.events.filter((event) => event.id == id)[0]
-        console.log(event)
+        // console.log(event)
         dispatch({type: "OPEN_DROP_MODAL",payload:event})
     }
 
@@ -110,7 +109,6 @@ const MyEventProvider = ({children}) => {
     return (
         <MyEventContext.Provider value={{
             ...state,
-            openEventInSchedule,
             closeDropEventModal,
             dropEvent,
             openDropEventModal,
@@ -118,6 +116,7 @@ const MyEventProvider = ({children}) => {
             selectEventName,
             selectFilterAges,
             selectFilterCategory,
+            openEventInSchedule,
             selectFilterDays,
             selectFilterLocation,
             selectFilterOrderBy,

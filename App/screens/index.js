@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Profile from './home/Profile';
-import Home from './home/Home';
+import Home from './home/Home'
 import FindEvents from './home/FindEvents';
 import MyEvents from './home/MyEvents';
 import { Text, View } from 'react-native';
@@ -33,7 +33,7 @@ const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator initialRouteName='Profile' screenOptions={{ headerShown: false }} drawerContent={(props) => <DrawerContent {...props} />}>
             <Drawer.Screen name='Home' component={Home} options={{drawerIcons: <Icon name='home' />}}/>
             <Drawer.Screen name='Profile' component={Profile} />
             <Drawer.Screen name='FindEvents' component={FindEvents} />

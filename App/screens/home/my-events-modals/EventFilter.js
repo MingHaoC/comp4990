@@ -13,7 +13,7 @@ import { useMyEventContext } from '../../../actions/My Events/MyEventsContext'
 const EventFilter = () => {
     /*Get props and actions from context */
     const {
-        closeEventFilter,
+        closeEventFilter, 
         filterEvents,
         event_filter,
         resetEventFilter

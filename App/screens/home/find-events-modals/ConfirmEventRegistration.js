@@ -5,7 +5,7 @@ import { Paper, ProjectButton } from '../../../components'
 import styles from '../../../styles'
 import { useFindEventContext } from '../../../actions/Find Events/FindEventsContext'
 
-const ConfirmEventRegistration = () => {
+const ConfirmEventRegistration = ({navigation}) => {
 
   const {
     register_result,
@@ -13,7 +13,7 @@ const ConfirmEventRegistration = () => {
   } = useFindEventContext()
   return (
 
- 
+  
     <Modal
       animationType="fade"
       transparent={true}
@@ -34,7 +34,7 @@ const ConfirmEventRegistration = () => {
                 underlineStyle={[styles.hidden]}>
 
             <Icon name='check-circle-o' style={[styles.center,{fontSize:100},styles.bold,styles.theme_complement_colour, styles.padding_bottom_xlarge]}/>
-            <ProjectButton title='View Your Events' style={[styles.margin_bottom_xlarge]}/>
+            <ProjectButton title='View Your Events' style={[styles.margin_bottom_xlarge]} onPress={() => {navigation.navigate("MyEvents")}}/>
             <ProjectButton title='Continue Searching' type='info' style={[styles.margin_bottom_medium]} onPress={() => {closeRegisterResultModal()}}/>
 
         </Paper>

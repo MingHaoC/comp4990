@@ -1,6 +1,5 @@
-import { View, Text, Pressable, Modal, ScrollView } from 'react-native'
+import { View, Text, Modal, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import dummyEvents from '../../../dummyEvents'
 import styles from '../../../styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Paper, ProjectButton, Underline } from '../../../components'
@@ -18,6 +17,7 @@ const RegisterForEvent = () => {
     const event = event_details.event_selected
 
     const {
+        Loading,
         selected_availability,
         current_display,
         displays,
@@ -71,60 +71,67 @@ const RegisterForEvent = () => {
                             styles.padding_bottom_medium
                     ]}>
             
-                        {/*Navigation Buttons*/}
-                        <View style={[styles.row,styles.padding_vertical_none, styles.padding_horizontal_medium] }>
+                        {/*Display loading spinner*/}
+                        {Loading && <ActivityIndicator size="large" />}
 
-                            <ProjectButton title={
-                                <View style={[styles.center, styles.row, styles.padding_vertical_none]}>
-                                    <Icon name='arrow-circle-o-left' style={[ styles.text_medium, styles.base_shade_colour]} />
-                                    <Text style={[styles.text_medium, styles.padding_horizontal_medium, styles.base_shade_colour]}>Back</Text>
-                                </View>}
-                                onPress={() => {showPreviousRegisterDisplay()}}
-                            />
+                            {/*Hide inputs while loading */}
+                        {!Loading && 
+                        <>
+                            {/*Navigation Buttons*/}
+                            <View style={[styles.row,styles.padding_vertical_none, styles.padding_horizontal_medium] }>
 
-                            <ProjectButton title={
-                                <View style={[styles.center, styles.row, styles.padding_vertical_none]}>
-                                    <Text style={[styles.text_medium, styles.base_shade_colour]}>Next</Text>
-                                    <Icon name='arrow-circle-o-right' style={[styles.padding_top_xsmall, styles.padding_horizontal_medium, styles.text_medium, styles.base_shade_colour]} />
-                                </View>} 
-                                onPress={() => {
-                                    showNextRegisterDisplay()
-                                }}
-                            />
-                        </View>
+                                <ProjectButton title={
+                                    <View style={[styles.center, styles.row, styles.padding_vertical_none]}>
+                                        <Icon name='arrow-circle-o-left' style={[ styles.text_medium, styles.base_shade_colour]} />
+                                        <Text style={[styles.text_medium, styles.padding_horizontal_medium, styles.base_shade_colour]}>Back</Text>
+                                    </View>}
+                                    onPress={() => {showPreviousRegisterDisplay()}}
+                                />
 
-                        {/*Sections*/}
-                        <View style={[styles.padding_medium]}>  
-                            {(current_display == 0) && <AdditionalInfo {...selected_availability} />}
-                            {(current_display == 1) && <Confirm {...event} {...selected_availability} />}
+                                <ProjectButton title={
+                                    <View style={[styles.center, styles.row, styles.padding_vertical_none]}>
+                                        <Text style={[styles.text_medium, styles.base_shade_colour]}>Next</Text>
+                                        <Icon name='arrow-circle-o-right' style={[styles.padding_top_xsmall, styles.padding_horizontal_medium, styles.text_medium, styles.base_shade_colour]} />
+                                    </View>} 
+                                    onPress={() => {
+                                        showNextRegisterDisplay()
+                                    }}
+                                />
+                            </View>
 
-                        </View>
+                            {/*Sections*/}
+                            <View style={[styles.padding_medium]}>  
+                                {(current_display == 0) && <AdditionalInfo {...selected_availability} />}
+                                {(current_display == 1) && <Confirm {...event} {...selected_availability} />}
 
-                        {/*Btn Options*/}
-                        <View style={[styles.column,]}>
+                            </View>
 
-                            <ProjectButton title={
-                                <View style={[styles.row]}>
-                                    <Icon name='shopping-cart' style={[styles.text_medium,styles.base_shade_colour]}/>
-                                    <Text style={[styles.text_medium,styles.base_shade_colour, styles.padding_left_medium]}>Add To Cart</Text>
-                                </View>
-                                } 
-                                type='default'   
-                                onPress={() => { registerForEvent()}} 
-                                style={[
-                                    styles.margin_vertical_medium,
-                                    styles.disappeared,
-                                    (current_display+1 == displays.length && styles.visible )
-                            ]}/>
+                            {/*Btn Options*/}
+                            <View style={[styles.column,]}>
 
-                            <ProjectButton title='Cancel' 
-                                type='info'   
-                                onPress={() => { closeRegisterModal()}} 
-                                style={[
-                                    styles.margin_vertical_medium
-                            ]}/>
+                                <ProjectButton title={
+                                    <View style={[styles.row]}>
+                                        <Icon name='shopping-cart' style={[styles.text_medium,styles.base_shade_colour]}/>
+                                        <Text style={[styles.text_medium,styles.base_shade_colour, styles.padding_left_medium]}>Add To Cart</Text>
+                                    </View>
+                                    } 
+                                    type='default'   
+                                    onPress={() => { registerForEvent()}} 
+                                    style={[
+                                        styles.margin_vertical_medium,
+                                        styles.disappeared,
+                                        (current_display+1 == displays.length && styles.visible )
+                                ]}/>
 
-                        </View>
+                                <ProjectButton title='Cancel' 
+                                    type='info'   
+                                    onPress={() => { closeRegisterModal()}} 
+                                    style={[
+                                        styles.margin_vertical_medium
+                                ]}/>
+
+                            </View>
+                        </>}
                     </Paper>
                 </View>
             </ScrollView>
@@ -160,7 +167,7 @@ const Confirm = (props) => {
         <>
             <Text style={[styles.h3, styles.bold, styles.margin_bottom_small]}>Confirm</Text>
             <Paper style={[styles.padding_medium]}>
-
+ 
                 {/*Name */}
                 <View>
                     <View  style={[styles.row]}>

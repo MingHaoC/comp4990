@@ -15,7 +15,7 @@ const EventFilter = () => {
     const {
         closeEventFilterModal,
         filterEvents,
-        event_filter,
+        event_filter, 
         resetEventFilter
     } = useFindEventContext();
 
