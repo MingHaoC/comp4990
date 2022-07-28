@@ -9,11 +9,13 @@ import Icon from 'react-native-vector-icons/Entypo';
 /**
  * Register Screen
  */
+
 export default function Register(props) {
-return(
-  <RegisterProvider>
-    <RegisterContent {...props} />
-  </RegisterProvider>)
+  return (
+    <RegisterProvider>
+      <RegisterContent {...props} />
+    </RegisterProvider>
+  );
 }
 
 /**
@@ -21,6 +23,7 @@ return(
  * We create a seperate component because we cannot access the context within the component that wraps the provider
  */
 const RegisterContent = ({navigation}) => { 
+
 
   const {
     registerUser,
@@ -47,6 +50,7 @@ const RegisterContent = ({navigation}) => {
     toggleHideVerifcationPassword,
     toggleResponseModal
   }  = useRegisterContext()
+
   return (
     <>
     <ScrollView>
@@ -211,8 +215,11 @@ const RegisterContent = ({navigation}) => {
                     onClose={() => {toggleResponseModal()}}
                     />
 
+
+        <RegisterModal {...state} closeModal={closeModal} />
       </View>
     </ScrollView>
     </>
+
   );
-}
+};

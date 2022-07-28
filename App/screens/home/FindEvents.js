@@ -11,13 +11,13 @@ import ConfirmEventRegistration from './find-events-modals/ConfirmEventRegistrat
 import Icon from 'react-native-vector-icons/FontAwesome';
 import fromExternalToProjectFormat from '../../services/eventAdapter'
 
-/** 
+
+/**
  * This screen is used to allow users to view, search, and register for events
  * @returns JSX Find Event Screen
  */
 const FindEvents = (props) => {
-
-    return (
+  return (
     <FindEventProvider>
         <StatusBar />
         <FindEventsContent {...props} />
@@ -30,82 +30,67 @@ const FindEvents = (props) => {
         <ConfirmEventRegistration {...props} />
 
     </FindEventProvider>
-  )
-}
+  );
+};
 /**
  * We use this component because you cannot directly access a context in the provider component.
  * @returns JSX FindEvents Page Content
  */
-const FindEventsContent = ({navigation}) => {
-    const { 
-        openEventFilterModal,
-        filterEvents,
-        event_filter,
-        selectEventName
-    } = useFindEventContext();
+const FindEventsContent = ({ navigation }) => {
+  const { openEventFilterModal, filterEvents, event_filter, selectEventName } =
+    useFindEventContext();
 
-    const {
-        name
-    } = event_filter
-    
-    return (
-        <>
+  const { name } = event_filter;
 
-    {/*Top of Screen, opens drawer and notifications*/}
-    <ProjectHeader navigation={navigation}>
-
+  return (
+    <>
+      {/*Top of Screen, opens drawer and notifications*/}
+      <ProjectHeader navigation={navigation}>
         {/* Search for Event By Name*/}
-        <ProjectTextInput   placeholder='Find Events...' 
-            form_input_error_text={[styles.disappeared]} 
-            form_input={[styles.margin_bottom_small]} 
-            form_input_label={[styles.disappeared]}
-            onChangeText={(value) => {
-                selectEventName(value)
-            }}
-
+        <ProjectTextInput
+          placeholder="Find Events..."
+          form_input_error_text={[styles.disappeared]}
+          form_input={[styles.margin_bottom_small]}
+          form_input_label={[styles.disappeared]}
+          onChangeText={(value) => {
+            selectEventName(value);
+          }}
         />
+      </ProjectHeader>
 
-    </ProjectHeader>
-
-    {/*Background */} 
-    <View style={[
-        styles.container, 
-        styles.padding_large
-    ]}>
-
+      {/*Background */}
+      <View style={[styles.container, styles.padding_large]}>
         {/*Container for Toggle Filter Button*/}
-        <Paper style={[
-            styles.margin_vertical_medium,
-        ]}>
-
-            {/*Toggle Filter Button*/}
-            <Pressable onPress={() => {openEventFilterModal()}}>
-                <Text style={[
-                    styles.text_medium,
-                    styles.center,
-                    styles.margin_vertical_medium
-                ]}>
-                    <Icon name='filter' style={[styles.text_medium]}/> 
-                    <Text style={styles.theme_tinted_colour}>  Filter Events</Text>
-                </Text>
-            </Pressable>
-
+        <Paper style={[styles.margin_vertical_medium]}>
+          {/*Toggle Filter Button*/}
+          <Pressable
+            onPress={() => {
+              openEventFilterModal();
+            }}
+          >
+            <Text
+              style={[
+                styles.text_medium,
+                styles.center,
+                styles.margin_vertical_medium,
+              ]}
+            >
+              <Icon name="filter" style={[styles.text_medium]} />
+              <Text style={styles.theme_tinted_colour}> Filter Events</Text>
+            </Text>
+          </Pressable>
         </Paper>
 
         {/*Events*/}
-        <Paper style={[ styles.center]}>
-
-                <ScrollView>
-
-                    <Events />
-                    
-                </ScrollView>
-        </Paper>    
-    </View>
-
+        <Paper style={[styles.center]}>
+          <ScrollView>
+            <Events />
+          </ScrollView>
+        </Paper>
+      </View>
     </>
-    );
-}
+  );
+};
 
 /**
  * A List of Events with Name, Description, and an option to read more only.
@@ -170,6 +155,7 @@ const Events = React.memo(() => {
     </View>);
 })
 
+
 /**
  * Condensed Event Items. Shows Name, Description, and option to read more
  * @returns JSX Event Item
@@ -214,8 +200,9 @@ const Event = ({id, name, description}) => {
 
                 </View>
         </Paper>
-    </View>
-    );
-}
 
-export default FindEvents
+    </View>
+  );
+};
+
+export default FindEvents;
