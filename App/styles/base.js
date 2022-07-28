@@ -824,6 +824,9 @@
      full_container:{
          width: sizing.FullContainer
      },
+     large_container:{
+        width: sizing.LargeContainer
+     },
      medium_container:{
          width: sizing.MediumContainer
      },

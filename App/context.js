@@ -1,6 +1,7 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
+import jwt_decode from "jwt-decode";
 import fetchEventList from './scrape/scrape'
-const root = 'http://localhost:8080'
+const root = 'https://809f-216-8-184-8.ngrok.io'
 const registerURL = `${root}/user/register`
 const loginURL = `${root}/user/login`
 
@@ -20,7 +21,7 @@ const AppProvider = ({ children }) => {
   // #region POST
   const POST_Response = {
     status: 501,
-    text: 'Error: Not Implemented.'
+    content: 'Error: Not Implemented.'
   }
 
   /**
@@ -46,18 +47,20 @@ const AppProvider = ({ children }) => {
        * Try to make POST request
        */
       try {
+
         //fetch data and get data contents
-        const response = await fetch(url, options );
-        const data = await response.text();
-        console.log(data)
+        const response = await fetch(url, options);
+        let data = ""
+        data = await response.text()
+
         /*Change POST_Response to match the actual response*/
-        let POST_Response_Modified = Object.create(POST_Response)
-        POST_Response_Modified.status =  response.status;
-        POST_Response_Modified.text = data
+        POST_Response.status = response.status;
+        POST_Response.content = data
         
-        return POST_Response_Modified
+        return POST_Response
       } 
       catch (error) {
+        console.log(error)
         return POST_Response;
       }
 
@@ -111,12 +114,12 @@ const AppProvider = ({ children }) => {
     };
 
     //send response
-    let loginResponse =  POST(userData,loginURL) 
+    let loginResponse =  await POST(userData,loginURL) 
 
     //Modifiy POST response data depending on statuus
     switch (loginResponse.status) {
       case 200:
-        loginResponse.text = 'Login Success... Routing Coming Soon'
+        // setUser(jwt_decode(loginResponse.content))
         return loginResponse;
 
       default:
