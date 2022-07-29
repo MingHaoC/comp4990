@@ -63,6 +63,10 @@ const ProfileProvider = ({children}) => {
             dispatch({type: "SET_EDIT_LOADING", payload: true})
             await updateProfilePOST(user.id, state.EditPhonenumber, state.EditLastname, state.EditAddress, state.EditPhonenumber)
             await getUser()
+            dispatch({type: "UPDATE_LASTNAME", payload: state.EditLastname})
+            dispatch({type: "UPDATE_FIRSTNAME", payload: state.EditFirstname})
+            dispatch({type: "UPDATE_ADDRESS", payload: state.EditAddress})
+            dispatch({type: "UPDATE_PHONENUMBER", payload: state.EditPhonenumber})
             dispatch({type: "SET_LOADING", payload: false})
             dispatch({type: "SET_EDIT_LOADING", payload: false})
         } catch (error) {
