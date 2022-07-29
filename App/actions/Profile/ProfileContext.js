@@ -13,7 +13,7 @@ const init_state = initial_state
 const ProfileProvider = ({children}) => {
     const {
         fetchEventList,
-        registerEventPOST,
+        getUserGET,
         updateProfilePOST,
         user
     } = useAppContext()
@@ -66,11 +66,21 @@ const ProfileProvider = ({children}) => {
 
     }
 
+    const getUser = async() => {
+        try {
+            const response = await getUserGET(user.sub)
+            console.log(response)
+        } catch (error) {
+            
+        }
+    }
     useEffect(() => {
         dispatch({type: "UPDATE_FIRSTNAME", payload: `${user.name.split(' ')[0]}`})
         dispatch({type: "UPDATE_LASTNAME", payload: `${user.name.split(' ')[1]}`})
-
+        getUser()
     },[])
+
+
 
     return(
         <ProfileContext.Provider value={{

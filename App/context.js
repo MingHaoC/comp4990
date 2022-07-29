@@ -189,10 +189,7 @@ const AppProvider = ({ children }) => {
        * Configure options
        */
       const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: "GET",
         body: JSON.stringify({id: id}),
       };
       let response = await fetch(getUserURL,options)
