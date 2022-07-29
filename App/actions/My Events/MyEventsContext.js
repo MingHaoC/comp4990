@@ -96,15 +96,39 @@ const MyEventProvider = ({children}) => {
         dispatch({type: "CLOSE_EVENT_FILTER_MODAL"})
     }
     const openDropEventModal = (id) => {
-        const event = state.events.filter((event) => event.id == id)[0]
-        console.log(event)
-        dispatch({type: "OPEN_DROP_MODAL",payload:event})
+        const event = state.events.filter((event) => event.eventId == id)[0]
+
+        if(event.emailContact != null){
+            const obj = JSON.parse(event.emailContact)
+            const ev = {
+              name: event.eventTitle,
+              location: event.location,
+              id: event.eventId,
+              description: event.eventDescription,
+              category: '',
+              days_of_the_week: obj.days_of_the_week,
+              start_time: obj.start_time,
+              end_time: obj.end_time,
+              start_date: obj.start_date
+  
+            }
+            console.log(ev)
+            dispatch({type: "OPEN_DROP_MODAL",payload:ev})
+
+          }
+    
+
     }
 
     const dropEvent = async(id) => {
-        let res = await cancelEvent(id)
-        console.log(res)
+        try {
+            let res = await cancelEvent(id)
+            console.log(res)
+        } catch (error) {
+            
+        }
         closeDropEventModal()
+
     }
 
     const closeDropEventModal = () =>{
