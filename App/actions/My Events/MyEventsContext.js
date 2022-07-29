@@ -142,7 +142,7 @@ const MyEventProvider = ({children}) => {
 
     useEffect(() => {
         getEvents()
-    },[])
+    })
     return (
         <MyEventContext.Provider value={{
             ...state,
