@@ -161,6 +161,8 @@ const AppProvider = ({ children }) => {
         {
           method: 'POST',
           headers: myHeaders,
+          body: JSON.stringify(userData),
+
         }
       )
     } catch (error) {
