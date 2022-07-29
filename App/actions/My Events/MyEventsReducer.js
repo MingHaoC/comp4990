@@ -16,6 +16,7 @@ const reducer = (state, action) => {
         const newDropModalState = state.drop_event_modal
         newDropModalState.is_open = true
         newDropModalState.event_selected = action.payload
+        console.log(action.payload)
         return {...state, drop_event_modal: newDropModalState}
     }
     if(action.type == "CLOSE_DROP_MODAL"){
