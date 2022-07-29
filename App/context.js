@@ -148,7 +148,7 @@ const AppProvider = ({ children }) => {
     try {
       let cancelResposne = await POST({},cancelEventURL+eventId)
       POST_Response.status = cancelResposne.status
-      POST_Response.content = await cancelResposne.text()
+      POST_Response.content = ""
     } catch (error) {
      console.log(error) 
     }
