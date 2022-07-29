@@ -47,6 +47,7 @@ const AppProvider = ({ children }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authentication": token
       },
       body: JSON.stringify(POST_data),
     };
