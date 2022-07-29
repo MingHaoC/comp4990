@@ -96,7 +96,7 @@ const MyEventProvider = ({children}) => {
     }
     const openDropEventModal = (id) => {
         const event = state.events.filter((event) => event.eventId == id)[0]
-        console.log(event)
+
         if(event.emailContact != null){
             const obj = JSON.parse(event.emailContact)
             const ev = {
@@ -111,14 +111,23 @@ const MyEventProvider = ({children}) => {
               start_date: obj.start_date
   
             }
+            console.log(ev)
             dispatch({type: "OPEN_DROP_MODAL",payload:ev})
-        }
+
+          }
+    
+
     }
 
     const dropEvent = async(id) => {
-        let res = await cancelEvent(id)
-        console.log(res.status)
+        try {
+            let res = await cancelEvent(id)
+            console.log(res)
+        } catch (error) {
+            
+        }
         closeDropEventModal()
+
     }
 
     const closeDropEventModal = () =>{
@@ -132,7 +141,7 @@ const MyEventProvider = ({children}) => {
 
     useEffect(() => {
         getEvents()
-    },[])
+    })
     return (
         <MyEventContext.Provider value={{
             ...state,

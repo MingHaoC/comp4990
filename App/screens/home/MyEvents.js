@@ -127,7 +127,8 @@ const Events = ({ events, navigation }) => {
 
       {/*Event List*/}
       <ScrollView style={[styles.margin_bottom_xlarge]}>
-        {events.map((event,index) => {
+        {events.map((event, index) => {
+
 
 
           if(event.emailContact != null){

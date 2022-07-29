@@ -22,7 +22,7 @@ const AppProvider = ({ children }) => {
   const getUserEventsURL = `${root}/event/user_events?userID=${user.sub}`
   const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`
   const editProfileURL = `${root}/user/edit`
-
+  const getUserURL = `${root}/user?userId=${user.sub}`
   const logout = () => {
     setUser(null);
   };
@@ -183,6 +183,20 @@ const AppProvider = ({ children }) => {
     
   }
 
+  const getUserGET = async(id) => {
+    try {
+
+      let response = await fetch(getUserURL)
+      let data = await response.json()
+      console.log(data)
+      POST_Response.status = response.status
+      POST_Response.content = data
+      return POST_Response
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   //#endregion
 
   return (
@@ -193,6 +207,7 @@ const AppProvider = ({ children }) => {
         logout,
         registerPOST,
         loginPOST,
+        getUserGET,
         fetchEventList,
         registerEventPOST,
         getUserEventsGET,
