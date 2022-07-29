@@ -128,7 +128,27 @@ const Events = ({ events, navigation }) => {
       {/*Event List*/}
       <ScrollView style={[styles.margin_bottom_xlarge]}>
         {events.map((event) => {
-          return <Event {...event} key={event.id} navigation={navigation} />;
+
+
+          if(event.emailContact != null){
+            const obj = JSON.parse(event.emailContact)
+            const ev = {
+              name: event.eventTitle,
+              location: event.location,
+              id: event.eventId,
+              description: event.eventDescription,
+              category: '',
+              days_of_the_week: obj.days_of_the_week,
+              start_time: obj.start_time,
+              end_time: obj.end_time,
+              start_date: obj.start_date
+  
+            }
+            return <Event {...ev} key={event.id} navigation={navigation} />;
+
+          }
+
+
         })}
         <Text style={[styles.margin_bottom_xlarge]}></Text>
         <Text style={[styles.margin_bottom_xlarge]}></Text>
@@ -273,7 +293,8 @@ const Duration = ({ start_date, end_date }) => {
               Session Start:
             </Text>
             <Text style={[styles.text_medium, styles.muted_text_2_colour]}>
-              {start_date}
+              Anytime
+              {/* {start_date} */}
             </Text>
           </View>
 
@@ -289,7 +310,9 @@ const Duration = ({ start_date, end_date }) => {
               Session End:
             </Text>
             <Text style={[styles.text_medium, styles.muted_text_2_colour]}>
-              {end_date}
+              Anytime
+              {/* {end_date != undefined && end_date} */}
+
             </Text>
           </View>
         </View>
@@ -364,8 +387,10 @@ const MeetingTimes = ({ id, days, start_time, end_time }) => {
   };
 
   useEffect(() => {
-    addAllSelected();
-  }, []);
+    addAllSelected()
+  },[])
+
+
 
   return (
     <Accordian
@@ -514,7 +539,7 @@ const Address = ({ id, location, navigation }) => {
       </Text>
 
       {/*Section Info */}
-      <View style={[styles.row]}>
+      <View style={[styles.column]}>
         {/*Location */}
         <Text
           style={[

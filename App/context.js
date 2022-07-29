@@ -5,22 +5,23 @@ import fetchEventList from "./scrape/scrape";
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    sub: "8",
-    email: "a@uwindsor.ca",
-    name: "Ariana Avdoulos",
-    expiresIn: 100000,
-    iat: 1658987410,
-    exp: 1658991010,
-  });
 
-  const root = "https://809f-216-8-184-8.ngrok.io";
-  const registerURL = `${root}/user/register`;
-  const loginURL = `${root}/user/login`;
-  const registerEventURL = `${root}/event/register?userID=${user.sub}`;
-  const getUserEventsURL = `${root}/event/user_events?userID=${user.sub}`;
-  const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`;
-  const editProfileURL = `${root}/user/edit`;
+  const [user,setUser] = useState({
+    "sub": "8",
+    "email": "a@uwindsor.ca",
+    "name": "Ariana Avdoulos",
+    "expiresIn": 100000,
+    "iat": 1658987410,
+    "exp": 1658991010
+  })
+
+  const root = 'https://3dce-216-8-186-247.ngrok.io'
+  const registerURL = `${root}/user/register`
+  const loginURL = `${root}/user/login`
+  const registerEventURL = `${root}/event/register?userID=${user.sub}`
+  const getUserEventsURL = `${root}/event/user_events?userID=${user.sub}`
+  const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`
+  const editProfileURL = `${root}/user/edit`
 
   const logout = () => {
     setUser(null);
@@ -143,21 +144,20 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const cancelEvent = (eventId) => {
+  const cancelEvent = async(eventId) => {
     try {
-      let cancelResposne = POST({}, cancelEventURL + eventId);
-    } catch (error) {}
-  };
-  const updateProfilePOST = async (
-    id,
-    firstName,
-    lastName,
-    address,
-    phoneNumber
-  ) => {
-    const userData = { id, firstName, lastName, address, phoneNumber };
+      let cancelResposne = await POST({},cancelEventURL+eventId)
+      POST_Response.status = cancelResposne.status
+      POST_Response.content = await cancelResposne.text()
+    } catch (error) {
+     console.log(error) 
+    }
+  }
+  const updateProfilePOST = async(id, firstName, lastName, address, phoneNumber) => {
+    const userData = {id,firstName,lastName,address,phoneNumber}
 
-    let updateResponse = POST_Response;
+    let updateResponse = POST_Response
+
     try {
       updateResponse = await POST(userData, editProfileURL);
     } catch (error) {
@@ -171,11 +171,18 @@ const AppProvider = ({ children }) => {
   //#region Get
   const getUserEventsGET = async () => {
     try {
-      let response = await fetch(getUserEventsURL);
-      let data = await response.json();
-      console.log(data);
-    } catch (error) {}
-  };
+      let response = await fetch(getUserEventsURL)
+      let data = await response.json()
+
+      POST_Response.status = response.status
+      POST_Response.content = data
+      return POST_Response
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
   //#endregion
 
   return (
