@@ -29,7 +29,7 @@ public class NotificationScheduler {
     @Autowired
     UserEventRepository userEventRepository;
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 200000)
     public void reportCurrentTime() {
         System.out.println("test");
         Date now = new Date();
