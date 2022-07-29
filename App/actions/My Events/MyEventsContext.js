@@ -1,5 +1,4 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
-import dummyEvents from "../../dummyEventsRegistered"
 import initial_state from "./inital_state"
 import reducer from './MyEventsReducer'
 import openMap from 'react-native-open-maps';

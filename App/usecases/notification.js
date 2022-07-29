@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "../config/config";
 
 const header = {
-  Accept: "application/json",
+  "Accept": "application/json",
   "Content-Type": "application/json",
 };
 
@@ -22,6 +22,7 @@ exports.registerExpoToken = async (
   };
 
   try {
+    console.log(`${config.host}/user/register/expoToken`);
     const result = await axios.post(
       `${config.host}/user/register/expoToken`,
       user,

@@ -130,6 +130,7 @@ const Events = ({ events, navigation }) => {
         {events.map((event, index) => {
 
 
+
           if(event.emailContact != null){
             const obj = JSON.parse(event.emailContact)
             const ev = {

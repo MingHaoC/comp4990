@@ -23,8 +23,8 @@ public class UserController {
      * @return
      */
     @GetMapping()
-    public ResponseEntity<User> getUser(@RequestBody User user) {
-        return userService.getUser(user);
+    public ResponseEntity<User> getUser(@RequestParam Integer userId) {
+        return userService.getUser(userId);
     }
 
     /**
@@ -84,6 +84,7 @@ public class UserController {
      */
     @PostMapping(REGISTER_EXPO_TOKEN)
     public ResponseEntity<String> RegisterExpoToken(@RequestBody User user){
+        System.out.println(user.getEmail() + " - " + user.getExpoToken());
         return userService.registerExpoToken(user);
     }
 }

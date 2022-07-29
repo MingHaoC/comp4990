@@ -19,9 +19,9 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public ResponseEntity<User> getUser(User user) {
+        public ResponseEntity<User> getUser(Integer userId) {
         try {
-            User getUser = userRepository.getById(user.getId());
+            User getUser = userRepository.getById(userId);
             User returnUser = new User();
             returnUser.setId(getUser.getId());
             returnUser.setFirstName(getUser.getFirstName());

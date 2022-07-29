@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-    ResponseEntity<User> getUser(User user);
+    ResponseEntity<User> getUser(Integer userId);
 
     ResponseEntity<String> updateUserInformation(User user);
 
