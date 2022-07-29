@@ -84,6 +84,7 @@ public class UserController {
      */
     @PostMapping(REGISTER_EXPO_TOKEN)
     public ResponseEntity<String> RegisterExpoToken(@RequestBody User user){
+        System.out.println(user.getEmail() + " - " + user.getExpoToken());
         return userService.registerExpoToken(user);
     }
 }
