@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import { AppProvider } from "./context";
 import { NavigationContainer } from "@react-navigation/native";
 import AppContent from "./screens";
-
+console.disa
 export default function App() {
 
 

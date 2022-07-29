@@ -216,7 +216,6 @@ const RegisterContent = ({navigation}) => {
                     />
 
 
-        <RegisterModal {...state} closeModal={closeModal} />
       </View>
     </ScrollView>
     </>

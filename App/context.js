@@ -147,12 +147,22 @@ const AppProvider = ({ children }) => {
     }
   }
   const updateProfilePOST = async(id, firstName, lastName, address, phoneNumber) => {
+
+
+
     const userData = {id,firstName,lastName,address,phoneNumber}
+    try {
 
     let updateResponse = POST_Response
-
-    try {
-      updateResponse = await POST(userData, `${root}/user/edit`);
+      const myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'plain/text');
+      myHeaders.append('Authorization', token);
+      let response = await fetch(`${root}/user?userId=${user.sub}`, 
+        {
+          method: 'POST',
+          headers: myHeaders,
+        }
+      )
     } catch (error) {
       console.log(error);
     }
@@ -187,7 +197,6 @@ const AppProvider = ({ children }) => {
           headers: myHeaders,
         }
       )
-      console.log(response.status)
       POST_Response.status = response.status
       POST_Response.content = await response.json()
       return POST_Response
