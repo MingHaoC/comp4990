@@ -36,6 +36,7 @@ public class UserController {
      */
     @PostMapping(EDIT)
     public ResponseEntity<String> EditUserInformation(@RequestBody User user) {
+        System.out.println("123");
         return userService.updateUserInformation(user);
     }
 

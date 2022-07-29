@@ -1,19 +1,17 @@
 import React, { useState, useContext, useReducer, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import fetchEventList from "./scrape/scrape";
-  const root = 'https://3dce-216-8-186-247.ngrok.io'
-  const registerURL = `${root}/user/register`
-  const loginURL = `${root}/user/login`
+import config from "./config/config";
+
+const root = config.host;
+const registerURL = `${root}/user/register`;
+const loginURL = `${root}/user/login`;
 
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-
-  const [token, setUserToken] = useState(null)
-  const [user,setUser] = useState(null)
-
-
-  
+  const [token, setUserToken] = useState(null);
+  const [user, setUser] = useState(null);
 
   const logout = () => {
     setUser(null);
@@ -38,7 +36,7 @@ const AppProvider = ({ children }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authentication": token
+        Authentication: token,
       },
       body: JSON.stringify(POST_data),
     };
@@ -131,82 +129,88 @@ const AppProvider = ({ children }) => {
   const registerEventPOST = async (event) => {
     //format user data
     try {
-      let registerRespone = POST(event,`${root}/event/register?userID=${user.sub}`);
+      let registerRespone = POST(
+        event,
+        `${root}/event/register?userID=${user.sub}`
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
-  const cancelEvent = async(eventId) => {
+  const cancelEvent = async (eventId) => {
     try {
-      let cancelResposne = await POST({},`${root}/event/cancel?userID=${user.sub}&eventID=`+eventId)
-      POST_Response.status = cancelResposne.status
-      POST_Response.content = ""
+      let cancelResposne = await POST(
+        {},
+        `${root}/event/cancel?userID=${user.sub}&eventID=` + eventId
+      );
+      POST_Response.status = cancelResposne.status;
+      POST_Response.content = "";
     } catch (error) {
-     console.log(error) 
+      console.log(error);
     }
-  }
-  const updateProfilePOST = async(id, firstName, lastName, address, phoneNumber) => {
-
-
-
-    const userData = {id,firstName,lastName,address,phoneNumber}
+  };
+  const updateProfilePOST = async (
+    id,
+    firstName,
+    lastName,
+    address,
+    phoneNumber
+  ) => {
+    const userData = { id, firstName, lastName, address, phoneNumber };
+    console.log(userData);
+    let response;
     try {
-
-    let updateResponse = POST_Response
       const myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'plain/text');
-      myHeaders.append('Authorization', token);
-      let response = await fetch(`${root}/user?userId=${user.sub}`, 
-        {
-          method: 'POST',
-          headers: myHeaders,
-          body: JSON.stringify(userData),
-
-        }
-      )
-      console.log(response.status)
+      console.log("------" + root);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", token);
+      response = await fetch(`${root}/user/edit`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(userData),
+      });
+      console.log(response.status);
     } catch (error) {
       console.log(error);
     }
 
-    return updateResponse;
+    return response;
   };
   // #endregion
 
   //#region Get
   const getUserEventsGET = async () => {
     try {
-      let response = await fetch(`${root}/event/user_events?userID=${user.sub}`)
-      let data = await response.json()
+      let response = await fetch(
+        `${root}/event/user_events?userID=${user.sub}`
+      );
+      let data = await response.json();
 
-      POST_Response.status = response.status
-      POST_Response.content = data
-      return POST_Response
+      POST_Response.status = response.status;
+      POST_Response.content = data;
+      return POST_Response;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
-  }
+  };
 
-  const getUserGET = async() => {
+  const getUserGET = async () => {
     try {
       const myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'plain/text');
-      myHeaders.append('Authorization', token);
-      let response = await fetch(`${root}/user?userId=${user.sub}`, 
-        {
-          method: 'GET',
-          headers: myHeaders,
-        }
-      )
-      POST_Response.status = response.status
-      POST_Response.content = await response.json()
-      return POST_Response
+      myHeaders.append("Content-Type", "plain/text");
+      myHeaders.append("Authorization", token);
+      let response = await fetch(`${root}/user?userId=${user.sub}`, {
+        method: "GET",
+        headers: myHeaders,
+      });
+      POST_Response.status = response.status;
+      POST_Response.content = await response.json();
+      return POST_Response;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   //#endregion
 
   return (
