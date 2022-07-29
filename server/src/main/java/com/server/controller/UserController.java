@@ -23,8 +23,8 @@ public class UserController {
      * @return
      */
     @GetMapping()
-    public ResponseEntity<User> getUser(@RequestBody User user) {
-        return userService.getUser(user);
+    public ResponseEntity<User> getUser(@RequestParam Integer userId) {
+        return userService.getUser(userId);
     }
 
     /**
