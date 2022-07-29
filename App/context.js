@@ -1,29 +1,20 @@
 import React, { useState, useContext, useReducer, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import fetchEventList from "./scrape/scrape";
+  const root = 'https://3dce-216-8-186-247.ngrok.io'
+  const registerURL = `${root}/user/register`
+  const loginURL = `${root}/user/login`
 
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
 
-  const [token, userToken] = useState("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiZW1haWwiOiJhQHV3aW5kc29yLmNhIiwibmFtZSI6IkFyaWFuYSBBdmRvdWxvcyIsImV4cGlyZXNJbiI6MTAwMDAwLCJpYXQiOjE2NTkwNTk0NzMsImV4cCI6MTY1OTA2MzA3M30.8SNqZapPeejO89SQtaoeoUZu3WagcEYe8s5t0z6522TDp--WCDdF5SFlb4ijSXj0CE2fMaA0nPcDvIHG5Z5YiA")
-  const [user,setUser] = useState({
-    "sub": "8",
-    "email": "a@uwindsor.ca",
-    "name": "Ariana Avdoulos",
-    "expiresIn": 100000,
-    "iat": 1658987410,
-    "exp": 1658991010
-  })
+  const [token, setUserToken] = useState(null)
+  const [user,setUser] = useState(null)
 
-  const root = 'https://3dce-216-8-186-247.ngrok.io'
-  const registerURL = `${root}/user/register`
-  const loginURL = `${root}/user/login`
-  const registerEventURL = `${root}/event/register?userID=${user.sub}`
-  const getUserEventsURL = `${root}/event/user_events?userID=${user.sub}`
-  const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`
-  const editProfileURL = `${root}/user/edit`
-  const getUserURL = `${root}/user?userId=${user.sub}`
+
+  
+
   const logout = () => {
     setUser(null);
   };
@@ -140,7 +131,7 @@ const AppProvider = ({ children }) => {
   const registerEventPOST = async (event) => {
     //format user data
     try {
-      let registerRespone = POST(event, registerEventURL);
+      let registerRespone = POST(event,`${root}/event/register?userID=${user.sub}`);
     } catch (error) {
       console.log(error);
     }
@@ -148,7 +139,7 @@ const AppProvider = ({ children }) => {
 
   const cancelEvent = async(eventId) => {
     try {
-      let cancelResposne = await POST({},cancelEventURL+eventId)
+      let cancelResposne = await POST({},`${root}/event/cancel?userID=${user.sub}&eventID=`+eventId)
       POST_Response.status = cancelResposne.status
       POST_Response.content = ""
     } catch (error) {
@@ -161,7 +152,7 @@ const AppProvider = ({ children }) => {
     let updateResponse = POST_Response
 
     try {
-      updateResponse = await POST(userData, editProfileURL);
+      updateResponse = await POST(userData, `${root}/user/edit`);
     } catch (error) {
       console.log(error);
     }
@@ -173,7 +164,7 @@ const AppProvider = ({ children }) => {
   //#region Get
   const getUserEventsGET = async () => {
     try {
-      let response = await fetch(getUserEventsURL)
+      let response = await fetch(`${root}/event/user_events?userID=${user.sub}`)
       let data = await response.json()
 
       POST_Response.status = response.status
@@ -190,7 +181,7 @@ const AppProvider = ({ children }) => {
       const myHeaders = new Headers();
       myHeaders.append('Content-Type', 'plain/text');
       myHeaders.append('Authorization', token);
-      let response = await fetch(getUserURL, 
+      let response = await fetch(`${root}/user?userId=${user.sub}`, 
         {
           method: 'GET',
           headers: myHeaders,
@@ -219,6 +210,7 @@ const AppProvider = ({ children }) => {
         registerEventPOST,
         getUserEventsGET,
         cancelEvent,
+        setUserToken,
         updateProfilePOST,
       }}
     >

@@ -16,7 +16,8 @@ const LoginProvider = ({children}) => {
     
     const {
         loginPOST,  //login api call
-        setUser     //Set user on successful login
+        setUser ,    //Set user on successful login
+        setUserToken,
     } = useAppContext();
 
     //Use reducer to update state only
@@ -86,6 +87,7 @@ const LoginProvider = ({children}) => {
 
             //If attempt succeed => set user
             if(response.status == 200){
+                setUserToken(`Bearer ${response.content}`)
                 setUser(jwt_decode(response.content))
             }
 
