@@ -19,6 +19,22 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
+    public ResponseEntity<User> getUser(User user) {
+        try {
+            User getUser = userRepository.getById(user.getId());
+            User returnUser = new User();
+            returnUser.setId(getUser.getId());
+            returnUser.setFirstName(getUser.getFirstName());
+            returnUser.setLastName(getUser.getLastName());
+            returnUser.setAddress(getUser.getAddress());
+            returnUser.setPhoneNumber(getUser.getPhoneNumber());
+            return ResponseEntity.ok(returnUser);
+        } catch(Exception e) {
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> updateUserInformation(User user) {
         try {
             Optional<User> getUser = userRepository.findById(user.getId());

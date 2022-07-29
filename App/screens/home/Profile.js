@@ -34,7 +34,7 @@ const EditProfile = ({navigation}) => {
 
   return(
     <>
-    <ProjectHeader />
+    <ProjectHeader  navigation={navigation} />
     <View style={[styles.margin_large]}>
     <Paper>
         <View style={[styles.padding_medium]}>
@@ -69,7 +69,7 @@ const ProfileOverview = ({navigation}) => {
 
   return(
     <>
-    <ProjectHeader />
+    <ProjectHeader  navigation={navigation} />
     <View style={[styles.margin_large]}>
     <Paper header={2}
             title={`${Firstname} ${Lastname}`}>
