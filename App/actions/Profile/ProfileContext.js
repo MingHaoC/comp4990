@@ -74,7 +74,7 @@ const ProfileProvider = ({children}) => {
 
     const getUser = async() => {
         try {
-            const response = await getUserGET(user.sub)
+            const response = await getUserGET()
             dispatch({type: "UPDATE_LASTNAME", payload: `${response.content.lastName}`})
             dispatch({type: "UPDATE_FIRSTNAME", payload: `${response.content.firstName}`})
             dispatch({type: "UPDATE_ADDRESS", payload: `${response.content.address}`})

@@ -6,6 +6,7 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
 
+  const [token, userToken] = useState("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiZW1haWwiOiJhQHV3aW5kc29yLmNhIiwibmFtZSI6IkFyaWFuYSBBdmRvdWxvcyIsImV4cGlyZXNJbiI6MTAwMDAwLCJpYXQiOjE2NTkwNTk0NzMsImV4cCI6MTY1OTA2MzA3M30.8SNqZapPeejO89SQtaoeoUZu3WagcEYe8s5t0z6522TDp--WCDdF5SFlb4ijSXj0CE2fMaA0nPcDvIHG5Z5YiA")
   const [user,setUser] = useState({
     "sub": "8",
     "email": "a@uwindsor.ca",
@@ -183,20 +184,25 @@ const AppProvider = ({ children }) => {
     
   }
 
-  const getUserGET = async(id) => {
+  const getUserGET = async() => {
     try {
-
-      let response = await fetch(getUserURL)
-      let data = await response.json()
-      console.log(data)
+      const myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'plain/text');
+      myHeaders.append('Authorization', token);
+      let response = await fetch(getUserURL, 
+        {
+          method: 'GET',
+          headers: myHeaders,
+        }
+      )
+      console.log(response.status)
       POST_Response.status = response.status
-      POST_Response.content = data
+      POST_Response.content = await response.json()
       return POST_Response
     } catch (error) {
       console.log(error)
     }
   }
-
   //#endregion
 
   return (
