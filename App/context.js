@@ -165,6 +165,7 @@ const AppProvider = ({ children }) => {
 
         }
       )
+      console.log(response.status)
     } catch (error) {
       console.log(error);
     }
