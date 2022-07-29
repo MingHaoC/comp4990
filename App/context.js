@@ -1,11 +1,8 @@
-import React, { useState, useContext, useReducer, useEffect } from 'react'
+import React, { useState, useContext, useReducer, useEffect } from "react";
 import jwt_decode from "jwt-decode";
-import fetchEventList from './scrape/scrape'
+import fetchEventList from "./scrape/scrape";
 
-const AppContext = React.createContext()
-
-
-
+const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
 
@@ -18,7 +15,7 @@ const AppProvider = ({ children }) => {
     "exp": 1658991010
   })
 
-  const root = 'https://809f-216-8-184-8.ngrok.io'
+  const root = 'https://3dce-216-8-186-247.ngrok.io'
   const registerURL = `${root}/user/register`
   const loginURL = `${root}/user/login`
   const registerEventURL = `${root}/event/register?userID=${user.sub}`
@@ -26,15 +23,14 @@ const AppProvider = ({ children }) => {
   const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`
   const editProfileURL = `${root}/user/edit`
 
-
   const logout = () => {
-    setUser(null)
-  }
+    setUser(null);
+  };
   // #region POST
   const POST_Response = {
     status: 501,
-    content: 'Error: Not Implemented.'
-  }
+    content: "Error: Not Implemented.",
+  };
 
   /**
    * Sends a POST request to a given url
@@ -42,41 +38,37 @@ const AppProvider = ({ children }) => {
    * @param {string} url web address of where to send the post request
    * @returns a POST response object => {status: number, text: responseData}
    */
-  const POST = async(POST_data, url) => {
-
+  const POST = async (POST_data, url) => {
     /**
      * Configure options
      */
     const options = {
-      method: 'POST',
+      method: "POST",
       headers: {
-      'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(POST_data)
-      };
-      
-      /**
-       * Try to make POST request
-       */
-      try {
+      body: JSON.stringify(POST_data),
+    };
 
-        //fetch data and get data contents
-        const response = await fetch(url, options);
-        let data = ""
-        data = await response.text()
+    /**
+     * Try to make POST request
+     */
+    try {
+      //fetch data and get data contents
+      const response = await fetch(url, options);
+      let data = "";
+      data = await response.text();
 
-        /*Change POST_Response to match the actual response*/
-        POST_Response.status = response.status;
-        POST_Response.content = data
-        
-        return POST_Response
-      } 
-      catch (error) {
-        console.log(error)
-        return POST_Response;
-      }
+      /*Change POST_Response to match the actual response*/
+      POST_Response.status = response.status;
+      POST_Response.content = data;
 
+      return POST_Response;
+    } catch (error) {
+      console.log(error);
+      return POST_Response;
     }
+  };
   /**
    * Attempts to create a new user in the system with the given parameters
    * @param {string} _address user's street address
@@ -86,30 +78,35 @@ const AppProvider = ({ children }) => {
    * @param {string} _password user's passowrd
    * @returns a POST response object => {status: number text: string}
    */
-  const registerPOST = (_address,_first_name, _last_name, _email, _password) => {
-
+  const registerPOST = (
+    _address,
+    _first_name,
+    _last_name,
+    _email,
+    _password
+  ) => {
     //format user data
     let userData = {
-        address: _address,
-        email: _email,
-        firstName: _first_name,
-        lastName: _last_name,
-        password: _password
+      address: _address,
+      email: _email,
+      firstName: _first_name,
+      lastName: _last_name,
+      password: _password,
     };
 
     //send response
-    let registerResponse =  POST(userData,registerURL)
-    
+    let registerResponse = POST(userData, registerURL);
+
     //Modifiy POST response data depending on statuus
     switch (registerResponse.status) {
       case 200:
-        registerResponse.text = 'Account Created. Please Login'
+        registerResponse.text = "Account Created. Please Login";
         return registerResponse;
-  
+
       default:
         return registerResponse;
     }
-  }
+  };
 
   /**
    * Attempts to autheticate the user with the given params
@@ -117,16 +114,15 @@ const AppProvider = ({ children }) => {
    * @param {*} _password User's password
    * @returns a POST response object => {status: number, text: responseData}. If successful (status == 200), the text attribute of the response object will contain the verification token
    */
-  const loginPOST = async(_email, _password) => {
-
+  const loginPOST = async (_email, _password) => {
     //format user data
     let userData = {
-        email: _email,
-        password: _password
+      email: _email,
+      password: _password,
     };
 
     //send response
-    let loginResponse =  await POST(userData,loginURL) 
+    let loginResponse = await POST(userData, loginURL);
 
     //Modifiy POST response data depending on statuus
     switch (loginResponse.status) {
@@ -137,77 +133,80 @@ const AppProvider = ({ children }) => {
       default:
         return loginResponse;
     }
-  }
+  };
 
-  const registerEventPOST = async(event) => {
+  const registerEventPOST = async (event) => {
     //format user data
     try {
-      let registerRespone = POST(event,registerEventURL)
-
+      let registerRespone = POST(event, registerEventURL);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const cancelEvent = (eventId) => {
+  const cancelEvent = async(eventId) => {
     try {
-      let cancelResposne = POST({},cancelEventURL+eventId)
+      let cancelResposne = await POST({},cancelEventURL+eventId)
+      POST_Response.status = cancelResposne.status
+      POST_Response.content = await cancelResposne.text()
     } catch (error) {
-      
+     console.log(error) 
     }
   }
   const updateProfilePOST = async(id, firstName, lastName, address, phoneNumber) => {
     const userData = {id,firstName,lastName,address,phoneNumber}
 
     let updateResponse = POST_Response
+
     try {
-      updateResponse = await POST(userData, editProfileURL)
+      updateResponse = await POST(userData, editProfileURL);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
-    return updateResponse
-
-  }
+    return updateResponse;
+  };
   // #endregion
 
-  
   //#region Get
-  const getUserEventsGET = async() => {
+  const getUserEventsGET = async () => {
     try {
       let response = await fetch(getUserEventsURL)
       let data = await response.json()
-      console.log(data)
+
+      POST_Response.status = response.status
+      POST_Response.content = data
+      return POST_Response
     } catch (error) {
-      
+      console.log(error)
     }
     
   }
+
   //#endregion
 
-    return (
-        <AppContext.Provider
-          value={{
-            user,
-            setUser,
-            logout,
-            registerPOST, 
-            loginPOST,
-            fetchEventList,
-            registerEventPOST,
-            getUserEventsGET,
-            cancelEvent,
-            updateProfilePOST,
-          }}
-        >
-          {children}
-        </AppContext.Provider>
-      )
-    
-}
+  return (
+    <AppContext.Provider
+      value={{
+        user,
+        setUser,
+        logout,
+        registerPOST,
+        loginPOST,
+        fetchEventList,
+        registerEventPOST,
+        getUserEventsGET,
+        cancelEvent,
+        updateProfilePOST,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
 
 const useAppContext = () => {
-    return useContext(AppContext)
-  }
+  return useContext(AppContext);
+};
 
-export { AppContext, AppProvider, useAppContext }
+export { AppContext, AppProvider, useAppContext };
