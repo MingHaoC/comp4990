@@ -22,7 +22,7 @@ const AppProvider = ({ children }) => {
   const getUserEventsURL = `${root}/event/user_events?userID=${user.sub}`
   const cancelEventURL = `${root}/event/cancel?userID=${user.sub}&eventID=`
   const editProfileURL = `${root}/user/edit`
-  const getUserURL = `${root}/user?id=${user.sub}`
+  const getUserURL = `${root}/user?userId=${user.sub}`
   const logout = () => {
     setUser(null);
   };

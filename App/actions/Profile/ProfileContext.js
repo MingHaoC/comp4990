@@ -58,25 +58,35 @@ const ProfileProvider = ({children}) => {
      * Reset Edit Account and go to ProfileOverview screen
      */
     const saveAccount = async() => {
-        dispatch({type: "SET_LOADING", payload: true})
-        dispatch({type: "SET_EDIT_LOADING", payload: true})
-        await updateProfilePOST(user.id, state.EditPhonenumber, state.EditLastname, state.EditAddress, state.EditPhonenumber)
-        dispatch({type: "SET_LOADING", payload: false})
-        dispatch({type: "SET_EDIT_LOADING", payload: false})
+        try {
+            dispatch({type: "SET_LOADING", payload: true})
+            dispatch({type: "SET_EDIT_LOADING", payload: true})
+            await updateProfilePOST(user.id, state.EditPhonenumber, state.EditLastname, state.EditAddress, state.EditPhonenumber)
+            await getUser()
+            dispatch({type: "SET_LOADING", payload: false})
+            dispatch({type: "SET_EDIT_LOADING", payload: false})
+        } catch (error) {
+            
+        }
+
 
     }
 
     const getUser = async() => {
         try {
             const response = await getUserGET(user.sub)
-            console.log(response)
+            dispatch({type: "UPDATE_LASTNAME", payload: `${response.content.lastName}`})
+            dispatch({type: "UPDATE_FIRSTNAME", payload: `${response.content.firstName}`})
+            dispatch({type: "UPDATE_ADDRESS", payload: `${response.content.address}`})
+            dispatch({type: "UPDATE_PHONENUMBER", payload: `${response.content.phoneNumber}`})
+
         } catch (error) {
             
         }
+
     }
     useEffect(() => {
-        dispatch({type: "UPDATE_FIRSTNAME", payload: `${user.name.split(' ')[0]}`})
-        dispatch({type: "UPDATE_LASTNAME", payload: `${user.name.split(' ')[1]}`})
+
         getUser()
     },[])
 
