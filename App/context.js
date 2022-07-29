@@ -185,14 +185,8 @@ const AppProvider = ({ children }) => {
 
   const getUserGET = async(id) => {
     try {
-      /**
-       * Configure options
-       */
-      const options = {
-        method: "GET",
-        body: JSON.stringify({id: id}),
-      };
-      let response = await fetch(getUserURL,options)
+
+      let response = await fetch(getUserURL)
       let data = await response.json()
       console.log(data)
       POST_Response.status = response.status
