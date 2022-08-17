@@ -5,7 +5,7 @@
 
 ### **Creating a MySQL database:**
  - Create an empty database (remember the name)
-   - Ex. 'CREATED DATABASE COMP4990' - COMP4990 is the name of the database in this example
+   - Ex. 'CREATE DATABASE COMP4990' - COMP4990 is the name of the database in this example
 
 ### **Setup step:**
  1. Open the project with IntelliJ (Make sure you open the Server folder and not the entire project)
