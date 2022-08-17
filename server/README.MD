@@ -5,6 +5,7 @@
 
 ### **Creating a MySQL database:**
  -	Create an empty database (remember the name)
+  - Ex. 'CREATED DATABASE COMP4990' - COMP4990 is the name of the database
 
 ### **Setup step:**
  1. Go to the following file, “./server/src/main/resources/application.properties”
