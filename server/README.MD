@@ -1,7 +1,7 @@
 # **Mobile App: Running the Server**
 
 ### **Clone the source code**
- - Clone or down the source code from GitHub
+ - Clone or download the source code from GitHub
 
 ### **Creating a MySQL database:**
  - Create an empty database (remember the name)
