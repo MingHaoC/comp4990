@@ -16,7 +16,7 @@
 	-	[DATABASE_NAME] - Name of the database that you created
 	-	[DATABASE_USERNAME] - Username to access the MySQL server
 	-	[DATABASE_PASSWORD] - Password to access the MySQL server
- 4.	The database tables will be automatically created
+ 4.	The database tables will be automatically created when the server application runs
  5.	Execute the following SQL command into the database console
 	-	‘INSERT INTO roles (id, name) VALUES (1, ‘ROLE_USER’)
 	-	‘INSERT INTO roles (id, name) VALUES (2, ‘ROLE_ADMIN’)
