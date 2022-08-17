@@ -18,10 +18,9 @@
 	-	[DATABASE_PASSWORD] - Password to access the MySQL server
  4.	Run the server application
  	-	The database table will be created automatically
- 6.	Execute the following SQL command into the database console
+ 5.	Execute the following SQL command into the database console
 	-	‘INSERT INTO roles (id, name) VALUES (1, ‘ROLE_USER’)
 	-	‘INSERT INTO roles (id, name) VALUES (2, ‘ROLE_ADMIN’)
- 7. Restart the server application
 	
 ### **TODO:**
  -	Automate the server setup using Docker container
