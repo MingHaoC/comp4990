@@ -11,7 +11,7 @@
  1. Open the project with IntelliJ (Make sure you open the Server folder and not the entire project)
  	- It should automatically download all the required maven dependency
  2. Open the following file “./server/src/main/resources/application.properties”
- 3. Update the following information
+ 3. Update the following information (make sure you remove the "[]" when adding your database information
 	-	[MySQL_Server_URL] - URL where the MySQL server is being hosted (localhost:3306 if you're hosting it on your computer)
 	-	[DATABASE_NAME] - Name of the database that you created
 	-	[DATABASE_USERNAME] - Username to access the MySQL server
