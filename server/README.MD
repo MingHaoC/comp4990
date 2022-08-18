@@ -17,10 +17,12 @@
 	-	[DATABASE_PASSWORD] - Password to access the MySQL server
  4.	Run the server application
  	-	The database table will be created automatically
+ 	-	One way to run the application is to open the file ServerApplication inside an IDE (IntelliJ is used for the screenshot below) and right click anywhere inside the file and click `Run ServerApplication`.
+ 	-	Another way is to click the green triangle on the top right of the screenshot below
 ![Screenshot](run.png)
  5.	Execute the following SQL command into the database console
-	-	`INSERT INTO roles (id, name) VALUES (1, ‘ROLE_USER’)`
-	-	`INSERT INTO roles (id, name) VALUES (2, ‘ROLE_ADMIN’)`
+	-	`INSERT INTO roles (id, name) VALUES (1, ‘ROLE_USER’)
+	-	INSERT INTO roles (id, name) VALUES (2, ‘ROLE_ADMIN’)`
 	
 # **TODO**
  -	Automate the server setup using Docker container
