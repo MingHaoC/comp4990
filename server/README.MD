@@ -21,8 +21,8 @@
  	-	Another way is to click the green triangle on the top right of the screenshot below
 ![Screenshot](run.png)
  5.	Execute the following SQL command into the database console
-	-	`INSERT INTO roles (id, name) VALUES (1, ‘ROLE_USER’)
-	-	INSERT INTO roles (id, name) VALUES (2, ‘ROLE_ADMIN’)`
+	-	`INSERT INTO roles (id, name) VALUES (1, ‘ROLE_USER’)`
+	-	`INSERT INTO roles (id, name) VALUES (2, ‘ROLE_ADMIN’)`
 	
 # **TODO**
  -	Automate the server setup using Docker container
